@@ -1,0 +1,14 @@
+<div class="intro__dots">
+  <div class="intro__layers">
+    <img class="bottom" src="assets/images/dots.jpg">
+    <img class="top" src="assets/images/carmen_dots.jpg">
+  </div>
+</div>
+
+<div class='intro__steps'>
+  {{#each doc.intro-steps}}
+    <div class='step' data-step='{{{step}}}' id='step={{{step}}}'>
+      <p class='step__prose'>{{{text}}}</p>
+    </div>
+  {{/each}}
+</div>

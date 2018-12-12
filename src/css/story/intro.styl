@@ -1,6 +1,7 @@
 .intro
 	margin 0 auto
 	padding 4rem 1rem 1.5rem 1rem
+	position relative
 
 	&__hed
 		max-width 60rem
@@ -13,7 +14,7 @@
 			set-type-size('xxx-large', true)
 		+mq('bp-5')
 			set-type-size('xxxx-large', true)
-	
+
 	&__byline
 		max-width $column-width
 		margin 0 auto
@@ -21,10 +22,42 @@
 		padding-bottom 1.5rem
 		text-align center
 		set-type-size('small', true)
-		
+
 	&__dek
 		max-width $column-width
 		margin 0 auto
 		padding-top 1.5rem
 		text-align center
 		set-type-size('medium', true)
+
+	&__dots
+		position sticky
+		top 5%
+		bottom auto
+		transform translate3d(0,0,0)
+
+		.intro__layers
+			position relative
+
+			.bottom
+				position absolute
+				z-index 1
+
+			.top
+				position absolute
+				z-index 2
+				opacity 0
+
+				&.is-active
+					opacity 1
+
+	&__steps
+		z-index 3
+		position relative
+		max-width 30rem
+		margin 0 auto
+		padding 1rem
+		.step
+			height 500px
+			&__prose
+				color #ffffff
