@@ -7,6 +7,7 @@ let radius = 2.5;
 const $intro = d3.select('#intro');
 const $top = $intro.select('.top');
 const $title = $intro.selectAll('.intro__hed-text')
+const $step = $intro.selectAll('.step')
 
 const tweetPos = [
 	{
@@ -62,10 +63,6 @@ function setupTweets() {
 
 	$gTweets
 		.append('circle.inner');
-
-
-
-
 }
 
 function hideTitle(){
@@ -112,6 +109,12 @@ function exit(step) {
 function resize() {
 	const width = $top.node().offsetWidth;
 	const height = $top.node().offsetHeight;
+
+	const stepHeight = Math.floor(window.innerHeight)
+
+	$step
+		.style('height', `${stepHeight}px`)
+
 
 	radius = radius * width / origW
 
