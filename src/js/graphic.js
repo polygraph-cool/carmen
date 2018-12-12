@@ -20,12 +20,13 @@ function resize() {
 
 function onSectionEnter(el) {
 	let step = d3.select(el).at('data-step')
-	console.log(step);
 	if (step == 0) top.classed('is-active', false)
 	if (step == 1) top.classed('is-active', true)
 }
 
 function onSectionExit(el) {
+	let step = d3.select(el).at('data-step')
+	if (step == 1) top.classed('is-active', false)
 	console.log('exit', d3.select(el).at('id'));
 }
 
