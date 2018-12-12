@@ -6,6 +6,7 @@ const radius = 2.5;
 
 const $intro = d3.select('#intro');
 const $top = $intro.select('.top');
+const $title = $intro.selectAll('.intro__hed-text')
 
 const tweetPos = [
 	{
@@ -55,15 +56,46 @@ function setupTweets() {
 		.append('circle');
 }
 
+function hideTitle(){
+	const titleWidth = $intro.select('.intro__hed').node().offsetWidth
+
+	$title
+		.transition()
+		.duration(500)
+		.delay((d, i) => i * 50)
+			.translate(d => [-titleWidth, 0])
+
+	$intro.select('.carmen-crouch')
+		.transition()
+		.duration(500)
+			.translate(d => [-titleWidth, 0])
+}
+
+function showTitle(){
+	$title
+		.transition()
+		.duration(500)
+		.delay((d, i) => i * 50)
+			.translate(d => [0, 0])
+
+	$intro.select('.carmen-crouch')
+		.transition()
+		.duration(500)
+			.translate(d => [0, 0])
+}
+
+
 function enter(step) {
 	$top.classed('is-active', step > 0);
 	$.tweets.selectAll('.tweet').classed('is-active', step === 2);
+	if (step === 1) hideTitle()
 }
 
 function exit(step) {
 	// console.log({ step });
 	$top.classed('is-active', step === 1);
 	$.tweets.selectAll('.tweet').classed('is-active', step !== 2);
+	if (step === 1) showTitle()
 }
 
 function resize() {
