@@ -7,6 +7,9 @@ import explore from './explore';
 
 let tweetData = [];
 
+let introSec = d3.select('#intro')
+const top = introSec.selectAll('.top')
+
 function resize() {
 	const height = window.innerHeight;
 	$.chart.st({ height });
@@ -16,7 +19,10 @@ function resize() {
 }
 
 function onSectionEnter(el) {
-	console.log('enter', d3.select(el).at('id'));
+	let step = d3.select(el).at('data-step')
+	console.log(step);
+	if (step == 0) top.classed('is-active', false)
+	if (step == 1) top.classed('is-active', true)
 }
 
 function onSectionExit(el) {
@@ -29,7 +35,7 @@ function setup() {
 	map.init();
 	explore.init();
 	EnterView({
-		selector: 'section',
+		selector: '.step',
 		enter: onSectionEnter,
 		exit: onSectionExit
 	});
