@@ -1,4 +1,4 @@
-import * as $ from './dom';
+import $ from './dom';
 
 function resize() {}
 
