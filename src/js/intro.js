@@ -68,19 +68,19 @@ function hideTitle(){
 	$intro.select('.carmen-crouch')
 		.transition()
 		.duration(500)
-			.translate(d => [-titleWidth, 0])
+			.translate(d => [-titleWidth, 20])
 }
 
 function showTitle(){
+	$intro.select('.carmen-crouch')
+		.transition()
+		.duration(500)
+			.translate(d => [0, 20])
+
 	$title
 		.transition()
 		.duration(500)
 		.delay((d, i) => i * 50)
-			.translate(d => [0, 0])
-
-	$intro.select('.carmen-crouch')
-		.transition()
-		.duration(500)
 			.translate(d => [0, 0])
 }
 
@@ -92,9 +92,8 @@ function enter(step) {
 }
 
 function exit(step) {
-	// console.log({ step });
-	$top.classed('is-active', step === 1);
-	$.tweets.selectAll('.tweet').classed('is-active', step !== 2);
+	$top.classed('is-active', step !== 1);
+	$.tweets.selectAll('.tweet').classed('is-active', step === 2);
 	if (step === 1) showTitle()
 }
 
