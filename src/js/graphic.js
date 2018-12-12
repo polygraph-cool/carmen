@@ -15,19 +15,31 @@ function resize() {
 	explore.resize();
 }
 
-function onSectionEnter(el) {
-	console.log('enter', d3.select(el).at('id'));
+function onStepEnter(el) {
+	const step = +d3.select(el).at('data-step');
+	intro.enter(step);
 }
 
-function onSectionExit(el) {
-	console.log('exit', d3.select(el).at('id'));
+function onStepExit(el) {
+	const step = +d3.select(el).at('data-step');
+	intro.exit(step);
 }
+
+function onSectionEnter(el) {}
+
+function onSectionExit(el) {}
 
 function setup() {
 	// sections
 	intro.init();
 	map.init();
 	explore.init();
+
+	EnterView({
+		selector: '.step',
+		enter: onStepEnter,
+		exit: onStepExit
+	});
 	EnterView({
 		selector: 'section',
 		enter: onSectionEnter,
