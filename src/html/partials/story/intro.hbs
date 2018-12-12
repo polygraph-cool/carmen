@@ -5,10 +5,21 @@
   </div>
 </div>
 
-<div class='intro__steps'>
-  {{#each doc.intro-steps}}
-    <div class='step' data-step='{{{step}}}' id='step-{{{step}}}'>
-      <p class='step__prose'>{{{text}}}</p>
-    </div>
-  {{/each}}
+<div class='intro__overlays'>
+
+  <div class='intro__hed'>
+    <img src='assets/images/carmen-crouch.png' class='carmen-crouch'>
+    <span class='intro__hed-text'>The</span><br>
+    <span class='intro__hed-text'>Carmen</span><br>
+    <span class='intro__hed-text'>Effect</span>
+  </div>
+
+  <div class='intro__steps'>
+    {{#each doc.intro-steps}}
+      <div class='step' data-step='{{{step}}}' id='step-{{{step}}}'>
+        <p class='step__prose'>{{{text}}}</p>
+      </div>
+    {{/each}}
+  </div>
+
 </div>

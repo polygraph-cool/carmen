@@ -53,13 +53,39 @@
 					opacity 1
 					transition 500ms
 
-	&__steps
+	&__overlays
 		z-index 3
 		position relative
-		max-width 30rem
-		margin 0 auto
-		padding 1rem
-		.step
-			height 700px
-			&__prose
-				color #ffffff
+
+		.intro__hed
+			position fixed
+			top auto
+			bottom 1rem
+			text-align: left
+
+			&-text
+				set-type-size('xxxx-large', true)
+				text-transform uppercase
+				font-weight 600
+				padding 0.05rem 0.75rem
+				margin 0 0 0.3rem 0
+				background-color: $gray-darkest
+				display inline-block
+				font-family: sans-serif;
+
+			img
+				max-width 175px
+				margin-bottom 0
+				transform translateY(20px)
+
+		.intro__steps
+			z-index 3
+			position relative
+			max-width 20rem
+			margin-left auto
+			margin-right 0
+			padding 1rem
+			.step
+				height 700px
+				&__prose
+					color #ffffff
