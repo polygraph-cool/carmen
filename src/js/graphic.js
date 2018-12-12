@@ -7,11 +7,6 @@ import explore from './explore';
 
 let tweetData = [];
 
-let introSec = d3.select('#intro')
-const top = introSec.selectAll('.top')
-let circles = null
-
-
 function resize() {
 	const height = window.innerHeight;
 	$.chart.st({ height });
@@ -20,20 +15,19 @@ function resize() {
 	explore.resize();
 }
 
-function onSectionEnter(el) {
-	let step = d3.select(el).at('data-step')
-	if (step == 0) top.classed('is-active', false)
-	if (step == 1) top.classed('is-active', true)
-	if (step == 2) circles.classed('is-active', true)
-
+function onStepEnter(el) {
+	const step = +d3.select(el).at('data-step');
+	intro.enter(step);
 }
 
-function onSectionExit(el) {
-	let step = d3.select(el).at('data-step')
-	if (step == 1) top.classed('is-active', false)
-	if (step == 2) circles.classed('is-active', false)
-	console.log('exit', d3.select(el).at('id'));
+function onStepExit(el) {
+	const step = +d3.select(el).at('data-step');
+	intro.exit(step);
 }
+
+function onSectionEnter(el) {}
+
+function onSectionExit(el) {}
 
 function setup() {
 	// sections
@@ -41,9 +35,13 @@ function setup() {
 	map.init();
 	explore.init();
 
-	circles = $.svg.selectAll('.circle')
 	EnterView({
 		selector: '.step',
+		enter: onStepEnter,
+		exit: onStepExit
+	});
+	EnterView({
+		selector: 'section',
 		enter: onSectionEnter,
 		exit: onSectionExit
 	});
