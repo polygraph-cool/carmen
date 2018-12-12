@@ -9,6 +9,8 @@ let tweetData = [];
 
 let introSec = d3.select('#intro')
 const top = introSec.selectAll('.top')
+let circles = null
+
 
 function resize() {
 	const height = window.innerHeight;
@@ -22,11 +24,14 @@ function onSectionEnter(el) {
 	let step = d3.select(el).at('data-step')
 	if (step == 0) top.classed('is-active', false)
 	if (step == 1) top.classed('is-active', true)
+	if (step == 2) circles.classed('is-active', true)
+
 }
 
 function onSectionExit(el) {
 	let step = d3.select(el).at('data-step')
 	if (step == 1) top.classed('is-active', false)
+	if (step == 2) circles.classed('is-active', false)
 	console.log('exit', d3.select(el).at('id'));
 }
 
@@ -35,6 +40,8 @@ function setup() {
 	intro.init();
 	map.init();
 	explore.init();
+
+	circles = $.svg.selectAll('.circle')
 	EnterView({
 		selector: '.step',
 		enter: onSectionEnter,
