@@ -2,7 +2,7 @@ import $ from './dom';
 
 const origW = 1280;
 const origH = 1024;
-const radius = 2.5;
+let radius = 2.5;
 
 const $intro = d3.select('#intro');
 const $top = $intro.select('.top');
@@ -47,13 +47,25 @@ const tweetPos = [
 ];
 
 function setupTweets() {
-	$.tweets
+	const $gTweets = $.tweets
 		.selectAll('.tweet')
 		.data(tweetPos)
 		.enter()
 		.append('g')
 		.at('class', d => `tweet tweet-${d.cat}`)
-		.append('circle');
+
+	$gTweets
+		.append('circle.outer');
+
+	$gTweets
+		.append('circle.mid');
+
+	$gTweets
+		.append('circle.inner');
+
+
+
+
 }
 
 function hideTitle(){
@@ -101,14 +113,31 @@ function resize() {
 	const width = $top.node().offsetWidth;
 	const height = $top.node().offsetHeight;
 
+	radius = radius * width / origW
+
 	$.svg.st('width', width).st('height', height);
 
 	$.tweets
-		.selectAll('.tweet circle')
+		.selectAll('.tweet')
+		.translate(d => [(d.cx * width) / origW, (d.cy * height) / origH]);
+
+	$.tweets
+		.selectAll('.inner')
 		.at('r', radius)
 		.at('cx', 0)
 		.at('cy', 0)
-		.translate(d => [(d.cx * width) / origW, (d.cy * height) / origH]);
+
+	$.tweets
+		.selectAll('.mid')
+		.at('r', radius * 4)
+		.at('cx', 0)
+		.at('cy', 0)
+
+	$.tweets
+		.selectAll('.outer')
+		.at('r', radius * 10)
+		.at('cx', 0)
+		.at('cy', 0)
 }
 
 function init() {
