@@ -1,5 +1,6 @@
 import * as topojson from 'topojson';
 import $ from './dom';
+import tweetPos from './category-tweets'
 
 let $outline = null;
 let $sphere = null;
@@ -71,6 +72,34 @@ function goTo({ coords, duration = 2000 }) {
 		});
 }
 
+function handoff(direction){
+	const $tweets = $.tweets.selectAll('.tweet')
+		.data(tweetPos)
+
+	const $tweetsEnter = $tweets
+		.enter()
+		.append('g')
+		.at('class', d => `tweet tweet-${d.cat}`)
+
+	$tweetsEnter
+		.append('circle.outer');
+
+	$tweetsEnter
+		.append('circle.mid');
+
+	$tweetsEnter
+		.append('circle.inner');
+
+	$tweets.exit().remove()
+
+	const $tweetsMerge = $tweetsEnter.merge($tweets)
+
+	$tweetsMerge.transition()
+		.duration(500)
+		.translate(d => [Math.random() * 500, Math.random() * 500])
+
+}
+
 function setup(world) {
 	projection = d3.geoOrthographic();
 	path = d3.geoPath().projection(projection);
@@ -112,4 +141,4 @@ function init() {
 	});
 }
 
-export default { init, resize };
+export default { init, resize, handoff };

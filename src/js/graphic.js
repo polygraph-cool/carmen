@@ -25,7 +25,11 @@ function onStepExit(el) {
 	intro.exit(step);
 }
 
-function onSectionEnter(el) {}
+function onSectionEnter(el) {
+	const id = d3.select(el).at('id')
+	if (id === "map") map.handoff()
+	// make map visible
+}
 
 function onSectionExit(el) {}
 

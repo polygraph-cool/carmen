@@ -1,4 +1,5 @@
 import $ from './dom';
+import tweetPos from './category-tweets'
 
 const origW = 1280;
 const origH = 1024;
@@ -8,44 +9,6 @@ const $intro = d3.select('#intro');
 const $top = $intro.select('.top');
 const $title = $intro.selectAll('.intro__hed-text')
 const $step = $intro.selectAll('.step')
-
-const tweetPos = [
-	{
-		cat: 'a',
-		cx: 833.5,
-		cy: 399.5
-	},
-	{
-		cat: 'b',
-		cx: 609.5,
-		cy: 316.5
-	},
-	{
-		cat: 'c',
-		cx: 385.5,
-		cy: 407.5
-	},
-	{
-		cat: 'd',
-		cx: 854.5,
-		cy: 568.5
-	},
-	{
-		cat: 'e',
-		cx: 462.5,
-		cy: 582.5
-	},
-	{
-		cat: 'f',
-		cx: 651.5,
-		cy: 610.5
-	},
-	{
-		cat: 'g',
-		cx: 826.5,
-		cy: 757.5
-	}
-];
 
 function setupTweets() {
 	const $gTweets = $.tweets
