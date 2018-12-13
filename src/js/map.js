@@ -1,6 +1,5 @@
 import * as topojson from 'topojson';
 import $ from './dom';
-import tweetPos from './category-tweets';
 
 let $outline = null;
 let $sphere = null;
@@ -12,6 +11,7 @@ let $pathLand = null;
 let projection = null;
 let path = null;
 let ready = false;
+let tweetData = [];
 
 function resize() {
 	if (ready) {
@@ -73,16 +73,20 @@ function goTo({ coords, duration = 2000 }) {
 }
 
 function handoff(direction) {
-	const $tweet = $.tweets.selectAll('.tweet').data(tweetPos);
+	const data = tweetData.filter(d => d.chosen);
+	const $tweet = $.tweets.selectAll('.tweet').data(data, d => d.category);
 
 	const $tweetEnter = $tweet
 		.enter()
 		.append('g')
-		.at('class', d => `tweet tweet-${d.cat}`);
+		.at('class', d => `tweet tweet-${d.category}`);
 
-	$tweetEnter.append('circle.outer');
-
-	$tweetEnter.append('circle.mid');
+	$tweetEnter.each((d, i, n) => {
+		if (d.chosen) {
+			d3.select(n[i]).append('circle.outer');
+			d3.select(n[i]).append('circle.mid');
+		}
+	});
 
 	$tweetEnter.append('circle.inner');
 
@@ -128,7 +132,8 @@ function setup(world) {
 	// $pathLand.datum(land).at('d', path);
 }
 
-function init() {
+function init(data) {
+	tweetData = data;
 	d3.loadData('assets/data/world-110m.json', (err, response) => {
 		if (err) console.log(err);
 		setup(response[0]);

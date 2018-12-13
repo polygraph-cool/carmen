@@ -1,33 +1,38 @@
 import $ from './dom';
-import tweetPos from './category-tweets';
 
+let tweetData = [];
 const origW = 1280;
 const origH = 1024;
 let radius = 2.5;
 
 const $intro = d3.select('#intro');
 const $top = $intro.select('.top');
+const $introHed = $intro.select('.intro__hed');
 const $title = $intro.selectAll('.intro__hed-text');
 const $step = $intro.selectAll('.step');
 
 function setupTweets() {
-	const $gTweets = $.tweets
-		.selectAll('.tweet')
-		.data(tweetPos)
+	const data = tweetData.filter(d => d.chosen);
+	const $tweet = $.tweets.selectAll('.tweet').data(data, d => d.category);
+
+	const $tweetEnter = $tweet
 		.enter()
 		.append('g')
-		.at('class', d => `tweet tweet-${d.cat}`);
+		.at('class', d => `tweet tweet-${d.category}`);
 
-	$gTweets.append('circle.outer');
+	$tweetEnter.each((d, i, n) => {
+		if (d.chosen) {
+			d3.select(n[i]).append('circle.outer');
+			d3.select(n[i]).append('circle.mid');
+		}
+	});
 
-	$gTweets.append('circle.mid');
-
-	$gTweets.append('circle.inner');
+	$tweetEnter.append('circle.inner');
 }
 
 function hideTitle() {
 	const titleWidth = $intro.select('.intro__hed').node().offsetWidth;
-
+	$introHed.classed('is-hidden', true);
 	$title
 		.transition()
 		.duration(500)
@@ -42,6 +47,7 @@ function hideTitle() {
 }
 
 function showTitle() {
+	$introHed.classed('is-hidden', false);
 	$intro
 		.select('.carmen-crouch')
 		.transition()
@@ -75,7 +81,10 @@ function resize() {
 
 	const stepHeight = Math.floor(window.innerHeight);
 
-	$step.st('height', `${stepHeight}px`);
+	const stepSize = $step.size();
+	$step
+		.st('height', (d, i) => stepHeight * (i === stepSize - 1 ? 2 : 1))
+		.classed('is-visible', true);
 
 	radius = (radius * width) / origW;
 
@@ -83,7 +92,7 @@ function resize() {
 
 	$.tweets
 		.selectAll('.tweet')
-		.translate(d => [(d.cx * width) / origW, (d.cy * height) / origH]);
+		.translate(d => [(d.x * width) / origW, (d.y * height) / origH]);
 
 	$.tweets
 		.selectAll('.inner')
@@ -104,7 +113,8 @@ function resize() {
 		.at('cy', 0);
 }
 
-function init() {
+function init(data) {
+	tweetData = data;
 	setupTweets();
 	resize();
 }

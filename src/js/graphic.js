@@ -1,5 +1,6 @@
 /* global d3 */
 import EnterView from 'enter-view';
+import tweetPos from './tweet-pos';
 import $ from './dom';
 import intro from './intro';
 import map from './map';
@@ -15,18 +16,19 @@ function resize() {
 	explore.resize();
 }
 
-function onStepEnter(el) {
+function onIntroStepEnter(el) {
 	const step = +d3.select(el).at('data-step');
 	intro.enter(step);
 }
 
-function onStepExit(el) {
+function onIntroStepExit(el) {
 	const step = +d3.select(el).at('data-step');
 	intro.exit(step);
 }
 
 function onSectionEnter(el) {
 	const id = d3.select(el).at('id');
+	console.log({ id });
 	switch (id) {
 	case 'intro':
 		intro.handoff();
@@ -52,9 +54,9 @@ function onSectionEnter(el) {
 
 function onSectionExit(el) {}
 
-function onMapEnter(el) {}
+function onMapStepEnter(el) {}
 
-function onMapExit(el) {}
+function onMapStepExit(el) {}
 
 function setup(data) {
 	// sections
@@ -67,22 +69,23 @@ function setup(data) {
 	EnterView({
 		selector: 'section',
 		enter: onSectionEnter,
-		exit: onSectionExit
+		exit: onSectionExit,
+		offset: 0.9
 	});
 
 	// intro steps
 	EnterView({
 		selector: '#intro .step',
-		enter: onStepEnter,
-		exit: onStepExit,
+		enter: onIntroStepEnter,
+		exit: onIntroStepExit,
 		offset: 0.9
 	});
 
 	// map steps
 	EnterView({
 		selector: '#map .step',
-		enter: onMapEnter,
-		exit: onMapExit,
+		enter: onMapStepEnter,
+		exit: onMapStepExit,
 		offset: 0.9
 	});
 
@@ -92,12 +95,19 @@ function setup(data) {
 function loadData() {
 	return new Promise(resolve => {
 		const a = 'abcdef';
-		const data = d3.range(500).map(d => ({
+		const data = d3.range(5000).map((d, i) => ({
 			text: 'Testing text',
-			category: a.charAt(Math.floor(Math.random() * a.length)),
-			followers: Math.floor(Math.random() * 1000)
+			category: a.charAt(i % a.length),
+			followers: Math.floor(Math.random() * 1000),
+			chosen: i < a.length
 		}));
-		resolve(data);
+
+		const withPos = data.map((d, i) => ({
+			...d,
+			x: d.chosen ? tweetPos[i].cx : Math.random() * 1000,
+			y: d.chosen ? tweetPos[i].cy : Math.random() * 1000
+		}));
+		resolve(withPos);
 	});
 }
 

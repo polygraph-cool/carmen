@@ -1,8 +1,9 @@
 #intro
 	.intro__dots
-		position sticky
+		position fixed
 		top 5%
-		bottom auto
+		left 0
+		width 100%
 		transform translate3d(0,0,0)
 
 		.intro__layers
@@ -31,6 +32,10 @@
 		top auto
 		bottom 1rem
 		text-align: left
+
+		&.is-hidden
+			pointer-events none
+
 
 		&-text
 			set-type-size('xxxx-large', true)
@@ -64,5 +69,11 @@
 			flex-direction column
 			justify-content flex-end
 			padding 1rem
+			opacity 0
+			transition opacity 250ms ease-in-out
+			&:last-of-type
+				justify-content center
+			&.is-visible
+				opacity 1
 			p
 				text-shadow 0 0 3px $bg
