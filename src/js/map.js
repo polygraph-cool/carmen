@@ -1,6 +1,6 @@
 import * as topojson from 'topojson';
 import $ from './dom';
-import tweetPos from './category-tweets'
+import tweetPos from './category-tweets';
 
 let $outline = null;
 let $sphere = null;
@@ -72,32 +72,28 @@ function goTo({ coords, duration = 2000 }) {
 		});
 }
 
-function handoff(direction){
-	const $tweets = $.tweets.selectAll('.tweet')
-		.data(tweetPos)
+function handoff(direction) {
+	const $tweet = $.tweet.selectAll('.tweet').data(tweetPos);
 
-	const $tweetsEnter = $tweets
+	const $tweetEnter = $tweet
 		.enter()
 		.append('g')
-		.at('class', d => `tweet tweet-${d.cat}`)
+		.at('class', d => `tweet tweet-${d.cat}`);
 
-	$tweetsEnter
-		.append('circle.outer');
+	$tweetEnter.append('circle.outer');
 
-	$tweetsEnter
-		.append('circle.mid');
+	$tweetEnter.append('circle.mid');
 
-	$tweetsEnter
-		.append('circle.inner');
+	$tweetEnter.append('circle.inner');
 
-	$tweets.exit().remove()
+	$tweet.exit().remove();
 
-	const $tweetsMerge = $tweetsEnter.merge($tweets)
+	const $tweetMerge = $tweetEnter.merge($tweet);
 
-	$tweetsMerge.transition()
+	$tweetMerge
+		.transition()
 		.duration(500)
-		.translate(d => [Math.random() * 500, Math.random() * 500])
-
+		.translate(d => [Math.random() * 500, Math.random() * 500]);
 }
 
 function setup(world) {

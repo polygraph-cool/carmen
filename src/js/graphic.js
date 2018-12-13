@@ -3,15 +3,15 @@ import EnterView from 'enter-view';
 import $ from './dom';
 import intro from './intro';
 import map from './map';
+import curate from './curate';
 import explore from './explore';
-
-let tweetData = [];
 
 function resize() {
 	const height = window.innerHeight;
 	$.chart.st({ height });
 	intro.resize();
 	map.resize();
+	curate.resize();
 	explore.resize();
 }
 
@@ -26,52 +26,59 @@ function onStepExit(el) {
 }
 
 function onSectionEnter(el) {
-	const id = d3.select(el).at('id')
-	if (id === "map") map.handoff()
+	const id = d3.select(el).at('id');
+	if (id === 'map') map.handoff();
 	// make map visible
 }
 
 function onSectionExit(el) {}
 
-function onMapEnter(el){}
+function onMapEnter(el) {}
 
-function onMapExit(el){}
+function onMapExit(el) {}
 
-function setup() {
+function setup(data) {
 	// sections
-	intro.init();
-	map.init();
-	explore.init();
+	intro.init(data);
+	map.init(data);
+	curate.init(data);
+	explore.init(data);
 
+	// section steps
+	EnterView({
+		selector: 'section',
+		enter: onSectionEnter,
+		exit: onSectionExit
+	});
+
+	// intro steps
 	EnterView({
 		selector: '#intro .step',
 		enter: onStepEnter,
 		exit: onStepExit,
 		offset: 0.9
 	});
+
+	// map steps
 	EnterView({
 		selector: '#map .step',
 		enter: onMapEnter,
 		exit: onMapExit,
 		offset: 0.9
 	});
-	EnterView({
-		selector: 'section',
-		enter: onSectionEnter,
-		exit: onSectionExit
-	});
+
 	resize();
 }
 
 function loadData() {
 	return new Promise(resolve => {
 		const a = 'abcdef';
-		tweetData = d3.range(500).map(d => ({
+		const data = d3.range(500).map(d => ({
 			text: 'Testing text',
 			category: a.charAt(Math.floor(Math.random() * a.length)),
 			followers: Math.floor(Math.random() * 1000)
 		}));
-		resolve();
+		resolve(data);
 	});
 }
 
