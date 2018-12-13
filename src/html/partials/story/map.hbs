@@ -1,0 +1,8 @@
+<div class='map__steps'>
+  {{#each doc.map-steps}}
+    <div class='step' data-step='{{{step}}}' id='step-{{{step}}}'>
+      <h3 class='step__label'>{{{label}}}</h3>
+      <p class='step__prose'>{{{text}}}</p>
+    </div>
+  {{/each}}
+</div>

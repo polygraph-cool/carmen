@@ -69,8 +69,7 @@ function loadData() {
 		tweetData = d3.range(500).map(d => ({
 			text: 'Testing text',
 			category: a.charAt(Math.floor(Math.random() * a.length)),
-			likes: Math.floor(Math.random() * 1000),
-			retweets: Math.floor(Math.random() * 100)
+			followers: Math.floor(Math.random() * 1000)
 		}));
 		resolve();
 	});
