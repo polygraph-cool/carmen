@@ -1,36 +1,5 @@
-.intro
-	margin 0 auto
-	padding 4rem 1rem 1.5rem 1rem
-	position relative
-
-	&__hed
-		max-width 60rem
-		margin 0 auto
-		padding-top 5rem
-		font-weight 400
-		text-align center
-		set-type-size('xx-large', true)
-		+mq('bp-3')
-			set-type-size('xxx-large', true)
-		+mq('bp-5')
-			set-type-size('xxxx-large', true)
-
-	&__byline
-		max-width $column-width
-		margin 0 auto
-		padding-top 5rem
-		padding-bottom 1.5rem
-		text-align center
-		set-type-size('small', true)
-
-	&__dek
-		max-width $column-width
-		margin 0 auto
-		padding-top 1.5rem
-		text-align center
-		set-type-size('medium', true)
-
-	&__dots
+#intro
+	.intro__dots
 		position sticky
 		top 5%
 		bottom auto
@@ -39,64 +8,61 @@
 		.intro__layers
 			position relative
 
-			.bottom
-				position absolute
-				z-index 1
+		.bottom
+			position absolute
+			z-index 1
 
-			.top
-				position absolute
-				z-index 2
-				opacity 0
+		.top
+			position absolute
+			z-index 2
+			opacity 0
+			transition 500ms
+
+			&.is-active
+				opacity 1
 				transition 500ms
 
-				&.is-active
-					opacity 1
-					transition 500ms
-
-	&__overlays
+	.intro__overlays
 		z-index 3
 		position relative
 
-		.intro__hed
-			position fixed
-			top auto
-			bottom 1rem
-			text-align: left
+	.intro__hed
+		position fixed
+		top auto
+		bottom 1rem
+		text-align: left
 
-			&-text
-				set-type-size('xxxx-large', true)
-				text-transform uppercase
-				font-weight 600
-				padding 0.05rem 0.75rem
-				margin 0 0 0.3rem 0
-				background-color: $gray-darkest
-				display inline-block
-				font-family: sans-serif;
-				z-index 3
-				position relative
-
-			img
-				max-width 175px
-				margin-bottom 0
-				transform translateY(20px)
-				position relative
-				z-index 4
-
-		.intro__steps
+		&-text
+			set-type-size('xxxx-large', true)
+			text-transform uppercase
+			font-weight 600
+			padding 0.05rem 0.75rem
+			margin 0 0 0.3rem 0
+			background-color $gray-darkest
+			display inline-block
 			z-index 3
 			position relative
-			max-width 20rem
-			margin-left auto
-			margin-right 0
-			padding 1rem
 
-			.step
-				display flex
-				flex-direction column
-				justify-content: flex-end;
-				&__prose
-					color #ffffff
-			#step-0
-				display flex
-				flex-direction column
-				justify-content: flex-end;
+		img
+			max-width 175px
+			margin-bottom 0
+			transform translateY(20px)
+			position relative
+			z-index 4
+
+
+	.intro__steps
+		z-index 3
+		position relative
+		max-width 25rem
+		margin-left auto
+		margin-right 0
+		padding 1rem
+
+		.step
+			display flex
+			flex-direction column
+			justify-content flex-end
+			padding 1rem
+			p
+				text-shadow 0 0 3px $bg

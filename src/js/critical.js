@@ -9,7 +9,13 @@ import { loadFontGroup } from './utils/load-font';
 // polyfill promise
 if (!window.Promise) window.Promise = Promise;
 
+const netflix = [
+	{ family: 'Netflix Sans', weight: 300 },
+	{ family: 'Netflix Sans', weight: 400 },
+	{ family: 'Netflix Sans', weight: 700 }
+];
+
 // load fonts
-// loadFontGroup(canela);
+loadFontGroup(netflix);
 // loadFontGroup(publico);
 // loadFontGroup(atlas);
