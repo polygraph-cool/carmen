@@ -73,11 +73,14 @@
 				display inline-block
 				font-family: sans-serif;
 				z-index 3
+				position relative
 
 			img
 				max-width 175px
 				margin-bottom 0
 				transform translateY(20px)
+				position relative
+				z-index 4
 
 		.intro__steps
 			z-index 3
@@ -88,6 +91,9 @@
 			padding 1rem
 
 			.step
+				display flex
+				flex-direction column
+				justify-content: flex-end;
 				&__prose
 					color #ffffff
 			#step-0

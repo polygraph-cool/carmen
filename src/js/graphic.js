@@ -38,7 +38,8 @@ function setup() {
 	EnterView({
 		selector: '.step',
 		enter: onStepEnter,
-		exit: onStepExit
+		exit: onStepExit,
+		offset: 0.9
 	});
 	EnterView({
 		selector: 'section',
