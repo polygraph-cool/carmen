@@ -29,6 +29,10 @@ function onSectionEnter(el) {}
 
 function onSectionExit(el) {}
 
+function onMapEnter(el){}
+
+function onMapExit(el){}
+
 function setup() {
 	// sections
 	intro.init();
@@ -36,9 +40,15 @@ function setup() {
 	explore.init();
 
 	EnterView({
-		selector: '.step',
+		selector: '#intro .step',
 		enter: onStepEnter,
 		exit: onStepExit,
+		offset: 0.9
+	});
+	EnterView({
+		selector: '#map .step',
+		enter: onMapEnter,
+		exit: onMapExit,
 		offset: 0.9
 	});
 	EnterView({
