@@ -27,7 +27,26 @@ function onStepExit(el) {
 
 function onSectionEnter(el) {
 	const id = d3.select(el).at('id');
-	if (id === 'map') map.handoff();
+	switch (id) {
+	case 'intro':
+		intro.handoff();
+		break;
+
+	case 'map':
+		map.handoff();
+		break;
+
+	case 'curate':
+		curate.handoff();
+		break;
+
+	case 'explore':
+		explore.handoff();
+		break;
+
+	default:
+		break;
+	}
 	// make map visible
 }
 

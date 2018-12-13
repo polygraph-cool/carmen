@@ -1,7 +1,18 @@
 import $ from './dom';
 
-function resize() {}
+const $curate = d3.select('#curate');
+const $p = $curate.select('p');
 
-function init() {}
+let tweetData = [];
 
-export default { init, resize };
+function handoff(direction) {}
+
+function resize() {
+	$p.st('height', window.innerHeight);
+}
+
+function init(data) {
+	tweetData = data;
+}
+
+export default { init, resize, handoff };

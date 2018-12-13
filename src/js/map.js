@@ -73,7 +73,7 @@ function goTo({ coords, duration = 2000 }) {
 }
 
 function handoff(direction) {
-	const $tweet = $.tweet.selectAll('.tweet').data(tweetPos);
+	const $tweet = $.tweets.selectAll('.tweet').data(tweetPos);
 
 	const $tweetEnter = $tweet
 		.enter()

@@ -67,6 +67,8 @@ function exit(step) {
 	if (step === 1) showTitle();
 }
 
+function handoff(direction) {}
+
 function resize() {
 	const width = $top.node().offsetWidth;
 	const height = $top.node().offsetHeight;
@@ -107,4 +109,4 @@ function init() {
 	resize();
 }
 
-export default { init, resize, enter, exit };
+export default { init, resize, enter, exit, handoff };
