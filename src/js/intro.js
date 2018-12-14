@@ -1,4 +1,5 @@
 import $ from './dom';
+import tweet from './tweet'
 
 let tweetData = [];
 const origW = 1280;
@@ -10,6 +11,13 @@ const $top = $intro.select('.top');
 const $introHed = $intro.select('.intro__hed');
 const $title = $intro.selectAll('.intro__hed-text');
 const $step = $intro.selectAll('.step');
+
+const exampleTweet = [{
+	name: "The Pudding",
+	handle: '@puddingviz',
+	text: 'We ❤️ Carmen Sandiego',
+	time: '11/14/18 12:39 PM'
+}]
 
 function setupTweets() {
 	const data = tweetData.filter(d => d.chosen);
@@ -65,6 +73,9 @@ function enter(step) {
 	$top.classed('is-active', step > 0);
 	$.tweets.selectAll('.tweet').classed('is-active', step === 2);
 	if (step === 1) hideTitle();
+	const randomX = Math.random()* 500
+	const randomY = Math.random()* 500
+	if (step === 2) tweet(exampleTweet, randomX, randomY)
 }
 
 function exit(step) {
