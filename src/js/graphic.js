@@ -28,31 +28,58 @@ function onIntroStepExit(el) {
 
 function onSectionEnter(el) {
 	const id = d3.select(el).at('id');
-	console.log({ id });
+	console.log('enter', id);
 	switch (id) {
 	case 'intro':
+		$.chart.classed('is-hidden', false);
+		$.introDots.classed('is-hidden', false);
 		intro.handoff();
 		break;
 
 	case 'map':
+		$.chart.classed('is-hidden', false);
+		$.introDots.classed('is-hidden', true);
 		map.handoff();
 		break;
 
 	case 'curate':
+		$.chart.classed('is-hidden', false);
+		$.introDots.classed('is-hidden', true);
 		curate.handoff();
 		break;
 
 	case 'explore':
+		$.chart.classed('is-hidden', true);
+		$.introDots.classed('is-hidden', true);
 		explore.handoff();
 		break;
 
 	default:
 		break;
 	}
-	// make map visible
 }
 
-function onSectionExit(el) {}
+function onSectionExit(el) {
+	const id = d3.select(el).at('id');
+	console.log('exit', id);
+	switch (id) {
+	case 'intro':
+		break;
+
+	case 'map':
+		$.introDots.classed('is-hidden', false);
+		break;
+
+	case 'curate':
+		break;
+
+	case 'explore':
+		break;
+
+	default:
+		break;
+	}
+}
 
 function onMapStepEnter(el) {}
 

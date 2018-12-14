@@ -3,11 +3,13 @@ const svg = chart.select('svg');
 const g = svg.select('g');
 const map = g.select('.g-map');
 const tweets = g.select('.g-tweets');
+const introDots = d3.select('.intro__dots');
 
 export default {
 	chart,
 	svg,
 	g,
 	map,
-	tweets
+	tweets,
+	introDots
 };
