@@ -75,13 +75,14 @@ function enter(step) {
 	if (step === 1) hideTitle();
 	const randomX = Math.random()* 500
 	const randomY = Math.random()* 500
-	if (step === 2) tweet(exampleTweet, randomX, randomY)
+	if (step === 2) tweet.createTweet(exampleTweet, randomX, randomY)
 }
 
 function exit(step) {
 	$top.classed('is-active', step !== 1);
 	$.tweets.selectAll('.tweet').classed('is-active', step === 2);
 	if (step === 1) showTitle();
+	if (step != 2) tweet.clearTweets()
 }
 
 function handoff(direction) {}

@@ -1,22 +1,20 @@
 import $ from './dom';
 
-// selections
-const tweet = $.chart.selectAll('.tweet__example')
-const name = tweet.select('.tweet__example-name')
-const handle = tweet.select('.tweet__example-handle')
-const text = tweet.select('.tweet__example-text')
-const time = tweet.select('.tweet__example-time')
+function createTweet(data, positionX, positionY){
+  const tweet = $.chart.append('div.tweet__example')
 
-
-function showTweet(data, positionX, positionY){
-  name.text(data[0].name)
-  handle.text(data[0].handle)
-  text.text(data[0].text)
-  time.text(data[0].time)
+  tweet.append('p.tweet__example-name').text(data[0].name)
+  tweet.append('p.tweet__example-handle').text(data[0].handle)
+  tweet.append('p.tweet__example-text').text(data[0].text)
+  tweet.append('p.tweet__example-time').text(data[0].time)
 
   tweet
     .classed('is-active', true)
     .translate([positionX, positionY])
 }
 
-export default showTweet
+function clearTweets(){
+  $.chart.selectAll('.tweet__example').remove()
+}
+
+export default {createTweet, clearTweets}
