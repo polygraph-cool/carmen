@@ -51,9 +51,10 @@ function runSim() {
 		// 		.strength(1)
 		// )
 		.force('x', d3.forceX(500))
-		.force('y', d3.forceY(500));
+		.force('y', d3.forceY(500))
+		.on('tick', handleTick);
 
-	simulation.nodes(nodes).on('tick', handleTick);
+	simulation.nodes(nodes);
 }
 
 function handoff(direction) {
