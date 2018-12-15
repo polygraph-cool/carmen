@@ -1,12 +1,20 @@
 import $ from './dom';
 
-const simulation = d3.forceSimulation();
+let simulation = null;
 
 const $curate = d3.select('#curate');
 const $p = $curate.select('p');
 
 let tweetData = [];
 let nodes = [];
+
+let centerX = 0;
+let centerY = 0;
+let minR = 0;
+let maxR = 0;
+
+const scaleFollowers = d3.scalePow().exponent(0.5);
+const scaleStrength = d3.scaleLinear();
 
 function handleTick() {
 	$.tweets.selectAll('.tweet').translate(d => [d.x, d.y]);
@@ -15,50 +23,40 @@ function handleTick() {
 function runSim() {
 	const alphaDecay = 0.0228;
 	const alphaMin = 0.001;
-	const alphaTarget = 0;
+	const alphaTarget = 0.0;
 	const velocityDecay = 0.4;
-	const manyBodyStrength = -5;
+	const manyBodyStrength = -10;
 
-	// const forceX = d => {
-	// 	const { x } = d.pos ? d.pos : { x: 0.5 };
-	// 	const px = x * width;
-	// 	const offset = d.offscreen ? radius : radius;
-	// 	if (d.qIndex === 0) return px - offset * 2;
-	// 	if (d.qIndex === 1) return px - offset;
-	// 	if (d.qIndex === 2) return px + offset;
-	// 	if (d.qIndex === 3) return px + offset * 2;
-	// 	return px;
-	// };
-
-	// const forceY = d => {
-	// 	const { y } = d.pos ? d.pos : { y: 0.5 };
-	// 	return y * height;
-	// };
-
-	// const forceR = () => Math.min(width, height) * 0.33;
-
-	simulation
+	simulation = d3
+		.forceSimulation(nodes)
+		.on('tick', handleTick)
 		.alphaDecay(alphaDecay)
 		.alphaMin(alphaMin)
 		.alphaTarget(alphaTarget)
 		.velocityDecay(velocityDecay)
+		.force('center', d3.forceCenter(centerX, centerY))
+		.force(
+			'collide',
+			d3
+				.forceCollide()
+				.radius(d => scaleFollowers(d.followers) * 1.25)
+				.strength(1)
+				.iterations(2)
+		)
 		.force('charge', d3.forceManyBody().strength(manyBodyStrength))
-		// .force(
-		// 	'collide',
-		// 	d3
-		// 		.forceCollide()
-		// 		.radius(2)
-		// 		.strength(1)
-		// )
-		.force('x', d3.forceX(500))
-		.force('y', d3.forceY(500))
-		.on('tick', handleTick);
+		.force('x', d3.forceX(centerX).strength(d => scaleStrength(d.followers)))
+		.force('y', d3.forceY(centerY).strength(d => scaleStrength(d.followers)));
 
-	simulation.nodes(nodes);
+	// simulation.restart();
 }
 
 function handoff(direction) {
 	nodes = tweetData.filter(d => d.category === 'a');
+
+	const followerMax = d3.max(nodes, n => n.followers);
+	scaleFollowers.domain([0, followerMax]).range([minR, maxR]);
+
+	scaleStrength.domain([0, followerMax]).range([0.1, 0.9]);
 
 	const $tweet = $.tweets.selectAll('.tweet').data(nodes, d => d.category);
 
@@ -75,7 +73,7 @@ function handoff(direction) {
 	});
 
 	$tweetEnter.append('circle.inner').at({
-		r: 2,
+		r: 0,
 		cx: 0,
 		cy: 0
 	});
@@ -83,11 +81,22 @@ function handoff(direction) {
 	$tweet.exit().remove();
 
 	const $tweetMerge = $tweetEnter.merge($tweet);
+
+	$tweetMerge
+		.select('.inner')
+		.transition()
+		.duration(500)
+		.at('r', d => scaleFollowers(d.followers));
 	runSim();
 }
 
 function resize() {
+	centerX = $.chart.node().offsetWidth / 2;
+	centerY = $.chart.node().offsetHeight / 2;
 	$p.st('height', window.innerHeight);
+
+	minR = 3;
+	maxR = 12;
 }
 
 function init(data) {

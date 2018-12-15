@@ -1,37 +1,35 @@
-.tweet__example
-  position absolute
-  background-color: white
-  width 250px
-  height: 175px
-  border-radius: 10px
-  top 50px
-  padding 1rem
-  display flex
-  flex-direction column
-  justify-content: space-between;
-  visibility hidden
-  &-name
-    display flex
-    margin-top 0.5rem
-    margin-bottom 0
-    color $off-black
-    line-height 1
-    font-weight 600
+.tweet
+	position absolute
+	background-color $fg
+	color $bg
+	width 15rem
+	border-radius 10px
+	padding 1rem
 
-  &-handle
-    set-type-size('x-small')
-    color $gray
-    margin-top 0
-    margin-bottom 0.25rem
+	&__name
+		margin 0
+		font-weight 700
 
-  &-text
-    color $off-black
-    margin 0
+	&__handle
+		margin 0
+		margin-bottom 0.5rem
+		color $gray
+		set-type-size('x-small')
 
-  &-time
-    color $gray
-    set-type-size('x-small')
-    margin 0
+	&__text
+		margin 0
+		color $off-black
 
-  &.is-active
-    visibility visible
+	&__time
+		margin 0
+		color $gray
+		set-type-size('x-small')
+
+	&.is-center
+		transform translate(-50%, -50%)
+	
+	&.is-left
+		transform translate(0, -50%)
+	
+	&.is-right
+		transform translate(50%, -50%)

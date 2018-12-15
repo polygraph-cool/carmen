@@ -1,6 +1,9 @@
 import * as topojson from 'topojson';
 import $ from './dom';
 
+const $map = d3.select('#map');
+const $step = $map.selectAll('.step');
+
 let $outline = null;
 let $sphere = null;
 let $pathCountry = null;
@@ -14,6 +17,11 @@ let ready = false;
 let tweetData = [];
 
 function resize() {
+	const stepHeight = window.innerHeight;
+
+	const stepSize = $step.size();
+	$step.st('height', (d, i) => stepHeight * (i === stepSize - 1 ? 2 : 1));
+
 	if (ready) {
 		const h = window.innerHeight;
 		const w = $.chart.node().offsetWidth;

@@ -3,6 +3,9 @@
 body
 	font-weight 400
 
+section
+	position relative
+
 figure#chart
 	position fixed
 	top 0
@@ -15,21 +18,31 @@ figure#chart
 		opacity 0
 		pointer-events none
 
-	.tweet
-		opacity 0
+	.chart__svg
+		.tweet
+			opacity 0
 
-		&.is-active
-			opacity 1
+			&.is-active
+				opacity 1
 
-		.inner
-			fill white
+			.inner
+				fill white
 
-		.mid
-			fill rgba($red, .3)
-			stroke rgba($red, .6)
-			stroke-width 1px
+			.mid
+				fill rgba($red, .3)
+				stroke rgba($red, .6)
+				stroke-width 1px
 
-		.outer
-			fill none
-			stroke-width 1px
-			stroke $red
+			.outer
+				fill none
+				stroke-width 1px
+				stroke $red
+
+
+	.chart__tweets
+		position absolute
+		top 0
+		left 0
+		width 100%
+		height 100%
+		z-index set-index(top)

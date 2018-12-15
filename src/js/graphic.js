@@ -26,54 +26,29 @@ function onIntroStepExit(el) {
 	intro.exit(step);
 }
 
-function onSectionEnter(el) {
-	const id = d3.select(el).at('id');
-	console.log('enter', id);
+function updateSection(index) {
+	const $section = $.section.filter((d, i) => i === index);
+	const id = $section.at('id');
+	console.log('section', id);
+	$.chart.classed('is-hidden', false);
+	$.introDots.classed('is-hidden', true);
+
 	switch (id) {
 	case 'intro':
-		$.chart.classed('is-hidden', false);
 		$.introDots.classed('is-hidden', false);
 		intro.handoff();
 		break;
-
 	case 'map':
-		$.chart.classed('is-hidden', false);
-		$.introDots.classed('is-hidden', true);
 		map.handoff();
 		break;
 
 	case 'curate':
-		$.chart.classed('is-hidden', false);
-		$.introDots.classed('is-hidden', true);
 		curate.handoff();
 		break;
 
 	case 'explore':
 		$.chart.classed('is-hidden', true);
-		$.introDots.classed('is-hidden', true);
 		explore.handoff();
-		break;
-
-	default:
-		break;
-	}
-}
-
-function onSectionExit(el) {
-	const id = d3.select(el).at('id');
-	console.log('exit', id);
-	switch (id) {
-	case 'intro':
-		break;
-
-	case 'map':
-		$.introDots.classed('is-hidden', false);
-		break;
-
-	case 'curate':
-		break;
-
-	case 'explore':
 		break;
 
 	default:
@@ -95,9 +70,16 @@ function setup(data) {
 	// section steps
 	EnterView({
 		selector: 'section',
-		enter: onSectionEnter,
-		exit: onSectionExit,
-		offset: 0.9
+		enter: el => {
+			const index = +d3.select(el).attr('data-index');
+			updateSection(index);
+		},
+		exit: el => {
+			let index = +d3.select(el).attr('data-index');
+			index = Math.max(0, index - 1);
+			updateSection(index);
+		},
+		offset: 0.2
 	});
 
 	// intro steps
@@ -122,7 +104,7 @@ function setup(data) {
 function loadData() {
 	return new Promise(resolve => {
 		const a = 'abcdef';
-		const data = d3.range(5000).map((d, i) => ({
+		const data = d3.range(3000).map((d, i) => ({
 			text: 'Testing text',
 			category: a.charAt(i % a.length),
 			followers: Math.floor(Math.random() * 1000),

@@ -27,26 +27,27 @@
 
 	<main id='content'>
 		<figure id='chart'>
-			<svg>
+			<svg class='chart__svg'>
 				<g>
 					<g class='g-map'></g>
 					<g class='g-tweets'></g>
 				</g>
 			</svg>
+			<div class='chart__tweets'></div>
 		</figure>
-		<section id='intro'>
+		<section data-index='0' id='intro'>
 			{{> story/intro }}
 		</section>
-		<section id='map'>
+		<section data-index='1' id='map'>
 			{{> story/map }}
 		</section>
-		<section id='curate'>
+		<section data-index='2' id='curate'>
 			{{> story/curate }}
 		</section>
-		<section id='explore'>
+		<section data-index='3' id='explore'>
 			{{> story/explore }}
 		</section>
-		<section id='outro'>
+		<section data-index='4' id='outro'>
 			{{> story/outro }}
 		</section>
 

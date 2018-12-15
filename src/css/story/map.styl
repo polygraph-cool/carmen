@@ -29,6 +29,19 @@
 		fill-opacity 0
 
 #map
-	position relative
-	max-width 25rem
-	padding-left 1rem
+	.map__steps
+		position relative
+		max-width 25rem
+		margin 0
+		padding 1rem
+
+		.step
+			display flex
+			flex-direction column
+			justify-content flex-end
+			min-height 480px
+			&:last-of-type
+				justify-content center
+			p
+				text-shadow 0 0 3px $bg
+
