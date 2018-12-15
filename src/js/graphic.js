@@ -113,8 +113,8 @@ function loadData() {
 
 		const withPos = data.map((d, i) => ({
 			...d,
-			x: d.chosen ? tweetPos[i].cx : Math.random() * 1000,
-			y: d.chosen ? tweetPos[i].cy : Math.random() * 1000
+			x: d.chosen ? tweetPos[i].cx : window.innerWidth / 2,
+			y: d.chosen ? tweetPos[i].cy : window.innerHeight / 2
 		}));
 		resolve(withPos);
 	});
