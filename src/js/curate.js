@@ -21,15 +21,21 @@ function handleTick() {
 }
 
 function runSim() {
-	const alphaDecay = 0.0227;
-	const alphaMin = 0.001;
-	const alphaTarget = 0.0;
-	const velocityDecay = 0.4;
-	const manyBodyStrength = -20;
+	// const alphaDecay = 0.0227;
+	// const alphaMin = 0.001;
+	// const alphaTarget = 0.0;
+	// const velocityDecay = 0.4;
+	const alpha = 0.1;
+	const alphaDecay = 0.005;
+	const alphaMin = 0.0;
+	const alphaTarget = 0.0001;
+	const velocityDecay = 0.5;
+	const manyBodyStrength = -15;
 
 	simulation = d3
 		.forceSimulation(nodes)
 		.on('tick', handleTick)
+		.alpha(alpha)
 		.alphaDecay(alphaDecay)
 		.alphaMin(alphaMin)
 		.alphaTarget(alphaTarget)
@@ -41,13 +47,13 @@ function runSim() {
 				.forceCollide()
 				.radius(d => scaleFollowers(d.followers) + 2)
 				.strength(1)
-				.iterations(2)
+			// .iterations(2)
 		)
-		// .force('charge', d3.forceManyBody().strength(manyBodyStrength))
 		.force('x', d3.forceX(centerX).strength(d => scaleStrength(d.followers)))
 		.force('y', d3.forceY(centerY).strength(d => scaleStrength(d.followers)));
-
-	// simulation.restart();
+	// .force('charge', d3.forceManyBody().strength(manyBodyStrength));
+	// .force('x', d3.forceX(centerX))
+	// .force('y', d3.forceY(centerY));
 }
 
 function handoff(direction) {
@@ -56,7 +62,7 @@ function handoff(direction) {
 	const followerMax = d3.max(nodes, n => n.followers);
 	scaleFollowers.domain([0, followerMax]).range([minR, maxR]);
 
-	scaleStrength.domain([0, followerMax]).range([0.01, 0.2]);
+	scaleStrength.domain([0, followerMax]).range([0.1, 0.33]);
 
 	const $tweet = $.tweets.selectAll('.tweet').data(nodes, d => d.category);
 
@@ -73,9 +79,9 @@ function handoff(direction) {
 	});
 
 	$tweetEnter.append('circle.inner').at({
-		r: 0,
 		cx: 0,
-		cy: 0
+		cy: 0,
+		r: 0
 	});
 
 	$tweet.exit().remove();
@@ -83,9 +89,9 @@ function handoff(direction) {
 	const $tweetMerge = $tweetEnter.merge($tweet);
 
 	$tweetMerge
-		.select('.inner')
 		.transition()
 		.duration(500)
+		.select('.inner')
 		.at('r', d => scaleFollowers(d.followers));
 	runSim();
 }

@@ -104,7 +104,7 @@ function setup(data) {
 function loadData() {
 	return new Promise(resolve => {
 		const a = 'abcdef';
-		const data = d3.range(3000).map((d, i) => ({
+		const data = d3.range(2400).map((d, i) => ({
 			text: 'Testing text',
 			category: a.charAt(i % a.length),
 			followers: Math.floor(Math.random() * 1000),
@@ -113,8 +113,8 @@ function loadData() {
 
 		const withPos = data.map((d, i) => ({
 			...d,
-			x: d.chosen ? tweetPos[i].cx : window.innerWidth / 2,
-			y: d.chosen ? tweetPos[i].cy : window.innerHeight / 2
+			x: d.chosen ? tweetPos[i].cx : Math.random() * window.innerWidth,
+			y: d.chosen ? tweetPos[i].cy : Math.random() * window.innerHeight
 		}));
 		resolve(withPos);
 	});
