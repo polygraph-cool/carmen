@@ -6,17 +6,19 @@ let tweetData = [];
 const origW = 1280;
 const origH = 1024;
 let radius = 2.5;
-let REM = 16
-let tweetWidth = 15 * REM
-let catNum = 5
-let width = null
-let height = null
+const REM = 16;
+const tweetWidth = 15 * REM;
+const catNum = 5;
+let width = null;
+let height = null;
+
+let triggerTimeouts = []
 
 const $intro = d3.select('#intro');
 const $top = $intro.select('.top');
 const $introHed = $intro.select('.intro__hed');
 const $title = $intro.selectAll('.intro__hed-text');
-const $stepGroup = $intro.selectAll('.intro__steps')
+const $stepGroup = $intro.selectAll('.intro__steps');
 const $step = $intro.selectAll('.step');
 
 const exampleTweet = {
@@ -30,7 +32,7 @@ function setupTweets() {
 	const data = tweetData.filter(d => d.chosen);
 	const $node = $.nodes.selectAll('.node').data(data, d => d.category);
 
-	console.log({data})
+	console.log({ data });
 
 	const $nodeEnter = $node
 		.enter()
@@ -46,13 +48,13 @@ function setupTweets() {
 
 	$nodeEnter.append('circle.inner');
 
-	const exampleData = tweetData.filter(d => d.example)
-	const $nodeEx = $.nodes.selectAll('.node__example').data(exampleData)
+	const exampleData = tweetData.filter(d => d.example);
+	const $nodeEx = $.nodes.selectAll('.node__example').data(exampleData);
 
 	const $nodeExEnter = $nodeEx
 		.enter()
 		.append('circle.node__example')
-		.st('opacity', 0)
+		.st('opacity', 0);
 }
 
 function hideTitle() {
@@ -87,17 +89,21 @@ function showTitle() {
 }
 
 function triggerExamples() {
-	const delay = 1000
-	$.nodes.selectAll('.node__example')
+	const delay = 4000;
+	$.nodes
+		.selectAll('.node__example')
 		.transition()
 		.duration(200)
 		.delay((d, i) => i * delay)
-		.st('opacity', 1)
+		.st('opacity', 1);
 
-	d3.range(3).forEach(i => {
-		const x = (tweetPos[i + catNum].cx * width) / origW
-		const y = (tweetPos[i + catNum].cy * height) / origH
-		setTimeout(() => Tweet.create({ data: exampleTweet, x, y }), i * 1000)
+	triggerTimeouts = d3.range(3).map(i => {
+		const x = (tweetPos[i + catNum].cx * width) / origW;
+		const y = (tweetPos[i + catNum].cy * height) / origH;
+		return setTimeout(
+			() => Tweet.create({ data: exampleTweet, x, y, fade: true, offset: true }),
+			i * delay
+		);
 	});
 }
 
@@ -105,12 +111,14 @@ function enter(step) {
 	$top.classed('is-active', step !== 'title');
 
 	if (step !== 'title') hideTitle();
-	if (step !== 'examples') Tweet.clear();
+	if (step !== 'examples') {
+		Tweet.clear();
+		triggerTimeouts.forEach(t => clearTimeout(t))
+	}
 	if (step === 'examples') triggerExamples();
 
 	$.nodes.selectAll('.node').classed('is-active', step === 'categories');
-	$.nodes.selectAll('.node__example').classed('is-active', step === 'examples')
-
+	$.nodes.selectAll('.node__example').classed('is-active', step === 'examples');
 }
 
 function exit(step) {
@@ -121,7 +129,9 @@ function exit(step) {
 	if (step === 'categories') triggerExamples();
 
 	$.nodes.selectAll('.node').classed('is-active', step === 'categories');
-	$.nodes.selectAll('.node__example').classed('is-active', step === 'categories')
+	$.nodes
+		.selectAll('.node__example')
+		.classed('is-active', step === 'categories');
 }
 
 function handoff(direction) {}
@@ -163,9 +173,7 @@ function resize() {
 		.at('cx', 0)
 		.at('cy', 0);
 
-	$.chartTweets
-		.st('width', width)
-		.st('height', height)
+	$.chartTweets.st('width', width).st('height', height);
 }
 
 function init(data) {

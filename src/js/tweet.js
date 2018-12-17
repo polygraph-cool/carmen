@@ -3,7 +3,7 @@ import $ from './dom';
 const REM = 16;
 const PAD = REM;
 
-function create({ data, x, y, offset }) {
+function create({ data, x, y, fade, offset }) {
 	const $tweet = $.chartTweets.append('div.tweet');
 
 	const { name, handle, text, time } = data;
@@ -16,7 +16,7 @@ function create({ data, x, y, offset }) {
 		.st({ top: y, left: x })
 		.st('opacity', 0)
 		.transition()
-		.duration(500)
+		.duration(fade ? 500 : 0)
 		.st('opacity', 1);
 
 	// adjust position
