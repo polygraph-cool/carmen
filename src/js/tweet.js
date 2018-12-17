@@ -4,7 +4,9 @@ const REM = 16;
 const PAD = REM;
 
 function create({ data, x, y }) {
-	const $tweet = $.chartTweets.append('div.tweet');
+	const $tweet = $.chartTweets
+		.append('div.tweet')
+
 
 	const { name, handle, text, time } = data;
 	$tweet.append('p.tweet__name').text(name);
@@ -12,7 +14,11 @@ function create({ data, x, y }) {
 	$tweet.append('p.tweet__text').text(text);
 	$tweet.append('p.tweet__time').text(time);
 
-	$tweet.st({ top: y, left: x });
+	$tweet.st({ top: y, left: x })
+		.st('opacity', 0)
+		.transition()
+			.duration(500)
+			.st('opacity', 1)
 
 	// adjust position
 	const w = +$tweet.node().offsetWidth / 2;

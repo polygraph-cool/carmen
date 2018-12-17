@@ -1,15 +1,22 @@
 import $ from './dom';
 import Tweet from './tweet';
+import tweetPos from './tweet-pos';
 
 let tweetData = [];
 const origW = 1280;
 const origH = 1024;
 let radius = 2.5;
+let REM = 16
+let tweetWidth = 15 * REM
+let catNum = 5
+let width = null
+let height = null
 
 const $intro = d3.select('#intro');
 const $top = $intro.select('.top');
 const $introHed = $intro.select('.intro__hed');
 const $title = $intro.selectAll('.intro__hed-text');
+const $stepGroup = $intro.selectAll('.intro__steps')
 const $step = $intro.selectAll('.step');
 
 const exampleTweet = {
@@ -22,6 +29,8 @@ const exampleTweet = {
 function setupTweets() {
 	const data = tweetData.filter(d => d.chosen);
 	const $node = $.nodes.selectAll('.node').data(data, d => d.category);
+
+	console.log({data})
 
 	const $nodeEnter = $node
 		.enter()
@@ -36,6 +45,14 @@ function setupTweets() {
 	});
 
 	$nodeEnter.append('circle.inner');
+
+	const exampleData = tweetData.filter(d => d.example)
+	const $nodeEx = $.nodes.selectAll('.node__example').data(exampleData)
+
+	const $nodeExEnter = $nodeEx
+		.enter()
+		.append('circle.node__example')
+		.st('opacity', 0)
 }
 
 function hideTitle() {
@@ -70,10 +87,17 @@ function showTitle() {
 }
 
 function triggerExamples() {
-	d3.range(6).forEach(i => {
-		const x = Math.random() * $.chartTweets.node().offsetWidth;
-		const y = Math.random() * $.chartTweets.node().offsetHeight;
-		Tweet.create({ data: exampleTweet, x, y });
+	const delay = 1000
+	$.nodes.selectAll('.node__example')
+		.transition()
+		.duration(200)
+		.delay((d, i) => i * delay)
+		.st('opacity', 1)
+
+	d3.range(3).forEach(i => {
+		const x = (tweetPos[i + catNum].cx * width) / origW
+		const y = (tweetPos[i + catNum].cy * height) / origH
+		setTimeout(() => Tweet.create({ data: exampleTweet, x, y }), i * 1000)
 	});
 }
 
@@ -85,6 +109,8 @@ function enter(step) {
 	if (step === 'examples') triggerExamples();
 
 	$.nodes.selectAll('.node').classed('is-active', step === 'categories');
+	$.nodes.selectAll('.node__example').classed('is-active', step === 'examples')
+
 }
 
 function exit(step) {
@@ -95,13 +121,14 @@ function exit(step) {
 	if (step === 'categories') triggerExamples();
 
 	$.nodes.selectAll('.node').classed('is-active', step === 'categories');
+	$.nodes.selectAll('.node__example').classed('is-active', step === 'categories')
 }
 
 function handoff(direction) {}
 
 function resize() {
-	const width = $top.node().offsetWidth;
-	const height = $top.node().offsetHeight;
+	width = $top.node().offsetWidth;
+	height = $top.node().offsetHeight;
 
 	const stepHeight = window.innerHeight;
 
@@ -115,11 +142,11 @@ function resize() {
 	$.svg.st('width', width).st('height', height);
 
 	$.nodes
-		.selectAll('.node')
+		.selectAll('.node, .node__example')
 		.translate(d => [(d.x * width) / origW, (d.y * height) / origH]);
 
 	$.nodes
-		.selectAll('.inner')
+		.selectAll('.inner, .node__example')
 		.at('r', radius)
 		.at('cx', 0)
 		.at('cy', 0);
@@ -135,6 +162,10 @@ function resize() {
 		.at('r', radius * 10)
 		.at('cx', 0)
 		.at('cy', 0);
+
+	$.chartTweets
+		.st('width', width)
+		.st('height', height)
 }
 
 function init(data) {
