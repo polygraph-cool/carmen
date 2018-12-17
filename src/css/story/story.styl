@@ -29,14 +29,61 @@ figure#chart
 				fill white
 
 			.mid
-				fill rgba($red, .3)
-				stroke rgba($red, .6)
 				stroke-width 1px
 
 			.outer
-				fill none
 				stroke-width 1px
-				stroke $red
+				fill none
+
+			&-a
+				.mid
+					fill rgba($edu, .3)
+					stroke rgba($edu, .6)
+
+				.outer
+					stroke $edu
+
+			&-b
+				.mid
+					fill rgba($role, .3)
+					stroke rgba($role, .6)
+
+				.outer
+					stroke $role
+
+			&-c
+				.mid
+					fill rgba($fashion, .3)
+					stroke rgba($fashion, .6)
+
+				.outer
+					stroke $fashion
+
+			&-d
+				.mid
+					fill rgba($culture, .3)
+					stroke rgba($culture, .6)
+
+				.outer
+					stroke $culture
+
+			&-e
+				.mid
+					fill rgba($travel, .3)
+					stroke rgba($travel, .6)
+
+				.outer
+					stroke $travel
+			//
+			// .mid
+			// 	fill rgba($red, .3)
+			// 	stroke rgba($red, .6)
+			// 	stroke-width 1px
+			//
+			// .outer
+			// 	fill none
+			// 	stroke-width 1px
+			// 	stroke $red
 
 		.node__example
 			fill $red
