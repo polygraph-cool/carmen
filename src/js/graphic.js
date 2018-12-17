@@ -111,13 +111,14 @@ function loadData() {
 			text: 'Testing text',
 			category: a.charAt(i % a.length),
 			followers: Math.floor(Math.random() * 1000),
-			chosen: i < a.length
+			chosen: i < a.length,
+			example: i > a.length && i < a.length + 4
 		}));
 
 		const withPos = data.map((d, i) => ({
 			...d,
-			x: d.chosen ? tweetPos[i].cx : Math.random() * window.innerWidth,
-			y: d.chosen ? tweetPos[i].cy : Math.random() * window.innerHeight
+			x: ( d.chosen  || d.example ) ? tweetPos[i].cx : Math.random() * window.innerWidth,
+			y: ( d.chosen || d.example ) ? tweetPos[i].cy : Math.random() * window.innerHeight
 		}));
 		resolve(withPos);
 	});
