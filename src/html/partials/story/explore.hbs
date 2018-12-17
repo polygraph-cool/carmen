@@ -1,19 +1,21 @@
-<figure class='explore__dots'></figure>
+<figure class='explore__figure'>
+	<div class='figure__dots'></div>
+	<div class='figure__tweets'></div>
+</figure>
 
-<h3 class='explore__title'>{{{doc.explore.title}}}</h3>
+<h3 class='explore__title'><span>{{{doc.explore.title}}}</span></h3>
 
 <nav class='explore__nav is-hidden'>
-	
-		<fieldset class='nav__choose'>
-		<legend>{{{doc.explore.choose}}}</legend>
-
-			<ul>
+		<div class='nav__choose'>
+			<div class='left'>
+				<p>{{{doc.explore.choose}}}</p>
 				{{#each doc.categories}}
-				<li><input value='{{id}}' type='radio' name='{{id}}' id='radio{{@index}}'><label for='radio{{@index}}'>{{label}}</label></li>
+				<span data-id='{{id}}'>{{label}}</span>
 				{{/each}}
-			</ul>
-
-	</fieldset>
-	
-	<button>{{{doc.explore.button}}}</button>
+			</div>
+			<div class='right'>
+				<button>{{{doc.explore.button}}}</button>
+			</div>
+			
+		</div>
 </nav>
