@@ -21,21 +21,21 @@ const exampleTweet = {
 
 function setupTweets() {
 	const data = tweetData.filter(d => d.chosen);
-	const $tweet = $.tweets.selectAll('.tweet').data(data, d => d.category);
+	const $node = $.nodes.selectAll('.node').data(data, d => d.category);
 
-	const $tweetEnter = $tweet
+	const $nodeEnter = $node
 		.enter()
 		.append('g')
-		.at('class', d => `tweet tweet-${d.category}`);
+		.at('class', d => `node node-${d.category}`);
 
-	$tweetEnter.each((d, i, n) => {
+	$nodeEnter.each((d, i, n) => {
 		if (d.chosen) {
 			d3.select(n[i]).append('circle.outer');
 			d3.select(n[i]).append('circle.mid');
 		}
 	});
 
-	$tweetEnter.append('circle.inner');
+	$nodeEnter.append('circle.inner');
 }
 
 function hideTitle() {
@@ -84,7 +84,7 @@ function enter(step) {
 	if (step !== 'examples') Tweet.clear();
 	if (step === 'examples') triggerExamples();
 
-	$.tweets.selectAll('.tweet').classed('is-active', step === 'categories');
+	$.nodes.selectAll('.node').classed('is-active', step === 'categories');
 }
 
 function exit(step) {
@@ -94,7 +94,7 @@ function exit(step) {
 	if (step === 'examples') Tweet.clear();
 	if (step === 'categories') triggerExamples();
 
-	$.tweets.selectAll('.tweet').classed('is-active', step === 'categories');
+	$.nodes.selectAll('.node').classed('is-active', step === 'categories');
 }
 
 function handoff(direction) {}
@@ -114,23 +114,23 @@ function resize() {
 
 	$.svg.st('width', width).st('height', height);
 
-	$.tweets
-		.selectAll('.tweet')
+	$.nodes
+		.selectAll('.node')
 		.translate(d => [(d.x * width) / origW, (d.y * height) / origH]);
 
-	$.tweets
+	$.nodes
 		.selectAll('.inner')
 		.at('r', radius)
 		.at('cx', 0)
 		.at('cy', 0);
 
-	$.tweets
+	$.nodes
 		.selectAll('.mid')
 		.at('r', radius * 4)
 		.at('cx', 0)
 		.at('cy', 0);
 
-	$.tweets
+	$.nodes
 		.selectAll('.outer')
 		.at('r', radius * 10)
 		.at('cx', 0)

@@ -82,27 +82,27 @@ function goTo({ coords, duration = 2000 }) {
 
 function handoff(direction) {
 	const data = tweetData.filter(d => d.chosen);
-	const $tweet = $.tweets.selectAll('.tweet').data(data, d => d.category);
+	const $node = $.nodes.selectAll('.node').data(data, d => d.category);
 
-	const $tweetEnter = $tweet
+	const $nodeEnter = $node
 		.enter()
 		.append('g')
-		.at('class', d => `tweet tweet-${d.category}`);
+		.at('class', d => `node node-${d.category}`);
 
-	$tweetEnter.each((d, i, n) => {
+	$nodeEnter.each((d, i, n) => {
 		if (d.chosen) {
 			d3.select(n[i]).append('circle.outer');
 			d3.select(n[i]).append('circle.mid');
 		}
 	});
 
-	$tweetEnter.append('circle.inner');
+	$nodeEnter.append('circle.inner');
 
-	$tweet.exit().remove();
+	$node.exit().remove();
 
-	const $tweetMerge = $tweetEnter.merge($tweet);
+	const $nodeMerge = $nodeEnter.merge($node);
 
-	$tweetMerge
+	$nodeMerge
 		.transition()
 		.duration(500)
 		.translate(d => [Math.random() * 500, Math.random() * 500]);

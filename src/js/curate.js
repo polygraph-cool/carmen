@@ -17,7 +17,7 @@ const scaleFollowers = d3.scalePow().exponent(0.5);
 const scaleStrength = d3.scaleLinear();
 
 function handleTick() {
-	$.tweets.selectAll('.tweet').translate(d => [d.x, d.y]);
+	$.nodes.selectAll('.node').translate(d => [d.x, d.y]);
 }
 
 function runSim() {
@@ -64,31 +64,31 @@ function handoff(direction) {
 
 	scaleStrength.domain([0, followerMax]).range([0.1, 0.33]);
 
-	const $tweet = $.tweets.selectAll('.tweet').data(nodes, d => d.category);
+	const $node = $.nodes.selectAll('.node').data(nodes, d => d.category);
 
-	const $tweetEnter = $tweet
+	const $nodeEnter = $node
 		.enter()
 		.append('g')
-		.at('class', d => `tweet tweet-${d.category} is-active`);
+		.at('class', d => `node node-${d.category} is-active`);
 
-	$tweetEnter.each((d, i, n) => {
+	$nodeEnter.each((d, i, n) => {
 		if (d.chosen) {
 			d3.select(n[i]).append('circle.outer');
 			d3.select(n[i]).append('circle.mid');
 		}
 	});
 
-	$tweetEnter.append('circle.inner').at({
+	$nodeEnter.append('circle.inner').at({
 		cx: 0,
 		cy: 0,
 		r: 0
 	});
 
-	$tweet.exit().remove();
+	$node.exit().remove();
 
-	const $tweetMerge = $tweetEnter.merge($tweet);
+	const $nodeMerge = $nodeEnter.merge($node);
 
-	$tweetMerge
+	$nodeMerge
 		.transition()
 		.duration(500)
 		.select('.inner')
