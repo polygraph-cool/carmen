@@ -97,10 +97,6 @@ function triggerExamples() {
 	d3.range(3).forEach(i => {
 		const x = (tweetPos[i + catNum].cx * width) / origW
 		const y = (tweetPos[i + catNum].cy * height) / origH
-		console.log({x, y, i})
-		// const x = Math.random() * ($.chartTweets.node().offsetWidth - rightMargin);
-		// console.log({x})
-		// const y = Math.random() * $.chartTweets.node().offsetHeight;
 		setTimeout(() => Tweet.create({ data: exampleTweet, x, y }), i * 1000)
 	});
 }
@@ -113,6 +109,7 @@ function enter(step) {
 	if (step === 'examples') triggerExamples();
 
 	$.nodes.selectAll('.node').classed('is-active', step === 'categories');
+	$.nodes.selectAll('.node__example').classed('is-active', step === 'examples')
 
 }
 
@@ -124,6 +121,7 @@ function exit(step) {
 	if (step === 'categories') triggerExamples();
 
 	$.nodes.selectAll('.node').classed('is-active', step === 'categories');
+	$.nodes.selectAll('.node__example').classed('is-active', step === 'categories')
 }
 
 function handoff(direction) {}
