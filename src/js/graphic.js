@@ -8,7 +8,8 @@ import curate from './curate';
 import explore from './explore';
 
 function resize() {
-	const height = window.innerHeight;
+	const headerH = $.header.node().offsetHeight;
+	const height = window.innerHeight - headerH;
 	$.chart.st({ height });
 	intro.resize();
 	map.resize();
@@ -17,12 +18,12 @@ function resize() {
 }
 
 function onIntroStepEnter(el) {
-	const step = +d3.select(el).at('data-step');
+	const step = d3.select(el).at('data-step');
 	intro.enter(step);
 }
 
 function onIntroStepExit(el) {
-	const step = +d3.select(el).at('data-step');
+	const step = d3.select(el).at('data-step');
 	intro.exit(step);
 }
 

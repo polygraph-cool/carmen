@@ -1,5 +1,5 @@
 import $ from './dom';
-import tweet from './tweet';
+import Tweet from './tweet';
 
 let tweetData = [];
 const origW = 1280;
@@ -45,13 +45,13 @@ function hideTitle() {
 		.transition()
 		.duration(500)
 		.delay((d, i) => i * 50)
-		.translate(d => [-titleWidth, 0]);
+		.translate([-titleWidth, 0]);
 
 	$intro
 		.select('.carmen-crouch')
 		.transition()
 		.duration(500)
-		.translate(d => [-titleWidth, 20]);
+		.translate([-titleWidth, 20]);
 }
 
 function showTitle() {
@@ -60,29 +60,41 @@ function showTitle() {
 		.select('.carmen-crouch')
 		.transition()
 		.duration(500)
-		.translate(d => [0, 20]);
+		.translate([0, 20]);
 
 	$title
 		.transition()
 		.duration(500)
 		.delay((d, i) => i * 50)
-		.translate(d => [0, 0]);
+		.translate([0, 0]);
+}
+
+function triggerExamples() {
+	d3.range(6).forEach(i => {
+		const x = Math.random() * $.chartTweets.node().offsetWidth;
+		const y = Math.random() * $.chartTweets.node().offsetHeight;
+		Tweet.create({ data: exampleTweet, x, y });
+	});
 }
 
 function enter(step) {
-	$top.classed('is-active', step > 0);
-	$.tweets.selectAll('.tweet').classed('is-active', step === 2);
-	if (step === 1) hideTitle();
-	const x = Math.random() * 500;
-	const y = Math.random() * 500;
-	if (step === 2) tweet.createTweet({ data: exampleTweet, x, y });
+	$top.classed('is-active', step !== 'title');
+
+	if (step !== 'title') hideTitle();
+	if (step !== 'examples') Tweet.clear();
+	if (step === 'examples') triggerExamples();
+
+	$.tweets.selectAll('.tweet').classed('is-active', step === 'categories');
 }
 
 function exit(step) {
-	$top.classed('is-active', step !== 1);
-	$.tweets.selectAll('.tweet').classed('is-active', step === 2);
-	if (step === 1) showTitle();
-	if (step != 2) tweet.clearTweets();
+	$top.classed('is-active', step !== 'examples');
+
+	if (step === 'examples') showTitle();
+	if (step === 'examples') Tweet.clear();
+	if (step === 'categories') triggerExamples();
+
+	$.tweets.selectAll('.tweet').classed('is-active', step === 'categories');
 }
 
 function handoff(direction) {}

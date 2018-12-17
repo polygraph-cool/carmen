@@ -7,21 +7,17 @@ header
 	background-color $white
 	display flex
 	flex-direction row
-	justify-content: space-between;
-	align-items: center;
+	justify-content space-between
+	align-items center
 
 
 	a.logo
 		display block
 		border none
-		max-width 9rem
-		margin 1rem 0
 
 		svg
 			display block
 			width 100%
-			max-height 25px
-			margin 0.5rem 0
 
 header.is-sticky
 	position fixed
@@ -29,15 +25,17 @@ header.is-sticky
 	background-color $white
 	box-shadow 0 0 7px 1px $gray-light
 	flex-direction row
-	justify-content: space-between;
-	align-items: center;
-	max-height 40px
+	justify-content space-between
+	align-items center
+	height 3rem
 
 	a.logo
 		display block
 		border none
-		max-width 9rem
-		margin 1rem
+		svg
+			height 1.5rem
+			width auto
+			padding 0 1rem
 
 	.header__toggle
 		position fixed

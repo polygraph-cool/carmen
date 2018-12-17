@@ -1,6 +1,9 @@
 import $ from './dom';
 
-function createTweet({ data, x, y }) {
+const REM = 16;
+const PAD = REM;
+
+function create({ data, x, y }) {
 	const $tweet = $.chartTweets.append('div.tweet');
 
 	const { name, handle, text, time } = data;
@@ -11,11 +14,24 @@ function createTweet({ data, x, y }) {
 
 	$tweet.st({ top: y, left: x });
 
-	$tweet.classed('is-center', true);
+	// adjust position
+	const w = +$tweet.node().offsetWidth / 2;
+	const h = +$tweet.node().offsetHeight / 2;
+	const chartW = $.chartTweets.node().offsetWidth;
+	const chartH = $.chartTweets.node().offsetHeight;
+
+	let marginLeft = 0;
+	let marginTop = 0;
+	if (x + w >= chartW - PAD) marginLeft = -w;
+	if (x - w <= PAD) marginLeft = w;
+
+	if (y + h >= chartH - PAD) marginTop = -h;
+	if (y - h <= PAD) marginTop = h;
+	$tweet.st({ marginLeft, marginTop });
 }
 
-function clearTweets() {
+function clear() {
 	$.chartTweets.selectAll('.tweet').remove();
 }
 
-export default { createTweet, clearTweets };
+export default { create, clear };

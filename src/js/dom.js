@@ -7,6 +7,7 @@ const tweets = g.select('.g-tweets');
 const introDots = d3.select('.intro__dots');
 const chartTweets = chart.select('.chart__tweets');
 const exploreNav = d3.select('.explore__nav');
+const header = d3.select('header');
 
 export default {
 	section,
@@ -17,5 +18,6 @@ export default {
 	tweets,
 	introDots,
 	chartTweets,
-	exploreNav
+	exploreNav,
+	header
 };
