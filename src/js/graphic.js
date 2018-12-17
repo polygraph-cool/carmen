@@ -117,8 +117,14 @@ function loadData() {
 
 		const withPos = data.map((d, i) => ({
 			...d,
-			x: ( d.chosen  || d.example ) ? tweetPos[i].cx : Math.random() * window.innerWidth,
-			y: ( d.chosen || d.example ) ? tweetPos[i].cy : Math.random() * window.innerHeight
+			x:
+				d.chosen || d.example
+					? tweetPos[i].cx
+					: Math.random() * window.innerWidth,
+			y:
+				d.chosen || d.example
+					? tweetPos[i].cy
+					: Math.random() * window.innerHeight
 		}));
 		resolve(withPos);
 	});

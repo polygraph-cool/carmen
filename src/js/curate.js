@@ -1,8 +1,17 @@
 import $ from './dom';
+import Tweet from './tweet';
+
+const exampleTweet = {
+	name: 'The Pudding',
+	handle: '@puddingviz',
+	text: 'We ❤️ Carmen Sandiego',
+	time: '11/14/18 12:39 PM'
+};
 
 let simulation = null;
 
 const $curate = d3.select('#curate');
+const $nav = $curate.select('nav');
 const $p = $curate.select('p');
 
 let tweetData = [];
@@ -10,66 +19,80 @@ let nodes = [];
 
 let centerX = 0;
 let centerY = 0;
-let minR = 0;
-let maxR = 0;
+let radius = 0;
 
-const scaleFollowers = d3.scalePow().exponent(0.5);
 const scaleStrength = d3.scaleLinear();
+
+function handleMouseEnter(d) {
+	const { x, y } = d;
+	Tweet.clear();
+	Tweet.create({
+		data: exampleTweet,
+		x,
+		y,
+		offset: true
+	});
+	$.nodes.selectAll('.node').classed('is-highlight', false);
+	d3.select(this).classed('is-highlight', true);
+}
+
+function handleMouseOut() {}
+
+function handleNavClick() {
+	$nav.selectAll('input').prop('checked', false);
+	const $label = d3.select(this);
+	$label.prop('checked', true);
+	const cat = $label
+		.parent()
+		.select('input')
+		.at('value');
+	update(cat);
+}
 
 function handleTick() {
 	$.nodes.selectAll('.node').translate(d => [d.x, d.y]);
 }
 
 function runSim() {
+	// const alpha = 1;
 	// const alphaDecay = 0.0227;
 	// const alphaMin = 0.001;
 	// const alphaTarget = 0.0;
 	// const velocityDecay = 0.4;
-	const alpha = 0.1;
-	const alphaDecay = 0.005;
-	const alphaMin = 0.0;
-	const alphaTarget = 0.0001;
-	const velocityDecay = 0.5;
-	const manyBodyStrength = -15;
+	const alphaDecay = 0.1;
+	const alphaMin = 0.001;
+	const alphaTarget = 0.2;
+	const velocityDecay = 0.4;
+	const manyBodyStrength = -radius * 1.5;
 
 	simulation = d3
 		.forceSimulation(nodes)
 		.on('tick', handleTick)
-		.alpha(alpha)
 		.alphaDecay(alphaDecay)
 		.alphaMin(alphaMin)
 		.alphaTarget(alphaTarget)
 		.velocityDecay(velocityDecay)
 		.force('center', d3.forceCenter(centerX, centerY))
-		.force(
-			'collide',
-			d3
-				.forceCollide()
-				.radius(d => scaleFollowers(d.followers) + 2)
-				.strength(1)
-			// .iterations(2)
-		)
-		.force('x', d3.forceX(centerX).strength(d => scaleStrength(d.followers)))
-		.force('y', d3.forceY(centerY).strength(d => scaleStrength(d.followers)));
-	// .force('charge', d3.forceManyBody().strength(manyBodyStrength));
-	// .force('x', d3.forceX(centerX))
-	// .force('y', d3.forceY(centerY));
+		.force('x', d3.forceX(centerX))
+		.force('y', d3.forceY(centerY))
+		.force('charge', d3.forceManyBody().strength(manyBodyStrength));
 }
 
-function handoff(direction) {
-	nodes = tweetData.filter(d => d.category === 'a');
+function update(cat) {
+	nodes = tweetData.filter(d => d.category === cat);
 
 	const followerMax = d3.max(nodes, n => n.followers);
-	scaleFollowers.domain([0, followerMax]).range([minR, maxR]);
 
 	scaleStrength.domain([0, followerMax]).range([0.1, 0.33]);
 
-	const $node = $.nodes.selectAll('.node').data(nodes, d => d.category);
+	const $node = $.nodes.selectAll('.node').data(nodes, d => d.id);
 
 	const $nodeEnter = $node
 		.enter()
 		.append('g')
-		.at('class', d => `node node-${d.category} is-active`);
+		.at('class', d => `node node-${d.category} is-active`)
+		.on('mouseenter', handleMouseEnter)
+		.on('mouseout', handleMouseOut);
 
 	$nodeEnter.each((d, i, n) => {
 		if (d.chosen) {
@@ -87,26 +110,31 @@ function handoff(direction) {
 	$node.exit().remove();
 
 	const $nodeMerge = $nodeEnter.merge($node);
-
 	$nodeMerge
+		.classed('is-curate', true)
+		.select('.inner')
 		.transition()
 		.duration(500)
-		.select('.inner')
-		.at('r', d => scaleFollowers(d.followers));
+		.at('r', radius);
+
 	runSim();
+}
+function handoff(direction) {
+	handleNavClick.call($nav.select('label').node());
 }
 
 function resize() {
 	centerX = $.chart.node().offsetWidth / 2;
 	centerY = $.chart.node().offsetHeight / 2;
-	$p.st('height', window.innerHeight);
-
-	minR = 4;
-	maxR = 16;
+	$nav.st('margin-bottom', window.innerHeight);
+	// $p.st('padding-top', window.innerHeight * 0.9);
+	radius = 8;
 }
 
 function init(data) {
 	tweetData = data;
+	$nav.selectAll('label').on('click', handleNavClick);
+	resize();
 }
 
 export default { init, resize, handoff };

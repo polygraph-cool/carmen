@@ -8,7 +8,7 @@ function handoff(direction) {}
 function resize() {}
 
 function init() {
-	const data = d3.range(135347);
+	const data = d3.range(1);
 	$dots
 		.selectAll('.dot')
 		.data(data)

@@ -11,7 +11,6 @@ figure#chart
 	top 3rem
 	left 0
 	width 100%
-	z-index 3
 	transition opacity 250ms ease-in-out
 
 	&.is-hidden
@@ -25,8 +24,20 @@ figure#chart
 			&.is-active
 				opacity 1
 
+			&.is-curate
+				.mid, .outer
+					opacity 0
+			
+			&.is-highlight
+				.inner
+					fill $primary
+
 			.inner
-				fill white
+				fill $fg
+				stroke $bg
+				stroke-width 3px
+				cursor pointer
+
 
 			.mid
 				stroke-width 1px
@@ -100,3 +111,4 @@ figure#chart
 		width 100%
 		height 100%
 		z-index set-index(top)
+		pointer-events none

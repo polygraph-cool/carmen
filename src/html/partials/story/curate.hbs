@@ -1,1 +1,17 @@
-<p>{{{doc.curate}}}</p>
+<p>{{{doc.curate.text}}}</p>
+
+<nav class='curate__nav is-hidden'>
+
+	<fieldset class='nav__choose'>
+		<legend>{{{doc.curate.choose}}}</legend>
+
+		<ul>
+			{{#each doc.categories}}
+			{{#if curate}}
+				<li><input value='{{id}}' type='radio' name='{{id}}' id='radio{{@index}}'><label for='radio{{@index}}'>{{label}}</label></li>
+			{{/if}}
+			{{/each}}
+		</ul>
+
+	</fieldset>
+</nav>
