@@ -26,3 +26,47 @@
 		left 0
 		padding 1rem
 		width 100%
+		transition opacity 250ms ease-in-out
+
+		&.is-hidden
+			opacity 0
+			pointer-events none
+	
+
+	fieldset
+		display flex
+		// flex-wrap wrap
+		ul
+			display flex
+			flex-wrap wrap
+		li
+			margin 0 0.25em
+			height 2em
+			position relative
+		input:checked + label
+			background-color green
+		input:focus + label
+			outline 1px dotted white
+		input
+			opacity 0
+			height 0
+			position absolute
+		label
+			cursor pointer
+			padding 0.25em 0.25em
+			border-radius 3px
+			color $gray-light
+			font-weight 600
+			display block
+			text-transform uppercase
+			text-shadow 0 0 3px $bg
+			border-bottom 1px solid currentColor
+			set-type-size(xx-small, true)
+			+mq('bp-5')
+				set-type-size(x-small, true)
+				padding 0.25em 0.5em
+			+mq('bp-6')
+				set-type-size(small, true)
+			&:hover
+				yellow
+			

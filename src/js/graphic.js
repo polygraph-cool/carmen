@@ -32,6 +32,7 @@ function updateSection(index) {
 	console.log('section', id);
 	$.chart.classed('is-hidden', false);
 	$.introDots.classed('is-hidden', true);
+	$.exploreNav.classed('is-hidden', true);
 
 	switch (id) {
 	case 'intro':
@@ -48,6 +49,7 @@ function updateSection(index) {
 
 	case 'explore':
 		$.chart.classed('is-hidden', true);
+		$.exploreNav.classed('is-hidden', false);
 		explore.handoff();
 		break;
 

@@ -6,6 +6,7 @@ const map = g.select('.g-map');
 const tweets = g.select('.g-tweets');
 const introDots = d3.select('.intro__dots');
 const chartTweets = chart.select('.chart__tweets');
+const exploreNav = d3.select('.explore__nav');
 
 export default {
 	section,
@@ -15,5 +16,6 @@ export default {
 	map,
 	tweets,
 	introDots,
-	chartTweets
+	chartTweets,
+	exploreNav
 };

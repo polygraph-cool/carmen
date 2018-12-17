@@ -2,6 +2,7 @@ import $ from './dom';
 
 const $explore = d3.select('#explore');
 const $dots = $explore.select('.explore__dots');
+
 function handoff(direction) {}
 
 function resize() {}
