@@ -1,5 +1,6 @@
 import $ from './dom';
 import Tweet from './tweet';
+import tweetPos from './tweet-pos';
 
 let tweetData = [];
 const origW = 1280;
@@ -7,6 +8,9 @@ const origH = 1024;
 let radius = 2.5;
 let REM = 16
 let tweetWidth = 15 * REM
+let catNum = 5
+let width = null
+let height = null
 
 const $intro = d3.select('#intro');
 const $top = $intro.select('.top');
@@ -48,6 +52,7 @@ function setupTweets() {
 	const $nodeExEnter = $nodeEx
 		.enter()
 		.append('circle.node__example')
+		.st('opacity', 0)
 }
 
 function hideTitle() {
@@ -82,15 +87,21 @@ function showTitle() {
 }
 
 function triggerExamples() {
-	const stepWidth = $stepGroup.node().offsetWidth
-	const rightMargin = stepWidth + tweetWidth
+	const delay = 1000
+	$.nodes.selectAll('.node__example')
+		.transition()
+		.duration(200)
+		.delay((d, i) => i * delay)
+		.st('opacity', 1)
 
-	d3.range(4).forEach(i => {
-
-		const x = Math.random() * ($.chartTweets.node().offsetWidth - rightMargin);
-		console.log({x})
-		const y = Math.random() * $.chartTweets.node().offsetHeight;
-		setTimeout(() => Tweet.create({ data: exampleTweet, x, y }), i * 2000)
+	d3.range(3).forEach(i => {
+		const x = (tweetPos[i + catNum].cx * width) / origW
+		const y = (tweetPos[i + catNum].cy * height) / origH
+		console.log({x, y, i})
+		// const x = Math.random() * ($.chartTweets.node().offsetWidth - rightMargin);
+		// console.log({x})
+		// const y = Math.random() * $.chartTweets.node().offsetHeight;
+		setTimeout(() => Tweet.create({ data: exampleTweet, x, y }), i * 1000)
 	});
 }
 
@@ -102,6 +113,7 @@ function enter(step) {
 	if (step === 'examples') triggerExamples();
 
 	$.nodes.selectAll('.node').classed('is-active', step === 'categories');
+
 }
 
 function exit(step) {
@@ -117,8 +129,8 @@ function exit(step) {
 function handoff(direction) {}
 
 function resize() {
-	const width = $top.node().offsetWidth;
-	const height = $top.node().offsetHeight;
+	width = $top.node().offsetWidth;
+	height = $top.node().offsetHeight;
 
 	const stepHeight = window.innerHeight;
 
@@ -152,6 +164,10 @@ function resize() {
 		.at('r', radius * 10)
 		.at('cx', 0)
 		.at('cy', 0);
+
+	$.chartTweets
+		.st('width', width)
+		.st('height', height)
 }
 
 function init(data) {

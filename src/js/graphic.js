@@ -106,13 +106,13 @@ function setup(data) {
 
 function loadData() {
 	return new Promise(resolve => {
-		const a = 'abcdef';
+		const a = 'abcde';
 		const data = d3.range(2400).map((d, i) => ({
 			text: 'Testing text',
 			category: a.charAt(i % a.length),
 			followers: Math.floor(Math.random() * 1000),
 			chosen: i < a.length,
-			example: i > a.length && i < a.length + 4
+			example: i >= a.length && i < a.length + 3
 		}));
 
 		const withPos = data.map((d, i) => ({
