@@ -23,13 +23,10 @@ function resize() {
 	$step.st('height', (d, i) => stepHeight * (i === stepSize - 1 ? 2 : 1));
 
 	if (ready) {
-		const h = window.innerHeight;
-		const w = $.chart.node().offsetWidth;
-		const sz = Math.min(w, h) * 0.67;
-		const width = sz;
-		const height = sz;
+		const height = $.chart.node().offsetHeight;
+		const width = $.chart.node().offsetWidth;
 
-		const radius = height / 2;
+		const radius = height / 2.5;
 		const scale = radius;
 
 		projection

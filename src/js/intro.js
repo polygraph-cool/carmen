@@ -12,7 +12,7 @@ const catNum = 5;
 let width = null;
 let height = null;
 
-let triggerTimeouts = []
+let triggerTimeouts = [];
 
 const $intro = d3.select('#intro');
 const $top = $intro.select('.top');
@@ -101,7 +101,8 @@ function triggerExamples() {
 		const x = (tweetPos[i + catNum].cx * width) / origW;
 		const y = (tweetPos[i + catNum].cy * height) / origH;
 		return setTimeout(
-			() => Tweet.create({ data: exampleTweet, x, y, fade: true, offset: true }),
+			() =>
+				Tweet.create({ data: exampleTweet, x, y, fade: true, offset: true }),
 			i * delay
 		);
 	});
@@ -113,7 +114,7 @@ function enter(step) {
 	if (step !== 'title') hideTitle();
 	if (step !== 'examples') {
 		Tweet.clear();
-		triggerTimeouts.forEach(t => clearTimeout(t))
+		triggerTimeouts.forEach(t => clearTimeout(t));
 	}
 	if (step === 'examples') triggerExamples();
 
