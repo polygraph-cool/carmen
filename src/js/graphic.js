@@ -21,6 +21,9 @@ function resize() {
 		.st({ width, height });
 
 	$.bg.at({ width: width * DPR, height: height * DPR }).st({ width, height });
+
+	$.ex.at({ width: width * DPR, height: height * DPR }).st({ width, height });
+
 	Intro.resize();
 	// Globe.resize();
 	Curate.resize();

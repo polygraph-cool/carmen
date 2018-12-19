@@ -98,6 +98,12 @@ function showTitle() {
 }
 
 function triggerExamples() {
+	const con = $.contextEx
+	console.log({con})
+	tweetPos.forEach(d => {
+		renderDot({d, ctx: $.contextEx })
+	})
+
 	const delay = 4000;
 	$.nodes
 		.selectAll('.node__example')
@@ -126,8 +132,9 @@ function test() {
 	// requestAnimationFrame(test);
 }
 
+
 function enter(step) {
-	test();
+	// test();
 
 	if (step !== 'title') hideTitle();
 	if (step !== 'examples') {
@@ -180,6 +187,12 @@ function resize() {
 		b.y = scale * b.cy + offsetH;
 		b.r = scale * BADGE_R;
 	});
+
+	tweetPos.forEach(t => {
+		t.cx = scale * t.cx + offsetW;
+		t.cy = scale * t.cy + offsetH;
+		t.r = scale * BADGE_R
+	})
 
 	const stepHeight = window.innerHeight;
 

@@ -4,6 +4,8 @@ const canvas = chart.select('.chart__canvas');
 const context = canvas.node().getContext('2d');
 const bg = chart.select('.chart__bg');
 const contextBg = bg.node().getContext('2d');
+const ex = chart.select('.chart__examples');
+const contextEx = ex.node().getContext('2d');
 const svg = chart.select('svg');
 const g = svg.select('g');
 const globe = g.select('.g-globe');
@@ -20,6 +22,8 @@ export default {
 	context,
 	bg,
 	contextBg,
+	ex,
+	contextEx,
 	svg,
 	g,
 	globe,
