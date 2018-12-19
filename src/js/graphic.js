@@ -18,6 +18,10 @@ function resize() {
 	$.canvas
 		.at({ width: width * DPR, height: height * DPR })
 		.st({ width, height });
+	
+	$.bg
+		.at({ width: width * DPR, height: height * DPR })
+		.st({ width, height });
 	intro.resize();
 	map.resize();
 	curate.resize();

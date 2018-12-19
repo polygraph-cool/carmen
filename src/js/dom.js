@@ -1,7 +1,9 @@
 const section = d3.selectAll('section');
 const chart = d3.select('#chart');
-const canvas = chart.select('canvas');
+const canvas = chart.select('.chart__canvas');
 const context = canvas.node().getContext('2d');
+const bg = chart.select('.chart__bg');
+const contextBg = bg.node().getContext('2d');
 const svg = chart.select('svg');
 const g = svg.select('g');
 const map = g.select('.g-map');
@@ -16,6 +18,8 @@ export default {
 	chart,
 	canvas,
 	context,
+	bg,
+	contextBg,
 	svg,
 	g,
 	map,

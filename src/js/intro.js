@@ -2,26 +2,28 @@ import $ from './dom';
 import Tweet from './tweet';
 import tweetPos from './tweet-pos';
 import badgePos from './badge-pos';
-console.log(badgePos.length)
+
+badgePos.forEach(d => {
+	d.x = Math.floor(d.x)
+	d.y = Math.floor(d.y)
+})
+
 let tweetData = [];
 const BADGE_W = 1280;
 const BADGE_H = 1024;
+const BADGE_R = 2.5;
 const BADGE_RATIO = BADGE_W / BADGE_H;
 
-let radius = 2.5;
 const REM = 16;
 const catNum = 5;
 let width = null;
 let height = null;
 
 let scale = 1;
-let offsetH = 0;
-let offsetW = 0;
 
 let triggerTimeouts = [];
 
 const $intro = d3.select('#intro');
-const $top = $intro.select('.top');
 const $introHed = $intro.select('.intro__hed');
 const $title = $intro.selectAll('.intro__hed-text');
 const $stepGroup = $intro.selectAll('.intro__steps');
@@ -114,25 +116,25 @@ function triggerExamples() {
 	});
 }
 
+function renderDot({ d, ctx }) {
+	ctx.beginPath();
+	ctx.moveTo(d.cx + d.r, d.cy);
+	ctx.arc(d.cx, d.cy, d.r, 0, 2 * Math.PI);
+	ctx.fillStyle = d.fill || `rgba(255,255,255,${Math.random()})`;
+	ctx.fill();
+}
+
 function test() {
 	$.context.clearRect(0, 0, width, height);
 	// $circle.at('')
 	badgePos.forEach(d => {
-		const x = scale * d.x + offsetW;
-		const y = scale * d.y + offsetH;
-		const r = scale * d.r;
-		$.context.beginPath();
-		$.context.moveTo(x + r, y);
-		$.context.arc(x, y, r, 0, 2 * Math.PI);
-		$.context.fillStyle = `rgba(255,255,255,${Math.random()})`;
-		$.context.fill();
+		renderDot({ d, ctx: $.context });
 	});
 	requestAnimationFrame(test);
 }
 
 function enter(step) {
 	test();
-	$top.classed('is-active', step !== 'title');
 
 	if (step !== 'title') hideTitle();
 	if (step !== 'examples') {
@@ -146,8 +148,6 @@ function enter(step) {
 }
 
 function exit(step) {
-	$top.classed('is-active', step !== 'examples');
-
 	if (step === 'examples') showTitle();
 	if (step === 'examples') Tweet.clear();
 	if (step === 'categories') triggerExamples();
@@ -167,19 +167,26 @@ function resize() {
 
 	let imageW = 0;
 	let imageH = 0;
+	let offsetW = 0;
+	let offsetH = 0;
 	if (screenRatio > BADGE_RATIO) {
 		scale = height / BADGE_H;
 		imageW = scale * BADGE_W;
-		offsetW = (width - imageW) / 2
+		offsetW = Math.floor((width - imageW) / 2)
 		offsetH = 0;
 	} else {
 		scale = width / BADGE_W;
 		imageH = scale * BADGE_H;
 		offsetW = 0;
-		offsetH = (height - imageH) / 2
+		offsetH = Math.floor((height - imageH) / 2);
 	}
-	
-	console.log({BADGE_W, BADGE_H, width, height, scale, imageH, imageW, offsetW, offsetH})
+
+	badgePos.forEach(b => {
+		b.cx = scale * b.x + offsetW;
+		b.cy = scale * b.y + offsetH;
+		b.r = scale * BADGE_R;
+	});
+
 	const stepHeight = window.innerHeight;
 
 	const stepSize = $step.size();
@@ -187,31 +194,36 @@ function resize() {
 		.st('height', (d, i) => stepHeight * (i === stepSize - 1 ? 2 : 1))
 		.classed('is-visible', true);
 
-	radius = (radius * width) / BADGE_W;
+	// const radius = Math.floor((BADGE_R * width) / BADGE_W);
 
-	$.nodes
-		.selectAll('.node, .node__example')
-		.translate(d => [(d.x * width) / BADGE_W, (d.y * height) / BADGE_H]);
+	// const sz = Math.floor((radius * 4 * 7) / 5)
 
-	$.nodes
-		.selectAll('.inner, .node__example')
-		.at('r', radius)
-		.at('cx', 0)
-		.at('cy', 0);
-
-	$.nodes
-		.selectAll('.mid')
-		.at('r', radius * 4)
-		.at('cx', 0)
-		.at('cy', 0);
-
-	$.nodes
-		.selectAll('.outer')
-		.at('r', radius * 10)
-		.at('cx', 0)
-		.at('cy', 0);
+	const radius = scale * BADGE_R;
 
 	$.chartTweets.st('width', width).st('height', height);
+	const unit = (radius + scale) * 2;
+
+	const area = width * height;
+	const unitSQ = unit * unit;
+
+	let numDots = Math.ceil(area / unitSQ);
+
+	const col = Math.ceil(width / unit) + 1;
+
+	numDots += col * 2;
+
+	const bgData = d3.range(numDots).map(i => ({
+		d: {
+			cx: (i % col) * unit,
+			cy: Math.floor(i / col) * unit,
+			r: scale * BADGE_R,
+			fill: '#333'
+		},
+		ctx: $.contextBg
+	}));
+
+	$.contextBg.clearRect(0,0,width, height)
+	bgData.forEach(renderDot);
 }
 
 function init(data) {
