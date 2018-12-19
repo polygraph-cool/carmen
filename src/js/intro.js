@@ -4,9 +4,9 @@ import tweetPos from './tweet-pos';
 import badgePos from './badge-pos';
 
 badgePos.forEach(d => {
-	d.x = Math.floor(d.x)
-	d.y = Math.floor(d.y)
-})
+	d.x = Math.floor(d.x);
+	d.y = Math.floor(d.y);
+});
 
 let tweetData = [];
 const BADGE_W = 1280;
@@ -39,8 +39,6 @@ const exampleTweet = {
 function setupTweets() {
 	const data = tweetData.filter(d => d.chosen);
 	const $node = $.nodes.selectAll('.node').data(data, d => d.category);
-
-	console.log({ data });
 
 	const $nodeEnter = $node
 		.enter()
@@ -130,7 +128,7 @@ function test() {
 	badgePos.forEach(d => {
 		renderDot({ d, ctx: $.context });
 	});
-	requestAnimationFrame(test);
+	// requestAnimationFrame(test);
 }
 
 function enter(step) {
@@ -172,13 +170,13 @@ function resize() {
 	if (screenRatio > BADGE_RATIO) {
 		scale = height / BADGE_H;
 		imageW = scale * BADGE_W;
-		offsetW = Math.floor((width - imageW) / 2)
+		offsetW = (width - imageW) / 2;
 		offsetH = 0;
 	} else {
 		scale = width / BADGE_W;
 		imageH = scale * BADGE_H;
 		offsetW = 0;
-		offsetH = Math.floor((height - imageH) / 2);
+		offsetH = (height - imageH) / 2;
 	}
 
 	badgePos.forEach(b => {
@@ -222,7 +220,7 @@ function resize() {
 		ctx: $.contextBg
 	}));
 
-	$.contextBg.clearRect(0,0,width, height)
+	$.contextBg.clearRect(0, 0, width, height);
 	bgData.forEach(renderDot);
 }
 
