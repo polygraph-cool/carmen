@@ -11,6 +11,8 @@ badgePos.forEach(d => {
 	d.cy = Math.floor(d.y);
 });
 
+let someTweets = tweetPos.slice(4, 7)
+
 let tweetData = [];
 const BADGE_W = 1280;
 const BADGE_H = 1024;
@@ -100,7 +102,7 @@ function showTitle() {
 function triggerExamples() {
 	const con = $.contextEx
 	console.log({con})
-	tweetPos.forEach(d => {
+	someTweets.forEach(d => {
 		renderDot({d, ctx: $.contextEx })
 	})
 
@@ -113,8 +115,8 @@ function triggerExamples() {
 		.st('opacity', 1);
 
 	triggerTimeouts = d3.range(3).map(i => {
-		const x = (tweetPos[i + catNum].cx * width) / BADGE_W;
-		const y = (tweetPos[i + catNum].cy * height) / BADGE_H;
+		const x = (someTweets[i].cx * width) / BADGE_W;
+		const y = (someTweets[i].cy * height) / BADGE_H;
 		return setTimeout(
 			() =>
 				Tweet.create({ data: exampleTweet, x, y, fade: true, offset: true }),
@@ -188,7 +190,7 @@ function resize() {
 		b.r = scale * BADGE_R;
 	});
 
-	tweetPos.forEach(t => {
+	someTweets.forEach(t => {
 		t.cx = scale * t.cx + offsetW;
 		t.cy = scale * t.cy + offsetH;
 		t.r = scale * BADGE_R
