@@ -3,6 +3,8 @@ import Tweet from './tweet';
 import tweetPos from './tweet-pos';
 import badgePos from './badge-pos';
 
+const DPR = window.devicePixelRatio ? Math.min(window.devicePixelRatio, 2) : 1;
+
 badgePos.forEach(d => {
 	d.x = Math.floor(d.x);
 	d.y = Math.floor(d.y);
@@ -159,8 +161,9 @@ function exit(step) {
 function handoff(direction) {}
 
 function resize() {
-	width = $.chart.node().offsetWidth;
-	height = $.chart.node().offsetHeight;
+	width = $.chart.node().offsetWidth * DPR;
+	height = $.chart.node().offsetHeight * DPR;
+
 	const screenRatio = width / height;
 
 	let imageW = 0;
