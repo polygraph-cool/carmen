@@ -1,16 +1,22 @@
 import $ from './dom';
 import Tweet from './tweet';
 import tweetPos from './tweet-pos';
-
+import badgePos from './badge-pos';
+console.log(badgePos.length)
 let tweetData = [];
-const origW = 1280;
-const origH = 1024;
+const BADGE_W = 1280;
+const BADGE_H = 1024;
+const BADGE_RATIO = BADGE_W / BADGE_H;
+
 let radius = 2.5;
 const REM = 16;
-const tweetWidth = 15 * REM;
 const catNum = 5;
 let width = null;
 let height = null;
+
+let scale = 1;
+let offsetH = 0;
+let offsetW = 0;
 
 let triggerTimeouts = [];
 
@@ -98,8 +104,8 @@ function triggerExamples() {
 		.st('opacity', 1);
 
 	triggerTimeouts = d3.range(3).map(i => {
-		const x = (tweetPos[i + catNum].cx * width) / origW;
-		const y = (tweetPos[i + catNum].cy * height) / origH;
+		const x = (tweetPos[i + catNum].cx * width) / BADGE_W;
+		const y = (tweetPos[i + catNum].cy * height) / BADGE_H;
 		return setTimeout(
 			() =>
 				Tweet.create({ data: exampleTweet, x, y, fade: true, offset: true }),
@@ -108,7 +114,24 @@ function triggerExamples() {
 	});
 }
 
+function test() {
+	$.context.clearRect(0, 0, width, height);
+	// $circle.at('')
+	badgePos.forEach(d => {
+		const x = scale * d.x + offsetW;
+		const y = scale * d.y + offsetH;
+		const r = scale * d.r;
+		$.context.beginPath();
+		$.context.moveTo(x + r, y);
+		$.context.arc(x, y, r, 0, 2 * Math.PI);
+		$.context.fillStyle = `rgba(255,255,255,${Math.random()})`;
+		$.context.fill();
+	});
+	requestAnimationFrame(test);
+}
+
 function enter(step) {
+	test();
 	$top.classed('is-active', step !== 'title');
 
 	if (step !== 'title') hideTitle();
@@ -138,9 +161,25 @@ function exit(step) {
 function handoff(direction) {}
 
 function resize() {
-	width = $top.node().offsetWidth;
-	height = $top.node().offsetHeight;
+	width = $.chart.node().offsetWidth;
+	height = $.chart.node().offsetHeight;
+	const screenRatio = width / height;
 
+	let imageW = 0;
+	let imageH = 0;
+	if (screenRatio > BADGE_RATIO) {
+		scale = height / BADGE_H;
+		imageW = scale * BADGE_W;
+		offsetW = (width - imageW) / 2
+		offsetH = 0;
+	} else {
+		scale = width / BADGE_W;
+		imageH = scale * BADGE_H;
+		offsetW = 0;
+		offsetH = (height - imageH) / 2
+	}
+	
+	console.log({BADGE_W, BADGE_H, width, height, scale, imageH, imageW, offsetW, offsetH})
 	const stepHeight = window.innerHeight;
 
 	const stepSize = $step.size();
@@ -148,13 +187,11 @@ function resize() {
 		.st('height', (d, i) => stepHeight * (i === stepSize - 1 ? 2 : 1))
 		.classed('is-visible', true);
 
-	radius = (radius * width) / origW;
-
-	$.svg.st('width', width).st('height', height);
+	radius = (radius * width) / BADGE_W;
 
 	$.nodes
 		.selectAll('.node, .node__example')
-		.translate(d => [(d.x * width) / origW, (d.y * height) / origH]);
+		.translate(d => [(d.x * width) / BADGE_W, (d.y * height) / BADGE_H]);
 
 	$.nodes
 		.selectAll('.inner, .node__example')

@@ -7,10 +7,17 @@ import map from './map';
 import curate from './curate';
 import explore from './explore';
 
+const DPR = window.devicePixelRatio ? Math.min(window.devicePixelRatio, 2) : 1;
+
 function resize() {
 	const headerH = $.header.node().offsetHeight;
 	const height = window.innerHeight - headerH;
 	$.chart.st({ height });
+	const width = $.chart.node().offsetWidth;
+	$.svg.st({ width, height });
+	$.canvas
+		.at({ width: width * DPR, height: height * DPR })
+		.st({ width, height });
 	intro.resize();
 	map.resize();
 	curate.resize();
@@ -132,8 +139,24 @@ function loadData() {
 	});
 }
 
+function svgToJSON() {
+	const out = [];
+	d3.select('.test')
+		.selectAll('circle')
+		.each((d, i, n) => {
+			const c = d3.select(n[i]);
+			out.push({
+				x: +c.at('cx'),
+				y: +c.at('cy'),
+				r: +c.at('r')
+			});
+		});
+	window.output = JSON.stringify(out);
+}
+
 function init() {
 	loadData().then(setup);
+	// svgToJSON();
 }
 
 export default { init, resize };
