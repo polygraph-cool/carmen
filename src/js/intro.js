@@ -148,8 +148,8 @@ function resize() {
 	});
 
 	someTweets.forEach(t => {
-		t.cx = scale * t.cx + offsetW;
-		t.cy = scale * t.cy + offsetH;
+		t.x = scale * t.cx + offsetW;
+		t.y = scale * t.cy + offsetH;
 		t.r = scale * BADGE_R;
 	});
 

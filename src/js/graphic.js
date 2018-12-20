@@ -158,9 +158,7 @@ function loadData() {
 			const index = thresh.findIndex(t => t <= i);
 			return {
 				...d,
-				category: breakdown[breakdown.length - 1 - index].cat,
-				text: 'Testing text',
-				followers: Math.floor(Math.random() * 1000)
+				category: breakdown[breakdown.length - 1 - index].cat
 			};
 		});
 
