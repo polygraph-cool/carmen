@@ -7,6 +7,7 @@ const BADGE_W = 1280;
 const BADGE_H = 1024;
 const BADGE_R = 2.5;
 const RADIUS_INC = 0.1;
+const DURATION = 1000;
 
 const COL = {
 	a: '#3d66f9',
@@ -38,6 +39,9 @@ let centerX = 0;
 let centerY = 0;
 let radius = 0;
 let currentStep = null;
+let timer = null;
+
+const ease = d3.easeCubicInOut;
 
 const scaleStrength = d3.scaleLinear();
 const voronoi = d3.voronoi();
@@ -153,8 +157,34 @@ function runIntro() {
 	// $travel = #fcd206
 
 	badgeData.forEach(d => {
+		d.sx = d.x;
+		d.sy = d.y;
+		d.tx = d.ox;
+		d.ty = d.oy;
 		d.fill = COL[d.category];
 		Render.dot({ d, ctx: $.contextFg });
+	});
+
+	if (timer) timer.stop();
+
+	timer = d3.timer(elapsed => {
+		// compute how far through the animation we are (0 to 1)
+		const t = Math.min(1, ease(elapsed / DURATION));
+
+		// update point positions (interpolate between source and target)
+		nodes.forEach(n => {
+			n.x = n.sx * (1 - t) + n.tx * t;
+			n.y = n.sy * (1 - t) + n.ty * t;
+		});
+
+		// update what is drawn on screen
+		handleTick();
+
+		// if this animation is over
+		if (t === 1) {
+			// stop this timer for this layout and start a new one
+			timer.stop();
+		}
 	});
 }
 
@@ -205,7 +235,11 @@ function resize() {
 }
 
 function init(data) {
-	badgeData = data.map(d => ({ ...d }));
+	badgeData = data.map(d => ({
+		...d,
+		ox: d.x,
+		oy: d.y
+	}));
 	$nav.selectAll('button').on('click', handleNavClick);
 }
 
