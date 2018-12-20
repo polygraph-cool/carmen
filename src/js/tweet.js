@@ -20,19 +20,19 @@ function create({ data, x, y, fade, offset }) {
 		.st('opacity', 1);
 
 	// adjust position
-	// const w = +$tweet.node().offsetWidth / 2;
-	// const h = +$tweet.node().offsetHeight / 2;
-	// const chartW = $.chartTweets.node().offsetWidth;
-	// const chartH = $.chartTweets.node().offsetHeight;
-	//
-	// let marginLeft = 0;
-	// let marginTop = offset ? -h * 1.25 : 0;
-	// if (x + w >= chartW - PAD) marginLeft = -w;
-	// if (x - w <= PAD) marginLeft = w;
-	//
-	// if (y + h >= chartH - PAD) marginTop += -h;
-	// if (y - h <= PAD) marginTop = h;
-	// $tweet.st({ marginLeft, marginTop });
+	const w = +$tweet.node().offsetWidth / 2;
+	const h = +$tweet.node().offsetHeight / 2;
+	const chartW = $.chartTweets.node().offsetWidth;
+	const chartH = $.chartTweets.node().offsetHeight;
+
+	let marginLeft = 0;
+	let marginTop = offset ? -h * 1.25 : 0;
+	if (x + w >= chartW - PAD) marginLeft = -w;
+	if (x - w <= PAD) marginLeft = w;
+
+	if (y + h >= chartH - PAD) marginTop += -h;
+	if (y - h <= PAD) marginTop = h;
+	$tweet.st({ marginLeft, marginTop });
 }
 
 function clear() {

@@ -101,6 +101,7 @@ function revealDots() {
 
 function runTitle() {
 	showTitle();
+	Render.clear($.contextEx);
 	Tweet.clear();
 	revealDots();
 }
