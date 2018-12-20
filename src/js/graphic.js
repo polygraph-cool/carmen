@@ -46,6 +46,7 @@ function updateSection(index) {
 	$.introDots.classed('is-hidden', true);
 	$.exploreNav.classed('is-hidden', true);
 	$.globe.classed('is-hidden', true);
+	Intro.clear();
 	switch (id) {
 	case 'intro':
 		$.introDots.classed('is-hidden', false);

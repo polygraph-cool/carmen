@@ -126,6 +126,12 @@ function exit(step) {
 
 function handoff(direction) {}
 
+function clear() {
+	Tweet.clear();
+	Render.clear($.contextEx);
+	if (timeout) clearTimeout(timeout);
+}
+
 function resize() {
 	width = $.chart.node().offsetWidth;
 	height = $.chart.node().offsetHeight;
@@ -188,4 +194,4 @@ function init(data) {
 	badgeData = data.map(d => ({ ...d }));
 }
 
-export default { init, resize, enter, exit, handoff };
+export default { init, resize, enter, exit, handoff, clear };

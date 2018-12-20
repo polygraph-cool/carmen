@@ -120,6 +120,7 @@ function runNav(cat) {
 }
 
 function runIntro() {
+	if (simulation) simulation.stop();
 	Render.clear($.contextBg);
 	Render.clear($.contextFg);
 
@@ -143,6 +144,7 @@ function enter(step) {
 
 function exit(step) {
 	currentStep = step === 'nav' ? 'intro' : 'nav';
+	if (currentStep === 'intro') runIntro();
 }
 
 function handoff(direction) {
