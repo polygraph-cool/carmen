@@ -21,7 +21,6 @@ const $nav = $curate.select('nav');
 const $step = $curate.selectAll('.step');
 
 let badgeData = [];
-let tweetData = [];
 let nodes = [];
 
 let centerX = 0;
@@ -93,7 +92,7 @@ function runSim() {
 }
 
 function update(cat) {
-	nodes = tweetData
+	nodes = badgeData
 		.filter(d => d.category === cat)
 		.map(d => ({
 			...d,
@@ -186,9 +185,8 @@ function resize() {
 	enter(currentStep);
 }
 
-function init({ data, badgePos }) {
-	tweetData = data;
-	badgeData = badgePos.map(d => ({ ...d }));
+function init(data) {
+	badgeData = data.map(d => ({ ...d }));
 	$nav.selectAll('label').on('click', handleNavClick);
 }
 

@@ -16,7 +16,6 @@ const $step = $intro.selectAll('.step');
 const someTweets = tweetPos.slice(4, 7);
 
 let badgeData = [];
-let tweetData = [];
 let width = null;
 let height = null;
 let triggerTimeouts = [];
@@ -29,33 +28,6 @@ const exampleTweet = {
 	text: 'We ❤️ Carmen Sandiego',
 	time: '11/14/18 12:39 PM'
 };
-
-function setupTweets() {
-	const data = tweetData.filter(d => d.chosen);
-	const $node = $.nodes.selectAll('.node').data(data, d => d.category);
-
-	const $nodeEnter = $node
-		.enter()
-		.append('g')
-		.at('class', d => `node node-${d.category}`);
-
-	$nodeEnter.each((d, i, n) => {
-		if (d.chosen) {
-			d3.select(n[i]).append('circle.outer');
-			d3.select(n[i]).append('circle.mid');
-		}
-	});
-
-	$nodeEnter.append('circle.inner');
-
-	const exampleData = tweetData.filter(d => d.example);
-	const $nodeEx = $.nodes.selectAll('.node__example').data(exampleData);
-
-	const $nodeExEnter = $nodeEx
-		.enter()
-		.append('circle.node__example')
-		.st('opacity', 0);
-}
 
 function hideTitle() {
 	const titleWidth = $intro.select('.intro__hed').node().offsetWidth;
@@ -112,31 +84,30 @@ function triggerExamples() {
 	});
 }
 
-function revealTick() {
-	Render.clear($.contextFg);
-	let notDone = false;
-	badgeData.forEach(d => {
-		d.fill = `rgba(${d.l}, ${d.l}, ${d.l})`;
-		Render.dot({ d, ctx: $.contextFg });
-		// inc lightness
-		if (d.l < d.target) {
-			notDone = true;
-			d.l = Math.min(d.target, d.l + d.rate);
-		}
-	});
-	if (currentStep === 'title' && notDone) requestAnimationFrame(revealTick);
-	else console.log('done');
-}
+// function revealTick() {
+// 	Render.clear($.contextFg);
+// 	let notDone = false;
+// 	badgeData.forEach(d => {
+// 		d.fill = `rgba(${d.l}, ${d.l}, ${d.l})`;
+// 		Render.dot({ d, ctx: $.contextFg });
+// 		// inc lightness
+// 		if (d.l < d.target) {
+// 			notDone = true;
+// 			d.l = Math.min(d.target, d.l + d.rate);
+// 		}
+// 	});
+// 	if (currentStep === 'title' && notDone) requestAnimationFrame(revealTick);
+// 	else console.log('done');
+// }
 
 function revealDots() {
 	badgeData.forEach(d => {
-		d.fill = 'rgba(0,0,0)';
 		// d.l = 0;
 		// d.target = 128;
 		// d.rate = 1 + Math.random() * 10;
+		d.fill = '#000';
 		Render.dot({ d, ctx: $.contextFg });
 	});
-	// revealTick();
 }
 
 function runTitle() {
@@ -222,10 +193,8 @@ function resize() {
 	enter(currentStep);
 }
 
-function init({ data, badgePos }) {
-	badgeData = badgePos.map(d => ({ ...d }));
-	tweetData = data;
-	setupTweets();
+function init(data) {
+	badgeData = data.map(d => ({ ...d }));
 }
 
 export default { init, resize, enter, exit, handoff };

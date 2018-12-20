@@ -10,10 +10,16 @@ import Render from './render';
 
 import badgePos from './badge-pos';
 
-badgePos.forEach(d => {
-	d.cx = Math.floor(d.x);
-	d.cy = Math.floor(d.y);
-});
+// edutainment
+// travel
+// role model
+// fashion
+const breakdown = [
+	{ cat: 'a', count: 2760 },
+	{ cat: 'b', count: 3489 },
+	{ cat: 'c', count: 895 + 359 + 381 },
+	{ cat: 'd', count: 8060 }
+];
 
 const DPR = window.devicePixelRatio ? Math.min(window.devicePixelRatio, 2) : 1;
 
@@ -90,9 +96,9 @@ function onCurateStepExit(el) {
 
 function setup(data) {
 	// sections
-	Intro.init({ data, badgePos });
+	Intro.init(data);
 	// Globe.init(data);
-	Curate.init({ data, badgePos });
+	Curate.init(data);
 	Explore.init(data);
 	// section steps
 	EnterView({
@@ -137,27 +143,39 @@ function setup(data) {
 
 function loadData() {
 	return new Promise(resolve => {
-		const a = 'abcde';
-		const data = d3.range(100).map((d, i) => ({
-			text: 'Testing text',
-			category: a.charAt(i % a.length),
-			followers: Math.floor(Math.random() * 1000),
-			chosen: i < a.length,
-			example: i >= a.length && i < a.length + 3
-		}));
+		const sum = d3.sum(breakdown, d => d.count);
+		let tally = 0;
+		const thresh = breakdown.map(d => {
+			const percent = d.count / sum;
+			const badgeCount = Math.floor(percent * badgePos.length);
+			const t = tally;
+			tally += badgeCount;
+			return t;
+		});
+		thresh.reverse();
+		// console.log(thresh, badgePos.length);
+		const withCat = badgePos.map((d, i) => {
+			const index = thresh.findIndex(t => t <= i);
+			return {
+				...d,
+				category: breakdown[breakdown.length - 1 - index].cat,
+				text: 'Testing text',
+				followers: Math.floor(Math.random() * 1000)
+			};
+		});
 
-		const withPos = data.map((d, i) => ({
-			...d,
-			x:
-				d.chosen || d.example
-					? tweetPos[i].cx
-					: Math.random() * window.innerWidth,
-			y:
-				d.chosen || d.example
-					? tweetPos[i].cy
-					: Math.random() * window.innerHeight
-		}));
-		resolve(withPos);
+		// const withPos = data.map((d, i) => ({
+		// 	...d,
+		// 	x:
+		// 		d.chosen || d.example
+		// 			? tweetPos[i].cx
+		// 			: Math.random() * window.innerWidth,
+		// 	y:
+		// 		d.chosen || d.example
+		// 			? tweetPos[i].cy
+		// 			: Math.random() * window.innerHeight
+		// }));
+		resolve(withCat);
 	});
 }
 
@@ -168,8 +186,8 @@ function svgToJSON() {
 		.each((d, i, n) => {
 			const c = d3.select(n[i]);
 			out.push({
-				x: +c.at('cx'),
-				y: +c.at('cy'),
+				cx: +c.at('cx'),
+				cy: +c.at('cy'),
 				r: +c.at('r')
 			});
 		});
