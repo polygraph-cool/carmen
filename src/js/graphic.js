@@ -10,17 +10,7 @@ import Explore from './explore';
 import Render from './render';
 
 import badgePos from './badge-pos';
-
-// edutainment
-// travel
-// role model
-// fashion
-const breakdown = [
-	{ cat: 'a', count: 2760 },
-	{ cat: 'b', count: 3489 },
-	{ cat: 'c', count: 895 + 359 + 381 },
-	{ cat: 'd', count: 8060 }
-];
+import categories from './categories';
 
 const DPR = window.devicePixelRatio ? Math.min(window.devicePixelRatio, 2) : 1;
 
@@ -146,7 +136,7 @@ function assignCategoryRandom(counts) {
 	const shuffled = Shuffle(pool);
 	return badgePos.map((d, i) => ({
 		...d,
-		category: breakdown[shuffled[i]] ? breakdown[shuffled[i]].cat : 'd'
+		category: categories[shuffled[i]] ? categories[shuffled[i]].cat : 'd'
 	}));
 }
 
@@ -164,35 +154,23 @@ function assignCategoryLayer(counts) {
 		const index = thresh.findIndex(t => t <= i);
 		return {
 			...d,
-			category: breakdown[breakdown.length - 1 - index].cat
+			category: categories[categories.length - 1 - index].cat
 		};
 	});
 }
 
 function loadData() {
 	return new Promise(resolve => {
-		const sum = d3.sum(breakdown, d => d.count);
-		const tally = 0;
+		const sum = d3.sum(categories, d => d.count);
 
-		const counts = breakdown.map(d => {
+		const counts = categories.map(d => {
 			const percent = d.count / sum;
 			return Math.floor(percent * badgePos.length);
 		});
 
 		const withCat = assignCategoryLayer(counts);
 		// const withCat = assignCategoryRandom(counts);
-		// console.log(withCat);
-		// const withPos = data.map((d, i) => ({
-		// 	...d,
-		// 	x:
-		// 		d.chosen || d.example
-		// 			? tweetPos[i].cx
-		// 			: Math.random() * window.innerWidth,
-		// 	y:
-		// 		d.chosen || d.example
-		// 			? tweetPos[i].cy
-		// 			: Math.random() * window.innerHeight
-		// }));
+
 		resolve(withCat);
 	});
 }

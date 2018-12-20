@@ -1,11 +1,12 @@
 import $ from './dom';
 import Tweet from './tweet';
 import Render from './render';
+import categories from './categories';
 
 const BADGE_W = 1280;
 const BADGE_H = 1024;
 const BADGE_R = 2.5;
-const RADIUS_INC = 0.1;
+// const RADIUS_INC = 0.1;
 
 const COL = {
 	a: '#3d66f9',
@@ -21,6 +22,7 @@ const exampleTweet = {
 	time: '11/14/18 12:39 PM'
 };
 
+let sampleSize = 0;
 let simulation = null;
 
 const $curate = d3.select('#curate');
@@ -53,9 +55,9 @@ function handleMouseEnter(d) {
 function handleMouseOut() {}
 
 function handleNavClick() {
-	$nav.selectAll('button').classed('is-active', false)
+	$nav.selectAll('button').classed('is-active', false);
 	const $button = d3.select(this);
-	$button.classed('is-active', true)
+	$button.classed('is-active', true);
 	const cat = $button.at('data-id');
 	runNav(cat);
 }
@@ -64,10 +66,17 @@ function handleTick() {
 	Render.clear($.contextFg);
 	nodes.forEach(d => {
 		// scale radius smoothly
-		if (d.r !== d.targetR) d.r += RADIUS_INC;
-		d.r = Math.min(d.targetR, d.r);
+		// if (d.r !== d.targetR) d.r += RADIUS_INC;
+		// d.r = Math.min(d.targetR, d.r);
 		Render.dot({ d, ctx: $.contextFg });
 	});
+}
+
+function handleEnd() {
+	nodes.forEach(d => {
+		d.r = radius;
+	});
+	handleTick();
 }
 
 function runSim() {
@@ -76,9 +85,9 @@ function runSim() {
 	// const alphaMin = 0.001;
 	// const alphaTarget = 0.0;
 	// const velocityDecay = 0.4;
-	const alphaDecay = 0.1;
+	const alphaDecay = 0.0227;
 	const alphaMin = 0.001;
-	const alphaTarget = 0.2;
+	const alphaTarget = 0.0;
 	const velocityDecay = 0.4;
 	const manyBodyStrength = -radius * 1.5;
 
@@ -89,19 +98,24 @@ function runSim() {
 		.alphaMin(alphaMin)
 		.alphaTarget(alphaTarget)
 		.velocityDecay(velocityDecay)
-		// .force('center', d3.forceCenter(centerX, centerY))
 		.force('x', d3.forceX(centerX))
 		.force('y', d3.forceY(centerY))
-		.force('charge', d3.forceManyBody().strength(manyBodyStrength));
+		.force('charge', d3.forceManyBody().strength(manyBodyStrength))
+		.on('end', handleEnd);
 }
 
 function runNav(cat) {
+	const c = categories.find(c => c.cat === cat);
+	const sample = Math.floor(c.count * sampleSize);
+
 	nodes = badgeData
 		.filter(n => n.category === cat)
+		.slice(0, sample)
 		.map(n => ({
 			...n,
 			targetR: radius
 		}));
+	console.log({ sample });
 	runSim();
 }
 
@@ -136,6 +150,7 @@ function handoff(direction) {
 }
 
 function resize() {
+	sampleSize = 0.05;
 	centerX = $.chart.node().offsetWidth / 2;
 	centerY = $.chart.node().offsetHeight / 2;
 
