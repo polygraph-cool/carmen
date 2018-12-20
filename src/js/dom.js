@@ -6,7 +6,7 @@ const bg = chart.select('.chart__bg');
 const contextBg = bg.node().getContext('2d');
 const svg = chart.select('svg');
 const g = svg.select('g');
-const map = g.select('.g-map');
+const globe = g.select('.g-globe');
 const nodes = g.select('.g-nodes');
 const introDots = d3.select('.intro__dots');
 const chartTweets = chart.select('.chart__tweets');
@@ -22,7 +22,7 @@ export default {
 	contextBg,
 	svg,
 	g,
-	map,
+	globe,
 	nodes,
 	introDots,
 	chartTweets,

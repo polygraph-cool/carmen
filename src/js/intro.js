@@ -2,12 +2,13 @@ import $ from './dom';
 import Tweet from './tweet';
 import tweetPos from './tweet-pos';
 import badgePos from './badge-pos';
+import Render from './render';
 
 const DPR = window.devicePixelRatio ? Math.min(window.devicePixelRatio, 2) : 1;
 
 badgePos.forEach(d => {
-	d.x = Math.floor(d.x);
-	d.y = Math.floor(d.y);
+	d.cx = Math.floor(d.x);
+	d.cy = Math.floor(d.y);
 });
 
 let tweetData = [];
@@ -116,19 +117,11 @@ function triggerExamples() {
 	});
 }
 
-function renderDot({ d, ctx }) {
-	ctx.beginPath();
-	ctx.moveTo(d.cx + d.r, d.cy);
-	ctx.arc(d.cx, d.cy, d.r, 0, 2 * Math.PI);
-	ctx.fillStyle = d.fill || `rgba(255,255,255,${Math.random()})`;
-	ctx.fill();
-}
-
 function test() {
 	$.context.clearRect(0, 0, width, height);
 	// $circle.at('')
 	badgePos.forEach(d => {
-		renderDot({ d, ctx: $.context });
+		Render.dot({ d, ctx: $.context });
 	});
 	// requestAnimationFrame(test);
 }
@@ -183,8 +176,8 @@ function resize() {
 	}
 
 	badgePos.forEach(b => {
-		b.cx = scale * b.x + offsetW;
-		b.cy = scale * b.y + offsetH;
+		b.x = scale * b.cx + offsetW;
+		b.y = scale * b.cy + offsetH;
 		b.r = scale * BADGE_R;
 	});
 
@@ -215,8 +208,8 @@ function resize() {
 
 	const bgData = d3.range(numDots).map(i => ({
 		d: {
-			cx: (i % col) * unit,
-			cy: Math.floor(i / col) * unit,
+			x: (i % col) * unit,
+			y: Math.floor(i / col) * unit,
 			r: scale * BADGE_R,
 			fill: '#333'
 		},
@@ -224,7 +217,7 @@ function resize() {
 	}));
 
 	$.contextBg.clearRect(0, 0, width, height);
-	bgData.forEach(renderDot);
+	bgData.forEach(Render.dot);
 }
 
 function init(data) {

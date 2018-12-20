@@ -2,10 +2,11 @@
 import EnterView from 'enter-view';
 import tweetPos from './tweet-pos';
 import $ from './dom';
-import intro from './intro';
-import map from './map';
-import curate from './curate';
-import explore from './explore';
+import Intro from './intro';
+import Globe from './globe';
+import Curate from './curate';
+import Explore from './explore';
+import Render from './render';
 
 const DPR = window.devicePixelRatio ? Math.min(window.devicePixelRatio, 2) : 1;
 
@@ -18,24 +19,23 @@ function resize() {
 	$.canvas
 		.at({ width: width * DPR, height: height * DPR })
 		.st({ width, height });
-	
-	$.bg
-		.at({ width: width * DPR, height: height * DPR })
-		.st({ width, height });
-	intro.resize();
-	map.resize();
-	curate.resize();
-	explore.resize();
+
+	$.bg.at({ width: width * DPR, height: height * DPR }).st({ width, height });
+	Intro.resize();
+	// Globe.resize();
+	Curate.resize();
+	Explore.resize();
+	Render.resize();
 }
 
 function onIntroStepEnter(el) {
 	const step = d3.select(el).at('data-step');
-	intro.enter(step);
+	Intro.enter(step);
 }
 
 function onIntroStepExit(el) {
 	const step = d3.select(el).at('data-step');
-	intro.exit(step);
+	Intro.exit(step);
 }
 
 function updateSection(index) {
@@ -45,26 +45,24 @@ function updateSection(index) {
 	$.chart.classed('is-hidden', false);
 	$.introDots.classed('is-hidden', true);
 	$.exploreNav.classed('is-hidden', true);
-	$.map.classed('is-hidden', true);
-
+	$.globe.classed('is-hidden', true);
 	switch (id) {
 	case 'intro':
 		$.introDots.classed('is-hidden', false);
-		intro.handoff();
+		Intro.handoff();
 		break;
 	case 'map':
-		map.handoff();
-		$.map.classed('is-hidden', false);
+		// Globe.handoff();
+		// Globe.classed('is-hidden', false);
 		break;
-
 	case 'curate':
-		curate.handoff();
+		Curate.handoff();
 		break;
 
 	case 'explore':
 		$.chart.classed('is-hidden', true);
 		$.exploreNav.classed('is-hidden', false);
-		explore.handoff();
+		Explore.handoff();
 		break;
 
 	default:
@@ -78,11 +76,10 @@ function onMapStepExit(el) {}
 
 function setup(data) {
 	// sections
-	intro.init(data);
-	map.init(data);
-	curate.init(data);
-	explore.init(data);
-
+	Intro.init(data);
+	// Globe.init(data);
+	Curate.init(data);
+	Explore.init(data);
 	// section steps
 	EnterView({
 		selector: 'section',
@@ -120,7 +117,7 @@ function setup(data) {
 function loadData() {
 	return new Promise(resolve => {
 		const a = 'abcde';
-		const data = d3.range(2400).map((d, i) => ({
+		const data = d3.range(100).map((d, i) => ({
 			text: 'Testing text',
 			category: a.charAt(i % a.length),
 			followers: Math.floor(Math.random() * 1000),

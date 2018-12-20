@@ -1,5 +1,6 @@
 import $ from './dom';
 import Tweet from './tweet';
+import Render from './render';
 
 const exampleTweet = {
 	name: 'The Pudding',
@@ -50,7 +51,8 @@ function handleNavClick() {
 }
 
 function handleTick() {
-	$.nodes.selectAll('.node').translate(d => [d.x, d.y]);
+	Render.clear($.contextBg);
+	nodes.forEach(d => Render.dot({ d, ctx: $.contextBg }));
 }
 
 function runSim() {
@@ -79,7 +81,14 @@ function runSim() {
 }
 
 function update(cat) {
-	nodes = tweetData.filter(d => d.category === cat);
+	nodes = tweetData
+		.filter(d => d.category === cat)
+		.map(d => ({
+			...d,
+			ctx: $.context,
+			fill: 'yellow',
+			r: 6
+		}));
 
 	const followerMax = d3.max(nodes, n => n.followers);
 
