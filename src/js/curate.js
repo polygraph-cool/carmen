@@ -6,7 +6,7 @@ import categories from './categories';
 const BADGE_W = 1280;
 const BADGE_H = 1024;
 const BADGE_R = 2.5;
-// const RADIUS_INC = 0.1;
+const RADIUS_INC = 0.1;
 
 const COL = {
 	a: '#3d66f9',
@@ -32,15 +32,18 @@ const $step = $curate.selectAll('.step');
 let badgeData = [];
 let nodes = [];
 
+let width = 0;
+let height = 0;
 let centerX = 0;
 let centerY = 0;
 let radius = 0;
 let currentStep = null;
 
 const scaleStrength = d3.scaleLinear();
+const voronoi = d3.voronoi();
 
-function handleMouseEnter(d) {
-	const { x, y } = d;
+function handleVorEnter({ data }) {
+	const { x, y } = data;
 	Tweet.clear();
 	Tweet.create({
 		data: exampleTweet,
@@ -48,11 +51,7 @@ function handleMouseEnter(d) {
 		y,
 		offset: true
 	});
-	$.nodes.selectAll('.node').classed('is-highlight', false);
-	d3.select(this).classed('is-highlight', true);
 }
-
-function handleMouseOut() {}
 
 function handleNavClick() {
 	$nav.selectAll('button').classed('is-active', false);
@@ -66,8 +65,9 @@ function handleTick() {
 	Render.clear($.contextFg);
 	nodes.forEach(d => {
 		// scale radius smoothly
-		// if (d.r !== d.targetR) d.r += RADIUS_INC;
-		// d.r = Math.min(d.targetR, d.r);
+		const diff = Math.abs(d.r - d.targetR);
+		if (diff >= 0.2) d.r += RADIUS_INC;
+		else d.r = d.targetR;
 		Render.dot({ d, ctx: $.contextFg });
 	});
 }
@@ -77,6 +77,28 @@ function handleEnd() {
 		d.r = radius;
 	});
 	handleTick();
+
+	// VORONOI
+	voronoi
+		.x(d => d.x)
+		.y(d => d.y)
+		.extent([[0, 0], [width, height]]);
+
+	let $vorPath = $.vor.selectAll('path');
+
+	const polygons = voronoi.polygons(nodes);
+
+	$vorPath = $vorPath
+		.data(polygons)
+		.enter()
+		.append('path')
+		.merge($vorPath);
+
+	$vorPath.at('d', d => (d ? `M${d.join('L')}Z` : null));
+
+	$vorPath.on('mouseenter', handleVorEnter);
+	// $vorPath.on('mouseout', handleVorE);
+	// else $vorPath.on('mouseenter', handleVorEnter);
 }
 
 function runSim() {
@@ -137,14 +159,20 @@ function runIntro() {
 }
 
 function enter(step) {
+	Tweet.clear();
 	currentStep = step;
 	if (currentStep === 'intro') runIntro();
 	else if (currentStep === 'nav') runNav('a');
 }
 
 function exit(step) {
+	Tweet.clear();
 	currentStep = step === 'nav' ? 'intro' : 'nav';
 	if (currentStep === 'intro') runIntro();
+}
+
+function clear() {
+	Tweet.clear();
 }
 
 function handoff(direction) {
@@ -153,8 +181,10 @@ function handoff(direction) {
 
 function resize() {
 	sampleSize = 0.05;
-	centerX = $.chart.node().offsetWidth / 2;
-	centerY = $.chart.node().offsetHeight / 2;
+	width = $.chart.node().offsetWidth;
+	height = $.chart.node().offsetHeight;
+	centerX = width / 2;
+	centerY = height / 2;
 
 	const stepSize = $step.size();
 	const stepHeight = window.innerHeight;
@@ -179,4 +209,4 @@ function init(data) {
 	$nav.selectAll('button').on('click', handleNavClick);
 }
 
-export default { init, resize, enter, exit, handoff };
+export default { init, resize, enter, exit, handoff, clear };
