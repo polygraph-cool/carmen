@@ -13,8 +13,6 @@ const $title = $intro.selectAll('.intro__hed-text');
 const $stepGroup = $intro.selectAll('.intro__steps');
 const $step = $intro.selectAll('.step');
 
-const someTweets = tweetPos.slice(4, 7);
-
 let badgeData = [];
 let width = null;
 let height = null;
@@ -61,9 +59,10 @@ function showTitle() {
 }
 
 function triggerExamples() {
-	someTweets.forEach(d => {
-		Render.dot({ d, ctx: $.contextEx });
-	});
+	const leng = badgeData.length
+	// badgeData[rand].forEach(d => {
+	// 	Render.dot({ d: badgeData[rand], ctx: $.contextEx });
+	// });
 
 	const delay = 4000;
 	$.nodes
@@ -73,14 +72,18 @@ function triggerExamples() {
 		.delay((d, i) => i * delay)
 		.st('opacity', 1);
 
-	triggerTimeouts = d3.range(3).map(i => {
-		const x = (someTweets[i].cx * width) / BADGE_W;
-		const y = (someTweets[i].cy * height) / BADGE_H;
-		return setTimeout(
-			() =>
-				Tweet.create({ data: exampleTweet, x, y, fade: true, offset: true }),
-			i * delay
-		);
+	triggerTimeouts = d3.range(100).map(i => {
+		const rand = badgeData[Math.floor(Math.random() * badgeData.length)]
+		rand.fill = '#f30'
+		const x = rand.cx//(rand.cx * width) / BADGE_W;
+		const y = rand.cy//(rand.cy * height) / BADGE_H;
+		console.log({x, y})
+		const timeout = setTimeout(() => {
+			Tweet.clear()
+			Render.clear($.contextEx)
+	    Render.dot({ d: rand, ctx: $.contextEx });
+	    Tweet.create({ data: exampleTweet, x, y, fade: true, offset: true });
+		}, i * delay );
 	});
 }
 
@@ -147,11 +150,11 @@ function resize() {
 		b.r = scale * BADGE_R;
 	});
 
-	someTweets.forEach(t => {
-		t.x = scale * t.cx + offsetW;
-		t.y = scale * t.cy + offsetH;
-		t.r = scale * BADGE_R;
-	});
+	// someTweets.forEach(t => {
+	// 	t.x = scale * t.cx + offsetW;
+	// 	t.y = scale * t.cy + offsetH;
+	// 	t.r = scale * BADGE_R;
+	// });
 
 	const stepHeight = window.innerHeight;
 
