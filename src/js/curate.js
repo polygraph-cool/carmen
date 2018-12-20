@@ -2,6 +2,8 @@ import $ from './dom';
 import Tweet from './tweet';
 import Render from './render';
 
+const RADIUS_INC = 0.1;
+
 const exampleTweet = {
 	name: 'The Pudding',
 	handle: '@puddingviz',
@@ -51,8 +53,13 @@ function handleNavClick() {
 }
 
 function handleTick() {
-	Render.clear($.contextBg);
-	nodes.forEach(d => Render.dot({ d, ctx: $.contextBg }));
+	Render.clear($.context);
+	nodes.forEach(d => {
+		// scale radius smoothly
+		if (d.r !== d.targetR) d.r += RADIUS_INC;
+		d.r = Math.min(d.targetR, d.r);
+		Render.dot({ d, ctx: $.context });
+	});
 }
 
 function runSim() {
@@ -87,7 +94,8 @@ function update(cat) {
 			...d,
 			ctx: $.context,
 			fill: 'yellow',
-			r: 6
+			r: 1,
+			targetR: radius
 		}));
 
 	const followerMax = d3.max(nodes, n => n.followers);

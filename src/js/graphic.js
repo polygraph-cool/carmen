@@ -16,19 +16,12 @@ function resize() {
 	$.chart.st({ height });
 	const width = $.chart.node().offsetWidth;
 	$.svg.st({ width, height });
-	$.canvas
-		.at({ width: width * DPR, height: height * DPR })
-		.st({ width, height });
 
-	$.bg.at({ width: width * DPR, height: height * DPR }).st({ width, height });
-
-	$.ex.at({ width: width * DPR, height: height * DPR }).st({ width, height });
-
+	Render.resize();
 	Intro.resize();
 	// Globe.resize();
 	Curate.resize();
 	Explore.resize();
-	Render.resize();
 }
 
 function onIntroStepEnter(el) {

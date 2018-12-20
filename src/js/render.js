@@ -1,17 +1,29 @@
 import $ from './dom';
 
+const DPR = window.devicePixelRatio ? Math.min(window.devicePixelRatio, 2) : 1;
+
 let width = 0;
 let height = 0;
 
 function resize() {
-	width = $.chart.node().offsetWidth;
-	height = $.chart.node().offsetHeight;
+	width = $.chart.node().offsetWidth * DPR;
+	height = $.chart.node().offsetHeight * DPR;
+	$.canvas
+		.at({ width: width * DPR, height: height * DPR })
+		.st({ width, height });
+
+	$.bg.at({ width: width * DPR, height: height * DPR }).st({ width, height });
+
+	$.ex.at({ width: width * DPR, height: height * DPR }).st({ width, height });
 }
 
 function dot({ d, ctx }) {
+	const x = d.x * DPR;
+	const y = d.y * DPR;
+	const r = d.r * DPR;
 	ctx.beginPath();
-	ctx.moveTo(d.x + d.r, d.y);
-	ctx.arc(d.x, d.y, d.r, 0, 2 * Math.PI);
+	ctx.moveTo(x + r, y);
+	ctx.arc(x, y, r, 0, 2 * Math.PI);
 	ctx.fillStyle = d.fill || `rgba(255,255,255,${Math.random()})`;
 	ctx.fill();
 }

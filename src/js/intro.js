@@ -4,28 +4,23 @@ import tweetPos from './tweet-pos';
 import badgePos from './badge-pos';
 import Render from './render';
 
-const DPR = window.devicePixelRatio ? Math.min(window.devicePixelRatio, 2) : 1;
+const BADGE_W = 1280;
+const BADGE_H = 1024;
+const BADGE_R = 2.5;
+const BADGE_RATIO = BADGE_W / BADGE_H;
 
 badgePos.forEach(d => {
 	d.cx = Math.floor(d.x);
 	d.cy = Math.floor(d.y);
 });
 
-let someTweets = tweetPos.slice(4, 7)
+const someTweets = tweetPos.slice(4, 7);
 
 let tweetData = [];
-const BADGE_W = 1280;
-const BADGE_H = 1024;
-const BADGE_R = 2.5;
-const BADGE_RATIO = BADGE_W / BADGE_H;
 
-const REM = 16;
-const catNum = 5;
 let width = null;
 let height = null;
-
 let scale = 1;
-
 let triggerTimeouts = [];
 
 const $intro = d3.select('#intro');
@@ -100,11 +95,9 @@ function showTitle() {
 }
 
 function triggerExamples() {
-	const con = $.contextEx
-	console.log({con})
 	someTweets.forEach(d => {
-		renderDot({d, ctx: $.contextEx })
-	})
+		Render.dot({ d, ctx: $.contextEx });
+	});
 
 	const delay = 4000;
 	$.nodes
@@ -126,17 +119,15 @@ function triggerExamples() {
 }
 
 function test() {
-	$.context.clearRect(0, 0, width, height);
-	// $circle.at('')
+	Render.clear($.context);
 	badgePos.forEach(d => {
 		Render.dot({ d, ctx: $.context });
 	});
 	// requestAnimationFrame(test);
 }
 
-
 function enter(step) {
-	// test();
+	test();
 
 	if (step !== 'title') hideTitle();
 	if (step !== 'examples') {
@@ -163,8 +154,8 @@ function exit(step) {
 function handoff(direction) {}
 
 function resize() {
-	width = $.chart.node().offsetWidth * DPR;
-	height = $.chart.node().offsetHeight * DPR;
+	width = $.chart.node().offsetWidth;
+	height = $.chart.node().offsetHeight;
 
 	const screenRatio = width / height;
 
@@ -193,8 +184,8 @@ function resize() {
 	someTweets.forEach(t => {
 		t.cx = scale * t.cx + offsetW;
 		t.cy = scale * t.cy + offsetH;
-		t.r = scale * BADGE_R
-	})
+		t.r = scale * BADGE_R;
+	});
 
 	const stepHeight = window.innerHeight;
 
