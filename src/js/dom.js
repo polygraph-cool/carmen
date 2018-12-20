@@ -13,6 +13,7 @@ const globe = g.select('.g-globe');
 const nodes = g.select('.g-nodes');
 const introDots = d3.select('.intro__dots');
 const chartTweets = chart.select('.chart__tweets');
+const exploreTweets = d3.select('.figure__tweets')
 const exploreNav = d3.select('.explore__nav');
 const header = d3.select('header');
 
@@ -31,6 +32,7 @@ export default {
 	nodes,
 	introDots,
 	chartTweets,
+	exploreTweets,
 	exploreNav,
 	header
 };
