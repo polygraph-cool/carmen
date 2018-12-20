@@ -7,7 +7,7 @@
 		<nav class='curate__nav' role='group'>
 				{{#each doc.categories}}
 				{{#if curate}}
-				<div class='choice'><button data-id='{{id}}'>{{label}}</button></div>
+				<div class='choice'><button class='cat-{{id}}' data-id='{{id}}'>{{label}}</button></div>
 				{{/if}}
 				{{/each}}
 		</nav>

@@ -85,7 +85,6 @@ function onGlobeStepEnter(el) {}
 function onGlobeStepExit(el) {}
 
 function onCurateStepEnter(el) {
-	console.log(el);
 	const step = d3.select(el).at('data-step');
 	Curate.enter(step);
 }
@@ -136,7 +135,7 @@ function setup(data) {
 		selector: '#curate .step',
 		enter: onCurateStepEnter,
 		exit: onCurateStepExit,
-		offset: 0.9
+		offset: 0.67
 	});
 
 	resize();
@@ -180,7 +179,7 @@ function loadData() {
 			return Math.floor(percent * badgePos.length);
 		});
 
-		const withCat = assignCategoryLayer(counts)
+		const withCat = assignCategoryLayer(counts);
 		// const withCat = assignCategoryRandom(counts);
 		// console.log(withCat);
 		// const withPos = data.map((d, i) => ({
