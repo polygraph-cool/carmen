@@ -2,10 +2,13 @@
 	position relative
 	figure
 		position relative
-		
+		overflow-x: hidden;
+
 	.figure__dots
 		background-image url('assets/images/dot.svg')
 		background-size 10px 10px
+		//transform translate(-50%, 0)
+
 
 	.figure__tweets
 		position absolute
@@ -14,6 +17,12 @@
 		width 100%
 		height 100%
 		pointer-events none
+
+		&-dot
+			background-image url('assets/images/color-dot.svg')
+			background-size 10px 10px
+			position absolute
+			//transform translate(-50%, 0)
 
 
 	.explore__title
@@ -54,18 +63,18 @@
 			border-bottom 2px solid currentColor
 			padding 0 0.25em
 			margin-right 1rem
-		
+
 		button
 			padding 0.25em
 			background-color $fg
 			color $bg
 			text-transform uppercase
 			font-family $sans
-		
+
 		.left,.right
 			display flex
-		
-	
+
+
 
 	fieldset
 		display flex
@@ -103,4 +112,3 @@
 				set-type-size(small, true)
 			&:hover
 				yellow
-			
