@@ -43,13 +43,12 @@ function updateSection(index) {
 	const id = $section.at('id');
 	console.log('section', id);
 	$.chart.classed('is-hidden', false);
-	$.introDots.classed('is-hidden', true);
 	$.exploreNav.classed('is-hidden', true);
 	$.globe.classed('is-hidden', true);
 	Intro.clear();
+	Curate.clear();
 	switch (id) {
 	case 'intro':
-		$.introDots.classed('is-hidden', false);
 		Intro.handoff();
 		break;
 	case 'globe':
@@ -169,8 +168,8 @@ function loadData() {
 			return Math.floor(percent * badgePos.length);
 		});
 
-		const withCat = assignCategoryLayer(counts);
-		// const withCat = assignCategoryRandom(counts);
+		// const withCat = assignCategoryLayer(counts);
+		const withCat = assignCategoryRandom(counts);
 
 		resolve(withCat);
 	});
