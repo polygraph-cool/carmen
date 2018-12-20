@@ -1,5 +1,6 @@
 /* global d3 */
 import EnterView from 'enter-view';
+import Shuffle from 'lodash.shuffle';
 import tweetPos from './tweet-pos';
 import $ from './dom';
 import Intro from './intro';
@@ -141,27 +142,47 @@ function setup(data) {
 	resize();
 }
 
+function assignCategoryRandom(counts) {
+	const pool = [].concat(...counts.map((d, i) => d3.range(d).map(() => i)));
+	const shuffled = Shuffle(pool);
+	return badgePos.map((d, i) => ({
+		...d,
+		category: breakdown[shuffled[i]] ? breakdown[shuffled[i]].cat : 'd'
+	}));
+}
+
+function assignCategoryLayer(counts) {
+	let tally = 0;
+	const thresh = counts.map(d => {
+		const t = tally;
+		tally += d;
+		return t;
+	});
+
+	thresh.reverse();
+	// console.log(thresh, badgePos.length);
+	return badgePos.map((d, i) => {
+		const index = thresh.findIndex(t => t <= i);
+		return {
+			...d,
+			category: breakdown[breakdown.length - 1 - index].cat
+		};
+	});
+}
+
 function loadData() {
 	return new Promise(resolve => {
 		const sum = d3.sum(breakdown, d => d.count);
-		let tally = 0;
-		const thresh = breakdown.map(d => {
+		const tally = 0;
+
+		const counts = breakdown.map(d => {
 			const percent = d.count / sum;
-			const badgeCount = Math.floor(percent * badgePos.length);
-			const t = tally;
-			tally += badgeCount;
-			return t;
-		});
-		thresh.reverse();
-		// console.log(thresh, badgePos.length);
-		const withCat = badgePos.map((d, i) => {
-			const index = thresh.findIndex(t => t <= i);
-			return {
-				...d,
-				category: breakdown[breakdown.length - 1 - index].cat
-			};
+			return Math.floor(percent * badgePos.length);
 		});
 
+		const withCat = assignCategoryLayer(counts)
+		// const withCat = assignCategoryRandom(counts);
+		// console.log(withCat);
 		// const withPos = data.map((d, i) => ({
 		// 	...d,
 		// 	x:

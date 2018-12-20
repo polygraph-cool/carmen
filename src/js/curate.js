@@ -144,8 +144,21 @@ function update(cat) {
 function runIntro() {
 	Render.clear($.contextFg);
 
+	// $edu = #e50914
+	// $role = #3d66f9
+	// $fashion = #62c6f9
+	// $culture = #29cc7a
+	// $travel = #fcd206
+
+	const col = {
+		a: '#e50914',
+		b: '#3d66f9',
+		c: '#62c6f9',
+		d: '#fcd206'
+	};
+
 	badgeData.forEach(d => {
-		d.fill = '#fff';
+		d.fill = col[d.category];
 		Render.dot({ d, ctx: $.contextFg });
 	});
 }
