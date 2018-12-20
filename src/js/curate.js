@@ -2,6 +2,9 @@ import $ from './dom';
 import Tweet from './tweet';
 import Render from './render';
 
+const BADGE_W = 1280;
+const BADGE_H = 1024;
+const BADGE_R = 2.5;
 const RADIUS_INC = 0.1;
 
 const exampleTweet = {
@@ -15,14 +18,16 @@ let simulation = null;
 
 const $curate = d3.select('#curate');
 const $nav = $curate.select('nav');
-const $p = $curate.select('p');
+const $step = $curate.selectAll('.step');
 
+let badgeData = [];
 let tweetData = [];
 let nodes = [];
 
 let centerX = 0;
 let centerY = 0;
 let radius = 0;
+let currentStep = null;
 
 const scaleStrength = d3.scaleLinear();
 
@@ -136,21 +141,55 @@ function update(cat) {
 
 	runSim();
 }
+
+function runIntro() {
+	Render.clear($.contextFg);
+
+	badgeData.forEach(d => {
+		d.fill = '#fff';
+		Render.dot({ d, ctx: $.contextFg });
+	});
+}
+
+function enter(step) {
+	currentStep = step;
+	if (currentStep === 'intro') runIntro();
+}
+
+function exit(step) {
+	currentStep = step === 'nav' ? 'intro' : 'nav';
+}
+
 function handoff(direction) {
-	handleNavClick.call($nav.select('label').node());
+	// handleNavClick.call($nav.select('label').node());
 }
 
 function resize() {
 	centerX = $.chart.node().offsetWidth / 2;
 	centerY = $.chart.node().offsetHeight / 2;
-	$nav.st('margin-bottom', window.innerHeight);
-	// $p.st('padding-top', window.innerHeight * 0.9);
+
+	const stepSize = $step.size();
+	const stepHeight = window.innerHeight;
+	$step.st('height', stepHeight).classed('is-visible', true);
+	// .st('height', (d, i) => stepHeight * (i === stepSize - 1 ? 2 : 1))
+
+	const { scale, offsetW, offsetH } = Render.getScale();
+
+	badgeData.forEach(b => {
+		b.x = scale * b.cx + offsetW;
+		b.y = scale * b.cy + offsetH;
+		b.r = scale * BADGE_R;
+	});
+
 	radius = 8;
+
+	enter(currentStep);
 }
 
-function init(data) {
+function init({ data, badgePos }) {
 	tweetData = data;
+	badgeData = badgePos.map(d => ({ ...d }));
 	$nav.selectAll('label').on('click', handleNavClick);
 }
 
-export default { init, resize, handoff };
+export default { init, resize, enter, exit, handoff };

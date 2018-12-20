@@ -28,7 +28,7 @@ function resize() {
 	const row = Math.floor(count / col);
 	$dots.st({
 		height: row * radius,
-		backgroundSize: `${radius * 4}px ${radius * 4}px`
+		backgroundSize: `${radius * 2}px ${radius * 2}px`
 	});
 }
 

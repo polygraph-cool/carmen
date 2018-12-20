@@ -1,53 +1,26 @@
 #curate
 	pointer-events none
-	p
-		padding 1rem
-		margin 0
-		max-width 25rem
+
+	.curate__steps
+		padding 0 1rem
 	
-	nav
-		position relative
-		padding 1rem
+	.step
 		max-width 20rem
 
-	legend
-		margin-bottom 1rem
 
-	fieldset
-		// display flex
-		ul
-			display flex
-			flex-direction column
-			// flex-wrap wrap
-		li
-			margin-bottom 0.5em
-			position relative
-		input:checked + label
-			border-bottom 2px solid $primary
-		input:focus + label
-			outline 1px dotted white
-		input
-			opacity 0
-			height 0
-			position absolute
-			display inline
-		label
+	nav
+		position relative
+		display flex
+		flex-direction column
+		.choice
+			margin-bottom 1rem
+			pointer-events none
+		button
 			pointer-events auto
-			cursor pointer
-			padding 0.25em
-			border-radius 3px
-			color $gray-light
-			font-weight 600
-			display block
-			text-transform uppercase
-			text-shadow 0 0 3px $bg
-			border-bottom 1px solid currentColor
-			border-radius 0
-			display inline
-			set-type-size(xx-small, true)
-			+mq('bp-5')
-				set-type-size(x-small, true)
-				padding 0.25em 0.5em
-			+mq('bp-6')
-				set-type-size(small, true)
+			background-color transparent
+			padding 0 0.5em
+			border-bottom 2px solid $gray
+			color $fg
+			font-weight 700
+		
 			

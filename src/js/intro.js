@@ -1,13 +1,11 @@
 import $ from './dom';
 import Tweet from './tweet';
 import tweetPos from './tweet-pos';
-import badgePos from './badge-pos';
 import Render from './render';
 
 const BADGE_W = 1280;
 const BADGE_H = 1024;
 const BADGE_R = 2.5;
-const BADGE_RATIO = BADGE_W / BADGE_H;
 
 const $intro = d3.select('#intro');
 const $introHed = $intro.select('.intro__hed');
@@ -17,18 +15,13 @@ const $step = $intro.selectAll('.step');
 
 const someTweets = tweetPos.slice(4, 7);
 
+let badgeData = [];
 let tweetData = [];
 let width = null;
 let height = null;
-let scale = 1;
 let triggerTimeouts = [];
 
 let currentStep = null;
-
-badgePos.forEach(d => {
-	d.cx = Math.floor(d.x);
-	d.cy = Math.floor(d.y);
-});
 
 const exampleTweet = {
 	name: 'The Pudding',
@@ -122,7 +115,7 @@ function triggerExamples() {
 function revealTick() {
 	Render.clear($.contextFg);
 	let notDone = false;
-	badgePos.forEach(d => {
+	badgeData.forEach(d => {
 		d.fill = `rgba(${d.l}, ${d.l}, ${d.l})`;
 		Render.dot({ d, ctx: $.contextFg });
 		// inc lightness
@@ -136,7 +129,7 @@ function revealTick() {
 }
 
 function revealDots() {
-	badgePos.forEach(d => {
+	badgeData.forEach(d => {
 		d.fill = 'rgba(0,0,0)';
 		// d.l = 0;
 		// d.target = 128;
@@ -175,25 +168,9 @@ function resize() {
 	width = $.chart.node().offsetWidth;
 	height = $.chart.node().offsetHeight;
 
-	const screenRatio = width / height;
+	const { scale, offsetW, offsetH } = Render.getScale();
 
-	let imageW = 0;
-	let imageH = 0;
-	let offsetW = 0;
-	let offsetH = 0;
-	if (screenRatio > BADGE_RATIO) {
-		scale = height / BADGE_H;
-		imageW = scale * BADGE_W;
-		offsetW = (width - imageW) / 2;
-		offsetH = 0;
-	} else {
-		scale = width / BADGE_W;
-		imageH = scale * BADGE_H;
-		offsetW = 0;
-		offsetH = (height - imageH) / 2;
-	}
-
-	badgePos.forEach(b => {
+	badgeData.forEach(b => {
 		b.x = scale * b.cx + offsetW;
 		b.y = scale * b.cy + offsetH;
 		b.r = scale * BADGE_R;
@@ -245,7 +222,8 @@ function resize() {
 	enter(currentStep);
 }
 
-function init(data) {
+function init({ data, badgePos }) {
+	badgeData = badgePos.map(d => ({ ...d }));
 	tweetData = data;
 	setupTweets();
 }

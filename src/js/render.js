@@ -1,9 +1,37 @@
 import $ from './dom';
 
+const BADGE_W = 1280;
+const BADGE_H = 1024;
+const BADGE_R = 2.5;
+const BADGE_RATIO = BADGE_W / BADGE_H;
 const DPR = window.devicePixelRatio ? Math.min(window.devicePixelRatio, 2) : 1;
 
 let width = 0;
 let height = 0;
+
+function getScale() {
+	const w = width / DPR;
+	const h = height / DPR;
+	const screenRatio = w / h;
+
+	let scale = 0;
+	let offsetW = 0;
+	let offsetH = 0;
+
+	if (screenRatio > BADGE_RATIO) {
+		scale = height / BADGE_H;
+		const imageW = scale * BADGE_W;
+		offsetW = (w - imageW) / 2;
+		offsetH = 0;
+	} else {
+		scale = width / BADGE_W;
+		const imageH = scale * BADGE_H;
+		offsetW = 0;
+		offsetH = (height - imageH) / 2;
+	}
+	// console.log({ scale, offsetW, offsetH });
+	return { scale, offsetW, offsetH };
+}
 
 function resize() {
 	width = $.chart.node().offsetWidth * DPR;
@@ -39,5 +67,6 @@ function clear(ctx) {
 export default {
 	resize,
 	dot,
-	clear
+	clear,
+	getScale
 };

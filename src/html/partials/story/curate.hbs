@@ -1,17 +1,20 @@
-<p>{{{doc.curate.text}}}</p>
+<div class='curate__steps'>
+	<div class='step' data-step='intro'>
+		<p class='step__prose'>{{{doc.curate.text}}}</p>
+	</div>
+	<div class='step' data-step='nav'>
+		<p>{{{doc.curate.choose}}}</p>
+		<nav class='curate__nav' role='group'>
+				{{#each doc.categories}}
+				{{#if curate}}
+				<div class='choice'><button data-id='{{id}}'>{{label}}</button></div>
+				{{/if}}
+				{{/each}}
+		</nav>
+	</div>
+</div>
 
-<nav class='curate__nav is-hidden'>
 
-	<fieldset class='nav__choose'>
-		<legend>{{{doc.curate.choose}}}</legend>
 
-		<ul>
-			{{#each doc.categories}}
-			{{#if curate}}
-				<li><input value='{{id}}' type='radio' name='{{id}}' id='radio{{@index}}'><label for='radio{{@index}}'>{{label}}</label></li>
-			{{/if}}
-			{{/each}}
-		</ul>
 
-	</fieldset>
-</nav>
+

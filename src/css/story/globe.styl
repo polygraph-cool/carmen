@@ -1,3 +1,24 @@
+#globe
+	display none
+	.globe__steps
+		position relative
+		max-width 25rem
+		margin 0
+		padding 1rem
+		pointer-events none
+
+		.step
+			display flex
+			flex-direction column
+			justify-content flex-end
+			min-height 480px
+			&:last-of-type
+				justify-content center
+			p
+				text-shadow 0 0 3px $bg
+
+
+
 #chart .g-globe
 	transition opacity 250ms ease-in-out
 	&.is-hidden
@@ -29,22 +50,3 @@
 	.country
 		fill $off-white
 		fill-opacity 0
-
-#globe
-	.globe__steps
-		position relative
-		max-width 25rem
-		margin 0
-		padding 1rem
-		pointer-events none
-
-		.step
-			display flex
-			flex-direction column
-			justify-content flex-end
-			min-height 480px
-			&:last-of-type
-				justify-content center
-			p
-				text-shadow 0 0 3px $bg
-

@@ -8,6 +8,13 @@ import Curate from './curate';
 import Explore from './explore';
 import Render from './render';
 
+import badgePos from './badge-pos';
+
+badgePos.forEach(d => {
+	d.cx = Math.floor(d.x);
+	d.cy = Math.floor(d.y);
+});
+
 const DPR = window.devicePixelRatio ? Math.min(window.devicePixelRatio, 2) : 1;
 
 function resize() {
@@ -47,7 +54,7 @@ function updateSection(index) {
 		$.introDots.classed('is-hidden', false);
 		Intro.handoff();
 		break;
-	case 'map':
+	case 'globe':
 		// Globe.handoff();
 		// Globe.classed('is-hidden', false);
 		break;
@@ -66,15 +73,26 @@ function updateSection(index) {
 	}
 }
 
-function onMapStepEnter(el) {}
+function onGlobeStepEnter(el) {}
 
-function onMapStepExit(el) {}
+function onGlobeStepExit(el) {}
+
+function onCurateStepEnter(el) {
+	console.log(el);
+	const step = d3.select(el).at('data-step');
+	Curate.enter(step);
+}
+
+function onCurateStepExit(el) {
+	const step = d3.select(el).at('data-step');
+	Curate.exit(step);
+}
 
 function setup(data) {
 	// sections
-	Intro.init(data);
+	Intro.init({ data, badgePos });
 	// Globe.init(data);
-	Curate.init(data);
+	Curate.init({ data, badgePos });
 	Explore.init(data);
 	// section steps
 	EnterView({
@@ -99,11 +117,18 @@ function setup(data) {
 		offset: 0.9
 	});
 
-	// map steps
+	// globe steps
 	EnterView({
-		selector: '#map .step',
-		enter: onMapStepEnter,
-		exit: onMapStepExit,
+		selector: '#globe .step',
+		enter: onGlobeStepEnter,
+		exit: onGlobeStepExit,
+		offset: 0.9
+	});
+
+	EnterView({
+		selector: '#curate .step',
+		enter: onCurateStepEnter,
+		exit: onCurateStepExit,
 		offset: 0.9
 	});
 
