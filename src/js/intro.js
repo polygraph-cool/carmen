@@ -13,12 +13,10 @@ const $title = $intro.selectAll('.intro__hed-text');
 const $stepGroup = $intro.selectAll('.intro__steps');
 const $step = $intro.selectAll('.step');
 
-const someTweets = tweetPos.slice(4, 7);
-
 let badgeData = [];
 let width = null;
 let height = null;
-let triggerTimeouts = [];
+let timeout = null;
 
 let currentStep = null;
 
@@ -60,28 +58,19 @@ function showTitle() {
 		.translate([0, 0]);
 }
 
-function triggerExamples() {
-	someTweets.forEach(d => {
-		Render.dot({ d, ctx: $.contextEx });
-	});
-
+function triggerExample() {
 	const delay = 4000;
-	$.nodes
-		.selectAll('.node__example')
-		.transition()
-		.duration(200)
-		.delay((d, i) => i * delay)
-		.st('opacity', 1);
+	const r = Math.floor(Math.random() * badgeData.length);
+	const d = badgeData[r];
+	const { x, y } = d;
 
-	triggerTimeouts = d3.range(3).map(i => {
-		const x = (someTweets[i].cx * width) / BADGE_W;
-		const y = (someTweets[i].cy * height) / BADGE_H;
-		return setTimeout(
-			() =>
-				Tweet.create({ data: exampleTweet, x, y, fade: true, offset: true }),
-			i * delay
-		);
-	});
+	d.fill = '#f30';
+
+	Tweet.clear();
+	Render.clear($.contextEx);
+	Render.dot({ d, ctx: $.contextEx });
+	Tweet.create({ data: exampleTweet, x, y, fade: true, offset: true });
+	timeout = setTimeout(triggerExample, delay);
 }
 
 // function revealTick() {
@@ -112,23 +101,25 @@ function revealDots() {
 
 function runTitle() {
 	showTitle();
+	Render.clear($.contextEx);
 	Tweet.clear();
-	triggerTimeouts.forEach(t => clearTimeout(t));
 	revealDots();
 }
 
 function runExamples() {
 	hideTitle();
-	triggerExamples();
+	triggerExample();
 }
 
 function enter(step) {
+	if (timeout) clearTimeout(timeout);
 	currentStep = step;
 	if (currentStep === 'title') runTitle();
 	else if (currentStep === 'examples') runExamples();
 }
 
 function exit(step) {
+	if (timeout) clearTimeout(timeout);
 	currentStep = step === 'examples' ? 'title' : 'examples';
 	if (currentStep === 'title') runTitle();
 }
@@ -147,11 +138,11 @@ function resize() {
 		b.r = scale * BADGE_R;
 	});
 
-	someTweets.forEach(t => {
-		t.x = scale * t.cx + offsetW;
-		t.y = scale * t.cy + offsetH;
-		t.r = scale * BADGE_R;
-	});
+	// someTweets.forEach(t => {
+	// 	t.x = scale * t.cx + offsetW;
+	// 	t.y = scale * t.cy + offsetH;
+	// 	t.r = scale * BADGE_R;
+	// });
 
 	const stepHeight = window.innerHeight;
 
