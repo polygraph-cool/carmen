@@ -16,8 +16,7 @@ const $step = $intro.selectAll('.step');
 let badgeData = [];
 let width = null;
 let height = null;
-let triggerTimeouts = [];
-let timeout = null
+let timeout = null;
 
 let currentStep = null;
 
@@ -59,32 +58,19 @@ function showTitle() {
 		.translate([0, 0]);
 }
 
-function triggerExamples() {
-	const leng = badgeData.length
-	// badgeData[rand].forEach(d => {
-	// 	Render.dot({ d: badgeData[rand], ctx: $.contextEx });
-	// });
-
+function triggerExample() {
 	const delay = 4000;
-	$.nodes
-		.selectAll('.node__example')
-		.transition()
-		.duration(200)
-		.delay((d, i) => i * delay)
-		.st('opacity', 1);
+	const r = Math.floor(Math.random() * badgeData.length);
+	const d = badgeData[r];
+	const { x, y } = d;
 
-	triggerTimeouts = d3.range(100).map(i => {
-		const rand = badgeData[Math.floor(Math.random() * badgeData.length)]
-		rand.fill = '#f30'
-		const x = rand.cx//(rand.cx * width) / BADGE_W;
-		const y = rand.cy//(rand.cy * height) / BADGE_H;
-		timeout = setTimeout(() => {
-			Tweet.clear()
-			Render.clear($.contextEx)
-	    Render.dot({ d: rand, ctx: $.contextEx });
-	    Tweet.create({ data: exampleTweet, x, y, fade: true, offset: true });
-		}, i * delay );
-	});
+	d.fill = '#f30';
+
+	Tweet.clear();
+	Render.clear($.contextEx);
+	Render.dot({ d, ctx: $.contextEx });
+	Tweet.create({ data: exampleTweet, x, y, fade: true, offset: true });
+	timeout = setTimeout(triggerExample, delay);
 }
 
 // function revealTick() {
@@ -116,23 +102,23 @@ function revealDots() {
 function runTitle() {
 	showTitle();
 	Tweet.clear();
-	clearTimeout(timeout)
-	//triggerTimeouts.forEach(t => clearTimeout(t));
 	revealDots();
 }
 
 function runExamples() {
 	hideTitle();
-	triggerExamples();
+	triggerExample();
 }
 
 function enter(step) {
+	if (timeout) clearTimeout(timeout);
 	currentStep = step;
 	if (currentStep === 'title') runTitle();
 	else if (currentStep === 'examples') runExamples();
 }
 
 function exit(step) {
+	if (timeout) clearTimeout(timeout);
 	currentStep = step === 'examples' ? 'title' : 'examples';
 	if (currentStep === 'title') runTitle();
 }
