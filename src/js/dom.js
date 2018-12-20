@@ -1,11 +1,12 @@
 const section = d3.selectAll('section');
 const chart = d3.select('#chart');
-const canvas = chart.select('.chart__canvas');
-const context = canvas.node().getContext('2d');
-const bg = chart.select('.chart__bg');
-const contextBg = bg.node().getContext('2d');
-const ex = chart.select('.chart__examples');
-const contextEx = ex.node().getContext('2d');
+const canvasBg = chart.select('.canvas__bg');
+const contextBg = canvasBg.node().getContext('2d');
+const canvasFg = chart.select('.canvas__fg');
+const contextFg = canvasFg.node().getContext('2d');
+const canvasEx = chart.select('.canvas__ex');
+const contextEx = canvasEx.node().getContext('2d');
+
 const svg = chart.select('svg');
 const g = svg.select('g');
 const globe = g.select('.g-globe');
@@ -18,11 +19,11 @@ const header = d3.select('header');
 export default {
 	section,
 	chart,
-	canvas,
-	context,
-	bg,
+	canvasBg,
 	contextBg,
-	ex,
+	canvasFg,
+	contextFg,
+	canvasEx,
 	contextEx,
 	svg,
 	g,

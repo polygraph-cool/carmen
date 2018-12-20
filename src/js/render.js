@@ -8,13 +8,17 @@ let height = 0;
 function resize() {
 	width = $.chart.node().offsetWidth * DPR;
 	height = $.chart.node().offsetHeight * DPR;
-	$.canvas
+	$.canvasBg
 		.at({ width: width * DPR, height: height * DPR })
 		.st({ width, height });
 
-	$.bg.at({ width: width * DPR, height: height * DPR }).st({ width, height });
+	$.canvasFg
+		.at({ width: width * DPR, height: height * DPR })
+		.st({ width, height });
 
-	$.ex.at({ width: width * DPR, height: height * DPR }).st({ width, height });
+	$.canvasEx
+		.at({ width: width * DPR, height: height * DPR })
+		.st({ width, height });
 }
 
 function dot({ d, ctx }) {
@@ -24,7 +28,7 @@ function dot({ d, ctx }) {
 	ctx.beginPath();
 	ctx.moveTo(x + r, y);
 	ctx.arc(x, y, r, 0, 2 * Math.PI);
-	ctx.fillStyle = d.fill || `rgba(255,255,255,${Math.random()})`;
+	ctx.fillStyle = d.fill || '#f30';
 	ctx.fill();
 }
 

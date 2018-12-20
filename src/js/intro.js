@@ -9,25 +9,26 @@ const BADGE_H = 1024;
 const BADGE_R = 2.5;
 const BADGE_RATIO = BADGE_W / BADGE_H;
 
-badgePos.forEach(d => {
-	d.cx = Math.floor(d.x);
-	d.cy = Math.floor(d.y);
-});
-
-const someTweets = tweetPos.slice(4, 7);
-
-let tweetData = [];
-
-let width = null;
-let height = null;
-let scale = 1;
-let triggerTimeouts = [];
-
 const $intro = d3.select('#intro');
 const $introHed = $intro.select('.intro__hed');
 const $title = $intro.selectAll('.intro__hed-text');
 const $stepGroup = $intro.selectAll('.intro__steps');
 const $step = $intro.selectAll('.step');
+
+const someTweets = tweetPos.slice(4, 7);
+
+let tweetData = [];
+let width = null;
+let height = null;
+let scale = 1;
+let triggerTimeouts = [];
+
+let currentStep = null;
+
+badgePos.forEach(d => {
+	d.cx = Math.floor(d.x);
+	d.cy = Math.floor(d.y);
+});
 
 const exampleTweet = {
 	name: 'The Pudding',
@@ -118,37 +119,54 @@ function triggerExamples() {
 	});
 }
 
-function test() {
-	Render.clear($.context);
+function revealTick() {
+	Render.clear($.contextFg);
+	let notDone = false;
 	badgePos.forEach(d => {
-		Render.dot({ d, ctx: $.context });
+		d.fill = `rgba(${d.l}, ${d.l}, ${d.l})`;
+		Render.dot({ d, ctx: $.contextFg });
+		// inc lightness
+		if (d.l < d.target) {
+			notDone = true;
+			d.l = Math.min(d.target, d.l + d.rate);
+		}
 	});
-	// requestAnimationFrame(test);
+	if (currentStep === 'title' && notDone) requestAnimationFrame(revealTick);
+	else console.log('done');
+}
+
+function revealDots() {
+	badgePos.forEach(d => {
+		d.fill = 'rgba(0,0,0)';
+		// d.l = 0;
+		// d.target = 128;
+		// d.rate = 1 + Math.random() * 10;
+		Render.dot({ d, ctx: $.contextFg });
+	});
+	// revealTick();
+}
+
+function runTitle() {
+	showTitle();
+	Tweet.clear();
+	triggerTimeouts.forEach(t => clearTimeout(t));
+	revealDots();
+}
+
+function runExamples() {
+	hideTitle();
+	triggerExamples();
 }
 
 function enter(step) {
-	test();
-
-	if (step !== 'title') hideTitle();
-	if (step !== 'examples') {
-		Tweet.clear();
-		triggerTimeouts.forEach(t => clearTimeout(t));
-	}
-	if (step === 'examples') triggerExamples();
-
-	$.nodes.selectAll('.node').classed('is-active', step === 'categories');
-	$.nodes.selectAll('.node__example').classed('is-active', step === 'examples');
+	currentStep = step;
+	if (currentStep === 'title') runTitle();
+	else if (currentStep === 'examples') runExamples();
 }
 
 function exit(step) {
-	if (step === 'examples') showTitle();
-	if (step === 'examples') Tweet.clear();
-	if (step === 'categories') triggerExamples();
-
-	$.nodes.selectAll('.node').classed('is-active', step === 'categories');
-	$.nodes
-		.selectAll('.node__example')
-		.classed('is-active', step === 'categories');
+	currentStep = step === 'examples' ? 'title' : 'examples';
+	if (currentStep === 'title') runTitle();
 }
 
 function handoff(direction) {}
@@ -222,14 +240,14 @@ function resize() {
 		ctx: $.contextBg
 	}));
 
-	$.contextBg.clearRect(0, 0, width, height);
+	Render.clear($.contextBg);
 	bgData.forEach(Render.dot);
+	enter(currentStep);
 }
 
 function init(data) {
 	tweetData = data;
 	setupTweets();
-	resize();
 }
 
 export default { init, resize, enter, exit, handoff };

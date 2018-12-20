@@ -33,7 +33,6 @@ function resize() {
 }
 
 function init() {
-	resize();
 	$explore.select('button').on('click', showTweet);
 }
 

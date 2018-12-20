@@ -143,7 +143,6 @@ function init(data) {
 		if (err) console.log(err);
 		setup(response[0]);
 		ready = true;
-		resize();
 	});
 }
 

@@ -53,12 +53,12 @@ function handleNavClick() {
 }
 
 function handleTick() {
-	Render.clear($.context);
+	// Render.clear($.contextFg);
 	nodes.forEach(d => {
 		// scale radius smoothly
 		if (d.r !== d.targetR) d.r += RADIUS_INC;
 		d.r = Math.min(d.targetR, d.r);
-		Render.dot({ d, ctx: $.context });
+		Render.dot({ d, ctx: $.contextFg });
 	});
 }
 
@@ -92,7 +92,7 @@ function update(cat) {
 		.filter(d => d.category === cat)
 		.map(d => ({
 			...d,
-			ctx: $.context,
+			ctx: $.contextFg,
 			fill: 'yellow',
 			r: 1,
 			targetR: radius
@@ -151,7 +151,6 @@ function resize() {
 function init(data) {
 	tweetData = data;
 	$nav.selectAll('label').on('click', handleNavClick);
-	resize();
 }
 
 export default { init, resize, handoff };
