@@ -17,6 +17,7 @@ let badgeData = [];
 let width = null;
 let height = null;
 let triggerTimeouts = [];
+let timeout = null
 
 let currentStep = null;
 
@@ -77,8 +78,7 @@ function triggerExamples() {
 		rand.fill = '#f30'
 		const x = rand.cx//(rand.cx * width) / BADGE_W;
 		const y = rand.cy//(rand.cy * height) / BADGE_H;
-		console.log({x, y})
-		const timeout = setTimeout(() => {
+		timeout = setTimeout(() => {
 			Tweet.clear()
 			Render.clear($.contextEx)
 	    Render.dot({ d: rand, ctx: $.contextEx });
@@ -116,7 +116,8 @@ function revealDots() {
 function runTitle() {
 	showTitle();
 	Tweet.clear();
-	triggerTimeouts.forEach(t => clearTimeout(t));
+	clearTimeout(timeout)
+	//triggerTimeouts.forEach(t => clearTimeout(t));
 	revealDots();
 }
 
