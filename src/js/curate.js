@@ -3,10 +3,7 @@ import Tweet from './tweet';
 import Render from './render';
 import categories from './categories';
 
-const BADGE_W = 1280;
-const BADGE_H = 1024;
 const BADGE_R = 2.5;
-const RADIUS_INC = 0.1;
 const DURATION = 1000;
 
 const COL = {
@@ -41,7 +38,7 @@ let radius = 0;
 let currentStep = null;
 let timer = null;
 
-const ease = d3.easeCubicInOut;
+const ease = d3.easeCubicOut;
 
 const scaleStrength = d3.scaleLinear();
 const voronoi = d3.voronoi();
@@ -68,20 +65,11 @@ function handleNavClick() {
 function handleTick() {
 	Render.clear($.contextFg);
 	nodes.forEach(d => {
-		// scale radius smoothly
-		const diff = Math.abs(d.r - d.tr);
-		if (diff >= 0.2) d.r += RADIUS_INC * d.dir;
-		else d.r = d.tr;
 		Render.dot({ d, ctx: $.contextFg });
 	});
 }
 
 function handleEnd() {
-	nodes.forEach(d => {
-		d.r = radius;
-	});
-	handleTick();
-
 	// VORONOI
 	voronoi
 		.x(d => d.x)
@@ -115,7 +103,7 @@ function runSim() {
 	const alphaMin = 0.001;
 	const alphaTarget = 0.0;
 	const velocityDecay = 0.4;
-	const manyBodyStrength = -radius * 1.5;
+	const manyBodyStrength = -radius * 1.25;
 
 	simulation = d3
 		.forceSimulation(nodes)
@@ -134,12 +122,38 @@ function runNav(cat) {
 	const c = categories.find(c => c.cat === cat);
 	const sample = Math.floor(c.count * sampleSize);
 
+	badgeData.forEach(n => {
+		n.x = n.ox;
+		n.y = n.oy;
+		n.r = n.or;
+	});
+
 	nodes = badgeData.filter(d => d.category === cat).slice(0, sample);
 
 	nodes.forEach(d => {
+		d.sr = d.or;
 		d.tr = radius;
-		d.dir = d.radius < d.r ? -1 : 1;
 	});
+
+	// transition scale
+	if (timer) timer.stop();
+
+	timer = d3.timer(elapsed => {
+		// compute how far through the animation we are (0 to 1)
+		const t = Math.min(1, ease((elapsed / DURATION) * 0.5));
+
+		// update point positions (interpolate between source and target)
+		nodes.forEach(d => {
+			d.r = d.sr * (1 - t) + d.tr * t;
+		});
+
+		// if this animation is over
+		if (t === 1) {
+			// stop this timer for this layout and start a new one
+			timer.stop();
+		}
+	});
+
 	// console.log({ sample });
 	runSim();
 }
@@ -163,7 +177,6 @@ function runIntro() {
 		d.ty = d.oy;
 		d.sr = d.r;
 		d.tr = d.or;
-		// d.dir = d.or < d.r ? -1 : 1;
 		d.fill = COL[d.category];
 	});
 
@@ -234,12 +247,12 @@ function resize() {
 		b.ox = scale * b.cx + offsetW;
 		b.oy = scale * b.cy + offsetH;
 		b.or = scale * BADGE_R;
-		b.x = 0;
-		b.y = 0;
+		b.x = centerX;
+		b.y = centerY;
 		b.r = 0;
 	});
 
-	radius = BADGE_R * 4;
+	radius = BADGE_R * 3;
 
 	enter(currentStep);
 }
