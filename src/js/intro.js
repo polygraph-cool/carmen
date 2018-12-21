@@ -101,7 +101,7 @@ function revealDots() {
 		// d.l = 0;
 		// d.target = 128;
 		// d.rate = 1 + Math.random() * 10;
-		d.fill = '#f30';
+		d.fill = '#000';
 		Render.dot({ d, ctx: $.contextFg });
 	});
 }
