@@ -181,7 +181,6 @@ function svgToJSON() {
 		.selectAll('circle')
 		.each((d, i, n) => {
 			const c = d3.select(n[i]);
-			out.push({ cx: 0, cy: 0 });
 			out.push({
 				cx: +c.at('cx'),
 				cy: +c.at('cy')

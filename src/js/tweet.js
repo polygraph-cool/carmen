@@ -41,7 +41,7 @@ function clear({ section, fade }) {
 	$t.selectAll('.tweet')
 		.transition()
 		.delay(fade ? 250 : 0)
-		.duration(250)
+		.duration(fade ? 250 : 0)
 		.st('opacity', 0)
 		.remove();
 }
