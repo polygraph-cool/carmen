@@ -69,7 +69,14 @@ function triggerExample() {
 	Tweet.clear('intro');
 	Render.clear($.contextEx);
 	Render.dot({ d, ctx: $.contextEx });
-	Tweet.create({ data: exampleTweet, x, y, fade: true, offset: true, section: 'intro' });
+	Tweet.create({
+		data: exampleTweet,
+		x,
+		y,
+		fade: true,
+		offset: true,
+		section: 'intro'
+	});
 	timeout = setTimeout(triggerExample, delay);
 }
 
@@ -137,7 +144,7 @@ function resize() {
 	height = $.chart.node().offsetHeight;
 
 	const { scale, offsetW, offsetH } = Render.getScale();
-
+	// console.log({ width, height, scale, offsetW, offsetH });
 	badgeData.forEach(b => {
 		b.x = scale * b.cx + offsetW;
 		b.y = scale * b.cy + offsetH;
