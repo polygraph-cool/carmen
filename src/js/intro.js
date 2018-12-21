@@ -66,10 +66,17 @@ function triggerExample() {
 
 	d.fill = '#f30';
 
-	Tweet.clear();
+	Tweet.clear('intro');
 	Render.clear($.contextEx);
 	Render.dot({ d, ctx: $.contextEx });
-	Tweet.create({ data: exampleTweet, x, y, fade: true, offset: true });
+	Tweet.create({
+		data: exampleTweet,
+		x,
+		y,
+		fade: true,
+		offset: true,
+		section: 'intro'
+	});
 	timeout = setTimeout(triggerExample, delay);
 }
 
@@ -102,7 +109,7 @@ function revealDots() {
 function runTitle() {
 	showTitle();
 	Render.clear($.contextEx);
-	Tweet.clear();
+	Tweet.clear('intro');
 	revealDots();
 }
 
@@ -127,7 +134,7 @@ function exit(step) {
 function handoff(direction) {}
 
 function clear() {
-	Tweet.clear();
+	Tweet.clear('intro');
 	Render.clear($.contextEx);
 	if (timeout) clearTimeout(timeout);
 }
@@ -137,7 +144,7 @@ function resize() {
 	height = $.chart.node().offsetHeight;
 
 	const { scale, offsetW, offsetH } = Render.getScale();
-
+	// console.log({ width, height, scale, offsetW, offsetH });
 	badgeData.forEach(b => {
 		b.x = scale * b.cx + offsetW;
 		b.y = scale * b.cy + offsetH;
