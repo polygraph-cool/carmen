@@ -98,7 +98,7 @@ function runSim() {
 	const alphaMin = 0.001;
 	const alphaTarget = 0.0;
 	const velocityDecay = 0.4;
-	const manyBodyStrength = -radius * 1.25;
+	const manyBodyStrength = -radius * 1.5;
 
 	simulation = d3
 		.forceSimulation(nodes)
