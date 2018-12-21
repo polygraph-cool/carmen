@@ -20,7 +20,9 @@ function resize() {
 	const stepHeight = window.innerHeight;
 
 	const stepSize = $step.size();
-	$step.st('height', (d, i) => stepHeight * (i === stepSize - 1 ? 2 : 1));
+	$step
+		.st('height', (d, i) => stepHeight * (i === stepSize - 1 ? 2 : 1))
+		.classed('is-visible', true);
 
 	if (ready) {
 		const height = $.chart.node().offsetHeight;
