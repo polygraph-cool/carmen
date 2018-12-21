@@ -9,9 +9,10 @@ const BADGE_R = 3;
 
 const $intro = d3.select('#intro');
 const $introHed = $intro.select('.intro__hed');
-const $title = $intro.selectAll('.intro__hed-text');
+const $title = $intro.selectAll('.intro__hed-text, .intro__watch');
 const $stepGroup = $intro.selectAll('.intro__steps');
 const $step = $intro.selectAll('.step');
+const $watch = $intro.selectAll('.intro__watch')
 
 let badgeData = [];
 let width = null;
@@ -56,6 +57,12 @@ function showTitle() {
 		.duration(500)
 		.delay((d, i) => i * 50)
 		.translate([0, 0]);
+
+	$watch
+		.transition()
+		.duration(500)
+		.translate([0, 0])
+
 }
 
 function triggerExample() {
