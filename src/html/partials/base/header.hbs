@@ -1,9 +1,12 @@
 <a href='#content' class='skip-to-main'>Skip to main content</a>
 
 <header class='{{#ifEquals this 'sticky'}}is-sticky{{/ifEquals}}{{#ifEquals this 'sticky-dark'}}is-sticky is-dark{{/ifEquals}}'>
-	<a href='https://netflix.com' target='_blank' class='logo logo-carmen'>
-		@@include('carmenLogo.svg')
-	</a>
+	<div class='left'>
+		<a href='https://netflix.com' target='_blank' class='logo logo-carmen'>
+			@@include('carmenLogo.svg')
+		</a>
+		<p class='header__text tk-netflix'>A Netflix Original Series</p>
+	</div>
 
 	<a href='https://netflix.com' target='_blank' class='logo logo-netflix'>
 		@@include('netflix.svg')
