@@ -3,8 +3,9 @@
 // role model
 // fashion
 export default [
-	{ cat: 'a', count: 2760 },
-	{ cat: 'b', count: 3489 },
-	{ cat: 'c', count: 895 + 359 + 381 },
-	{ cat: 'd', count: 8060 }
+	{ cat: 'edutainment', count: 2760 },
+	{ cat: 'travel', count: 3489 },
+	{ cat: 'role-model', count: 895 + 359 + 381 },
+	{ cat: 'fashion', count: 8060 },
+	{ cat: 'pop-culture', count: 8060 }
 ];

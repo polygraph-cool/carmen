@@ -65,6 +65,10 @@ function showTweet() {
 	});
 }
 
+function clear() {
+	Tweet.clear({ section: 'explore' });
+}
+
 function resize() {
 	const headerH = $.header.node().offsetHeight;
 	const height = window.innerHeight - headerH;
@@ -89,4 +93,4 @@ function init() {
 	resize();
 }
 
-export default { init, resize, handoff };
+export default { init, resize, handoff, clear };

@@ -46,6 +46,7 @@ function updateSection(index) {
 	$.globe.classed('is-hidden', true);
 	Intro.clear();
 	Curate.clear();
+	Explore.clear();
 	switch (id) {
 	case 'intro':
 		Intro.handoff();

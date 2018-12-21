@@ -1,9 +1,9 @@
 <div class='curate__steps'>
 	<div class='step' data-step='intro'>
-		<p class='step__prose'>{{{doc.curate.text}}}</p>
+		<p class='step__prose'>{{{doc.curate.intro}}}</p>
 	</div>
 	<div class='step' data-step='nav'>
-		<p>{{{doc.curate.choose}}}</p>
+		<p class='step__prose'>{{{doc.curate.nav}}}</p>
 		<nav class='curate__nav' role='group'>
 				{{#each doc.categories}}
 				{{#if curate}}
@@ -11,6 +11,7 @@
 				{{/if}}
 				{{/each}}
 		</nav>
+		<p class='step__note'>{{{doc.curate.note}}}</p>
 	</div>
 </div>
 

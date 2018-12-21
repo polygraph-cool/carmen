@@ -1,17 +1,11 @@
 import $ from './dom';
 import Tweet from './tweet';
 import Render from './render';
-import categories from './categories';
+import Categories from './categories';
+import Colors from './colors';
 
 const BADGE_R = 2.5;
 const DURATION = 1000;
-
-const COL = {
-	a: '#3d66f9',
-	b: '#62c6f9',
-	c: '#29cc7a',
-	d: '#fcd206'
-};
 
 const exampleTweet = {
 	name: 'The Pudding',
@@ -120,7 +114,7 @@ function runSim() {
 }
 
 function runNav(cat) {
-	const c = categories.find(c => c.cat === cat);
+	const c = Categories.find(c => c.cat === cat);
 	const sample = Math.floor(c.count * sampleSize);
 
 	badgeData.forEach(n => {
@@ -164,11 +158,6 @@ function runIntro() {
 	Render.clear($.contextBg);
 	Render.clear($.contextFg);
 
-	// $edu = #e50914
-	// $role = #3d66f9
-	// $fashion = #62c6f9
-	// $culture = #29cc7a
-	// $travel = #fcd206
 	nodes = badgeData;
 
 	nodes.forEach(d => {
@@ -178,7 +167,7 @@ function runIntro() {
 		d.ty = d.oy;
 		d.sr = d.r;
 		d.tr = d.or;
-		d.fill = COL[d.category];
+		d.fill = Colors[d.category];
 	});
 
 	if (timer) timer.stop();
@@ -213,7 +202,7 @@ function enter(step) {
 	Tweet.clear({ section: 'curate' });
 	currentStep = step;
 	if (currentStep === 'intro') runIntro();
-	else if (currentStep === 'nav') runNav('a');
+	else if (currentStep === 'nav') runNav('edutainment');
 }
 
 function exit(step) {
