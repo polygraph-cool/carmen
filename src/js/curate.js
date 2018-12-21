@@ -45,7 +45,7 @@ const voronoi = d3.voronoi();
 
 function handleVorEnter({ data }) {
 	const { x, y } = data;
-	Tweet.clear();
+	Tweet.clear({ section: 'curate' });
 	Tweet.create({
 		data: exampleTweet,
 		x,
@@ -210,20 +210,20 @@ function runIntro() {
 }
 
 function enter(step) {
-	Tweet.clear();
+	Tweet.clear({ section: 'curate' });
 	currentStep = step;
 	if (currentStep === 'intro') runIntro();
 	else if (currentStep === 'nav') runNav('a');
 }
 
 function exit(step) {
-	Tweet.clear();
+	Tweet.clear({ section: 'curate' });
 	currentStep = step === 'nav' ? 'intro' : 'nav';
 	if (currentStep === 'intro') runIntro();
 }
 
 function clear() {
-	Tweet.clear();
+	Tweet.clear({ section: 'curate' });
 }
 
 function handoff(direction) {

@@ -36,9 +36,14 @@ function create({ data, x = 0, y = 0, fade, offset, section }) {
 	$tweet.st({ marginLeft, marginTop });
 }
 
-function clear(section) {
-	if (section === 'intro') $.chartTweets.selectAll('.tweet').remove();
-	else if (section === 'explore') $.exploreTweets.selectAll('.tweet').remove();
+function clear({ section, fade }) {
+	const $t = section === 'explore' ? $.exploreTweets : $.chartTweets;
+	$t.selectAll('.tweet')
+		.transition()
+		.delay(fade ? 250 : 0)
+		.duration(250)
+		.st('opacity', 0)
+		.remove();
 }
 
 export default { create, clear };

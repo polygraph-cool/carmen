@@ -1,7 +1,6 @@
 /* global d3 */
 import EnterView from 'enter-view';
 import Shuffle from 'lodash.shuffle';
-import tweetPos from './tweet-pos';
 import $ from './dom';
 import Intro from './intro';
 import Globe from './globe';

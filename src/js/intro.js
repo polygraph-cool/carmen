@@ -66,7 +66,7 @@ function triggerExample() {
 
 	d.fill = '#f30';
 
-	Tweet.clear('intro');
+	Tweet.clear({ section: 'intro' });
 	Render.clear($.contextEx);
 	Render.dot({ d, ctx: $.contextEx });
 	Tweet.create({
@@ -109,7 +109,7 @@ function revealDots() {
 function runTitle() {
 	showTitle();
 	Render.clear($.contextEx);
-	Tweet.clear('intro');
+	Tweet.clear({ section: 'intro' });
 	revealDots();
 }
 
@@ -134,7 +134,7 @@ function exit(step) {
 function handoff(direction) {}
 
 function clear() {
-	Tweet.clear('intro');
+	Tweet.clear({ section: 'intro' });
 	Render.clear($.contextEx);
 	if (timeout) clearTimeout(timeout);
 }
