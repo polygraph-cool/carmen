@@ -3,10 +3,8 @@ import Tweet from './tweet';
 import Render from './render';
 import categories from './categories';
 
-const BADGE_W = 1280;
-const BADGE_H = 1024;
 const BADGE_R = 2.5;
-const RADIUS_INC = 0.1;
+const DURATION = 1000;
 
 const COL = {
 	a: '#3d66f9',
@@ -38,6 +36,9 @@ let centerX = 0;
 let centerY = 0;
 let radius = 0;
 let currentStep = null;
+let timer = null;
+
+const ease = d3.easeCubicOut;
 
 const scaleStrength = d3.scaleLinear();
 const voronoi = d3.voronoi();
@@ -64,20 +65,11 @@ function handleNavClick() {
 function handleTick() {
 	Render.clear($.contextFg);
 	nodes.forEach(d => {
-		// scale radius smoothly
-		const diff = Math.abs(d.r - d.targetR);
-		if (diff >= 0.2) d.r += RADIUS_INC;
-		else d.r = d.targetR;
 		Render.dot({ d, ctx: $.contextFg });
 	});
 }
 
 function handleEnd() {
-	nodes.forEach(d => {
-		d.r = radius;
-	});
-	handleTick();
-
 	// VORONOI
 	voronoi
 		.x(d => d.x)
@@ -111,7 +103,7 @@ function runSim() {
 	const alphaMin = 0.001;
 	const alphaTarget = 0.0;
 	const velocityDecay = 0.4;
-	const manyBodyStrength = -radius * 1.5;
+	const manyBodyStrength = -radius * 1.25;
 
 	simulation = d3
 		.forceSimulation(nodes)
@@ -130,14 +122,39 @@ function runNav(cat) {
 	const c = categories.find(c => c.cat === cat);
 	const sample = Math.floor(c.count * sampleSize);
 
-	nodes = badgeData
-		.filter(n => n.category === cat)
-		.slice(0, sample)
-		.map(n => ({
-			...n,
-			targetR: radius
-		}));
-	console.log({ sample });
+	badgeData.forEach(n => {
+		n.x = n.ox;
+		n.y = n.oy;
+		n.r = n.or;
+	});
+
+	nodes = badgeData.filter(d => d.category === cat).slice(0, sample);
+
+	nodes.forEach(d => {
+		d.sr = d.or;
+		d.tr = radius;
+	});
+
+	// transition scale
+	if (timer) timer.stop();
+
+	timer = d3.timer(elapsed => {
+		// compute how far through the animation we are (0 to 1)
+		const t = Math.min(1, ease((elapsed / DURATION) * 0.5));
+
+		// update point positions (interpolate between source and target)
+		nodes.forEach(d => {
+			d.r = d.sr * (1 - t) + d.tr * t;
+		});
+
+		// if this animation is over
+		if (t === 1) {
+			// stop this timer for this layout and start a new one
+			timer.stop();
+		}
+	});
+
+	// console.log({ sample });
 	runSim();
 }
 
@@ -151,10 +168,43 @@ function runIntro() {
 	// $fashion = #62c6f9
 	// $culture = #29cc7a
 	// $travel = #fcd206
+	nodes = badgeData;
 
-	badgeData.forEach(d => {
+	nodes.forEach(d => {
+		d.sx = d.x;
+		d.sy = d.y;
+		d.tx = d.ox;
+		d.ty = d.oy;
+		d.sr = d.r;
+		d.tr = d.or;
 		d.fill = COL[d.category];
-		Render.dot({ d, ctx: $.contextFg });
+	});
+
+	if (timer) timer.stop();
+
+	timer = d3.timer(elapsed => {
+		// compute how far through the animation we are (0 to 1)
+		const t = Math.min(1, ease(elapsed / DURATION));
+
+		// update point positions (interpolate between source and target)
+		nodes.forEach(d => {
+			d.x = d.sx * (1 - t) + d.tx * t;
+			d.y = d.sy * (1 - t) + d.ty * t;
+			d.r = d.sr * (1 - t) + d.tr * t;
+		});
+
+		// console.log(nodes[0]);
+		// update what is drawn on screen
+		Render.clear($.contextFg);
+		nodes.forEach(d => {
+			Render.dot({ d, ctx: $.contextFg });
+		});
+
+		// if this animation is over
+		if (t === 1) {
+			// stop this timer for this layout and start a new one
+			timer.stop();
+		}
 	});
 }
 
@@ -194,18 +244,24 @@ function resize() {
 	const { scale, offsetW, offsetH } = Render.getScale();
 
 	badgeData.forEach(b => {
-		b.x = scale * b.cx + offsetW;
-		b.y = scale * b.cy + offsetH;
-		b.r = scale * BADGE_R;
+		b.ox = scale * b.cx + offsetW;
+		b.oy = scale * b.cy + offsetH;
+		b.or = scale * BADGE_R;
+		b.x = centerX;
+		b.y = centerY;
+		b.r = 0;
 	});
 
-	radius = 8;
+	radius = BADGE_R * 3;
 
 	enter(currentStep);
 }
 
 function init(data) {
-	badgeData = data.map(d => ({ ...d }));
+	badgeData = data.map(d => ({
+		...d
+	}));
+	// .slice(0, 1);
 	$nav.selectAll('button').on('click', handleNavClick);
 }
 
