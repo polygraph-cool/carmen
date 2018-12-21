@@ -4,7 +4,7 @@ import Render from './render';
 import Categories from './categories';
 import Colors from './colors';
 
-const BADGE_R = 2.5;
+const BADGE_R = 3;
 const DURATION = 1000;
 
 const exampleTweet = {

@@ -1,8 +1,8 @@
 import $ from './dom';
 
-const BADGE_W = 1280;
-const BADGE_H = 1024;
-const BADGE_R = 2.5;
+const BADGE_W = 1400;
+const BADGE_H = 1400;
+const BADGE_R = 3;
 const BADGE_RATIO = BADGE_W / BADGE_H;
 const DPR = window.devicePixelRatio ? Math.min(window.devicePixelRatio, 2) : 1;
 
@@ -21,15 +21,15 @@ function getScale() {
 	if (screenRatio > BADGE_RATIO) {
 		scale = h / BADGE_H;
 		const imageW = scale * BADGE_W;
-		offsetW = (w - imageW) / 2;
+		offsetW = Math.floor((w - imageW) / 2);
 		offsetH = 0;
 	} else {
 		scale = w / BADGE_W;
 		const imageH = scale * BADGE_H;
 		offsetW = 0;
-		offsetH = (h - imageH) / 2;
+		offsetH = Math.floor((h - imageH) / 2);
 	}
-	// console.log({ scale, offsetW, offsetH });
+	console.log({ scale, offsetW, offsetH });
 	return { scale, offsetW, offsetH };
 }
 

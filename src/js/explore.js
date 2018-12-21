@@ -1,9 +1,9 @@
 import $ from './dom';
 import Tweet from './tweet';
 
-const ORIG_W = 1280;
-const ORIG_H = 1024;
-const DEFAULT_R = 2.5;
+const BADGE_W = 1400;
+const BADGE_H = 1400;
+const BADGE_R = 3;
 
 const $explore = d3.select('#explore');
 const $dots = $explore.select('.figure__dots');
@@ -77,7 +77,7 @@ function resize() {
 	pageWidth = $explore.node().offsetWidth;
 
 	const count = 130000;
-	const radius = Math.ceil((DEFAULT_R * height) / ORIG_H);
+	const radius = Math.ceil((BADGE_R * height) / BADGE_H);
 	diameter = radius * 2;
 	row = Math.floor(count / height);
 	col = Math.floor(count / row);

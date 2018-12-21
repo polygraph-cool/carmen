@@ -3,9 +3,9 @@ import Tweet from './tweet';
 import tweetPos from './tweet-pos';
 import Render from './render';
 
-const BADGE_W = 1280;
-const BADGE_H = 1024;
-const BADGE_R = 2.5;
+const BADGE_W = 1400;
+const BADGE_H = 1400;
+const BADGE_R = 3;
 
 const $intro = d3.select('#intro');
 const $introHed = $intro.select('.intro__hed');
@@ -101,7 +101,7 @@ function revealDots() {
 		// d.l = 0;
 		// d.target = 128;
 		// d.rate = 1 + Math.random() * 10;
-		d.fill = '#000';
+		d.fill = '#f30';
 		Render.dot({ d, ctx: $.contextFg });
 	});
 }

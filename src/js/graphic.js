@@ -136,7 +136,7 @@ function assignCategoryRandom(counts) {
 	const shuffled = Shuffle(pool);
 	return badgePos.map((d, i) => ({
 		...d,
-		category: categories[shuffled[i]] ? categories[shuffled[i]].cat : 'd'
+		category: categories[shuffled[i]] ? categories[shuffled[i]].cat : 'fashion'
 	}));
 }
 
@@ -181,10 +181,10 @@ function svgToJSON() {
 		.selectAll('circle')
 		.each((d, i, n) => {
 			const c = d3.select(n[i]);
+			out.push({ cx: 0, cy: 0 });
 			out.push({
 				cx: +c.at('cx'),
-				cy: +c.at('cy'),
-				r: +c.at('r')
+				cy: +c.at('cy')
 			});
 		});
 	window.output = JSON.stringify(out);
