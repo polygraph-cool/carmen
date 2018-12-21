@@ -3,11 +3,11 @@ import $ from './dom';
 const REM = 16;
 const PAD = REM;
 
-function create({ data, x = 0, y = 0, fade, offset }) {
-
-	const $tweet = section === 'intro' ?
-		$.chartTweets.append('div.tweet') :
-		$.exploreTweets.append('div.tweet')
+function create({ data, x = 0, y = 0, fade, offset, section }) {
+	const $tweet =
+		section === 'explore'
+			? $.exploreTweets.append('div.tweet')
+			: $.chartTweets.append('div.tweet');
 
 	const { name, handle, text, time } = data;
 	$tweet.append('p.tweet__name').text(name);
@@ -38,7 +38,7 @@ function create({ data, x = 0, y = 0, fade, offset }) {
 
 function clear(section) {
 	if (section === 'intro') $.chartTweets.selectAll('.tweet').remove();
-	else if (section === 'explore') $.exploreTweets.selectAll('.tweet').remove()
+	else if (section === 'explore') $.exploreTweets.selectAll('.tweet').remove();
 }
 
 export default { create, clear };

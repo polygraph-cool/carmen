@@ -50,7 +50,8 @@ function handleVorEnter({ data }) {
 		data: exampleTweet,
 		x,
 		y,
-		offset: true
+		offset: true,
+		section: 'curate'
 	});
 }
 
