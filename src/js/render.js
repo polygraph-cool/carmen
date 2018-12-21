@@ -19,15 +19,15 @@ function getScale() {
 	let offsetH = 0;
 
 	if (screenRatio > BADGE_RATIO) {
-		scale = height / BADGE_H;
+		scale = h / BADGE_H;
 		const imageW = scale * BADGE_W;
 		offsetW = (w - imageW) / 2;
 		offsetH = 0;
 	} else {
-		scale = width / BADGE_W;
+		scale = w / BADGE_W;
 		const imageH = scale * BADGE_H;
 		offsetW = 0;
-		offsetH = (height - imageH) / 2;
+		offsetH = (h - imageH) / 2;
 	}
 	// console.log({ scale, offsetW, offsetH });
 	return { scale, offsetW, offsetH };

@@ -3,7 +3,7 @@ import $ from './dom';
 const REM = 16;
 const PAD = REM;
 
-function create({ data, x, y, fade, offset }) {
+function create({ data, x = 0, y = 0, fade, offset }) {
 	const $tweet = $.chartTweets.append('div.tweet');
 
 	const { name, handle, text, time } = data;
@@ -11,7 +11,6 @@ function create({ data, x, y, fade, offset }) {
 	$tweet.append('p.tweet__handle').text(handle);
 	$tweet.append('p.tweet__text').text(text);
 	$tweet.append('p.tweet__time').text(time);
-
 	$tweet
 		.st({ top: y, left: x })
 		.st('opacity', 0)
@@ -24,7 +23,6 @@ function create({ data, x, y, fade, offset }) {
 	const h = +$tweet.node().offsetHeight / 2;
 	const chartW = $.chartTweets.node().offsetWidth;
 	const chartH = $.chartTweets.node().offsetHeight;
-
 	let marginLeft = 0;
 	let marginTop = offset ? -h * 1.25 : 0;
 	if (x + w >= chartW - PAD) marginLeft = -w;

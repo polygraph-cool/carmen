@@ -39,7 +39,7 @@ let centerX = 0;
 let centerY = 0;
 let radius = 0;
 let currentStep = null;
-const timer = null;
+let timer = null;
 
 const ease = d3.easeCubicInOut;
 
@@ -70,7 +70,7 @@ function handleTick() {
 	nodes.forEach(d => {
 		// scale radius smoothly
 		const diff = Math.abs(d.r - d.tr);
-		if (diff >= 0.2) d.r += RADIUS_INC;
+		if (diff >= 0.2) d.r += RADIUS_INC * d.dir;
 		else d.r = d.tr;
 		Render.dot({ d, ctx: $.contextFg });
 	});
@@ -134,14 +134,13 @@ function runNav(cat) {
 	const c = categories.find(c => c.cat === cat);
 	const sample = Math.floor(c.count * sampleSize);
 
-	nodes = badgeData
-		.filter(n => n.category === cat)
-		.slice(0, sample)
-		.map(n => ({
-			...n,
-			tr: radius
-		}));
-	console.log({ sample });
+	nodes = badgeData.filter(d => d.category === cat).slice(0, sample);
+
+	nodes.forEach(d => {
+		d.tr = radius;
+		d.dir = d.radius < d.r ? -1 : 1;
+	});
+	// console.log({ sample });
 	runSim();
 }
 
@@ -162,33 +161,38 @@ function runIntro() {
 		d.sy = d.y;
 		d.tx = d.ox;
 		d.ty = d.oy;
+		d.sr = d.r;
 		d.tr = d.or;
+		// d.dir = d.or < d.r ? -1 : 1;
 		d.fill = COL[d.category];
 	});
-	console.log('runintro');
-	console.log(nodes);
+
 	if (timer) timer.stop();
 
-	// timer = d3.timer(elapsed => {
-	// 	// compute how far through the animation we are (0 to 1)
-	// 	const t = Math.min(1, ease(elapsed / DURATION));
-	// 	console.log(t);
+	timer = d3.timer(elapsed => {
+		// compute how far through the animation we are (0 to 1)
+		const t = Math.min(1, ease(elapsed / DURATION));
 
-	// 	// update point positions (interpolate between source and target)
-	// 	nodes.forEach(n => {
-	// 		n.x = n.sx * (1 - t) + n.tx * t;
-	// 		n.y = n.sy * (1 - t) + n.ty * t;
-	// 	});
-	// 	// console.log(nodes[0]);
-	// 	// update what is drawn on screen
-	// 	handleTick();
+		// update point positions (interpolate between source and target)
+		nodes.forEach(d => {
+			d.x = d.sx * (1 - t) + d.tx * t;
+			d.y = d.sy * (1 - t) + d.ty * t;
+			d.r = d.sr * (1 - t) + d.tr * t;
+		});
 
-	// 	// if this animation is over
-	// 	if (t === 1) {
-	// 		// stop this timer for this layout and start a new one
-	// 		timer.stop();
-	// 	}
-	// });
+		// console.log(nodes[0]);
+		// update what is drawn on screen
+		Render.clear($.contextFg);
+		nodes.forEach(d => {
+			Render.dot({ d, ctx: $.contextFg });
+		});
+
+		// if this animation is over
+		if (t === 1) {
+			// stop this timer for this layout and start a new one
+			timer.stop();
+		}
+	});
 }
 
 function enter(step) {
@@ -235,18 +239,16 @@ function resize() {
 		b.r = 0;
 	});
 
-	console.log(badgeData[0]);
-	radius = 8;
+	radius = BADGE_R * 4;
 
 	enter(currentStep);
 }
 
 function init(data) {
-	badgeData = data
-		.map(d => ({
-			...d
-		}))
-		.slice(0, 1);
+	badgeData = data.map(d => ({
+		...d
+	}));
+	// .slice(0, 1);
 	$nav.selectAll('button').on('click', handleNavClick);
 }
 
