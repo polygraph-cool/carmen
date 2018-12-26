@@ -19,7 +19,7 @@ let projection = null;
 let path = null;
 let ready = false;
 
-let currentStep = 'categories';
+const current = {};
 
 function resize() {
 	// resize stepper elements
@@ -78,12 +78,14 @@ function goTo({ coords, duration = 2000 }) {
 }
 
 function update() {
-	console.log({ currentStep });
+	console.log({ current });
 }
 
 function step(index) {
 	const $s = $step.filter((d, i) => i === index);
-	currentStep = $s.at('data-step');
+	['step', 'lat', 'lon', 'tweet', 'user', 'city', 'country'].forEach(d => {
+		current[d] = $s.at(`data-${d}`);
+	});
 	update();
 }
 
@@ -123,6 +125,7 @@ function init() {
 		setup(response[0]);
 		ready = true;
 		resize();
+		step(0);
 	});
 }
 
