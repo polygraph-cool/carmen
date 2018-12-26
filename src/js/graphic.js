@@ -22,7 +22,7 @@ function resize() {
 
 	Render.resize();
 	Intro.resize();
-	// Globe.resize();
+	Globe.resize();
 	Curate.resize();
 	Explore.resize();
 }
@@ -49,20 +49,16 @@ function updateSection(index) {
 	Explore.clear();
 	switch (id) {
 	case 'intro':
-		Intro.handoff();
 		break;
 	case 'globe':
-		// Globe.handoff();
-		// Globe.classed('is-hidden', false);
+		$.globe.classed('is-hidden', false);
 		break;
 	case 'curate':
-		Curate.handoff();
 		break;
 
 	case 'explore':
 		$.chart.classed('is-hidden', true);
 		$.exploreNav.classed('is-hidden', false);
-		Explore.handoff();
 		break;
 
 	default:
@@ -70,9 +66,15 @@ function updateSection(index) {
 	}
 }
 
-function onGlobeStepEnter(el) {}
+function onGlobeStepEnter(el) {
+	const index = +d3.select(el).at('data-index');
+	Globe.step(index);
+}
 
-function onGlobeStepExit(el) {}
+function onGlobeStepExit(el) {
+	const index = +d3.select(el).at('data-index');
+	Globe.step(Math.max(0, index - 1));
+}
 
 function onCurateStepEnter(el) {
 	const step = d3.select(el).at('data-step');
@@ -87,7 +89,7 @@ function onCurateStepExit(el) {
 function setup(data) {
 	// sections
 	Intro.init(data);
-	// Globe.init(data);
+	Globe.init(data);
 	Curate.init(data);
 	Explore.init(data);
 	// section steps

@@ -23,8 +23,6 @@ const exampleTweet = {
 	time: '11/14/18 12:39 PM'
 };
 
-function handoff(direction) {}
-
 function removeTweets() {
 	Tweet.clear({ section: 'explore', delay: true });
 	$tweets.selectAll('.figure__tweets-dot').remove();
@@ -93,4 +91,4 @@ function init() {
 	resize();
 }
 
-export default { init, resize, handoff, clear };
+export default { init, resize, clear };

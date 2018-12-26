@@ -1,6 +1,6 @@
 <div class='globe__steps'>
   {{#each doc.globe-steps}}
-    <div class='step' data-step='{{{step}}}'>
+    <div class='step' data-index='{{@index}}' data-step='{{{step}}}'>
       <h3 class='step__label'>{{{label}}}</h3>
       <p class='step__prose'>{{{text}}}</p>
     </div>

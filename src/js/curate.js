@@ -216,10 +216,6 @@ function clear() {
 	Tweet.clear({ section: 'curate' });
 }
 
-function handoff(direction) {
-	// handleNavClick.call($nav.select('label').node());
-}
-
 function resize() {
 	sampleSize = 0.05;
 	width = $.chart.node().offsetWidth;
@@ -259,4 +255,4 @@ function init(data) {
 	$nav.selectAll('button').on('click', handleNavClick);
 }
 
-export default { init, resize, enter, exit, handoff, clear };
+export default { init, resize, enter, exit, clear };

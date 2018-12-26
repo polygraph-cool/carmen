@@ -1,9 +1,13 @@
 import * as topojson from 'topojson';
 import $ from './dom';
 
-const $map = d3.select('#map');
-const $step = $map.selectAll('.step');
+const $section = d3.select('#globe');
+const $step = $section.selectAll('.step');
 
+// $.globe is a reference to the <g> element
+// that all globe stuff should go inside
+
+// svg dom elements
 let $outline = null;
 let $sphere = null;
 let $pathCountry = null;
@@ -14,9 +18,11 @@ let $pathLand = null;
 let projection = null;
 let path = null;
 let ready = false;
-let tweetData = [];
+
+let currentStep = 'categories';
 
 function resize() {
+	// resize stepper elements
 	const stepHeight = window.innerHeight;
 
 	const stepSize = $step.size();
@@ -24,6 +30,7 @@ function resize() {
 		.st('height', (d, i) => stepHeight * (i === stepSize - 1 ? 2 : 1))
 		.classed('is-visible', true);
 
+	// resize all the globe stuff
 	if (ready) {
 		const height = $.chart.node().offsetHeight;
 		const width = $.chart.node().offsetWidth;
@@ -48,7 +55,7 @@ function resize() {
 		$pathLand.at('d', path);
 		$pathCountry.at('d', path);
 
-		$.map.translate([0, 0]);
+		$.globe.translate([0, 0]);
 	}
 }
 
@@ -65,46 +72,19 @@ function goTo({ coords, duration = 2000 }) {
 				$pathGraticule.at('d', path);
 				$pathBorder.at('d', path);
 				$pathLand.at('d', path);
-				// $pathLand.at('d', path);
 				$pathCountry.at('d', path);
-				// context.clearRect(0, 0, width, height);
-				// context.beginPath();
-				// path(land);
-				// context.fill();
-				// context.beginPath();
-				// context.arc(width / 2, height / 2, radius, 0, 2 * Math.PI, true);
-				// context.lineWidth = 2.5;
-				// context.stroke();
 			};
 		});
 }
 
-function handoff(direction) {
-	const data = tweetData.filter(d => d.chosen);
-	const $node = $.nodes.selectAll('.node').data(data, d => d.category);
+function update() {
+	console.log({ currentStep });
+}
 
-	const $nodeEnter = $node
-		.enter()
-		.append('g')
-		.at('class', d => `node node-${d.category}`);
-
-	$nodeEnter.each((d, i, n) => {
-		if (d.chosen) {
-			d3.select(n[i]).append('circle.outer');
-			d3.select(n[i]).append('circle.mid');
-		}
-	});
-
-	$nodeEnter.append('circle.inner');
-
-	$node.exit().remove();
-
-	const $nodeMerge = $nodeEnter.merge($node);
-
-	$nodeMerge
-		.transition()
-		.duration(500)
-		.translate(d => [Math.random() * 500, Math.random() * 500]);
+function step(index) {
+	const $s = $step.filter((d, i) => i === index);
+	currentStep = $s.at('data-step');
+	update();
 }
 
 function setup(world) {
@@ -115,37 +95,35 @@ function setup(world) {
 	const land = topojson.feature(world, world.objects.land);
 
 	const mesh = topojson.mesh(world, world.objects.countries, (a, b) => a !== b);
-
-	$sphere = $.map.append('path.sphere');
-	$pathGraticule = $.map.append('path.graticule');
-	$pathLand = $.map.append('path.land');
-	$pathBorder = $.map.append('path.border');
+	$sphere = $.globe.append('path.sphere');
+	$pathGraticule = $.globe.append('path.graticule');
+	$pathLand = $.globe.append('path.land');
+	$pathBorder = $.globe.append('path.border');
 
 	$pathBorder.datum(mesh);
 	$pathLand.datum(land);
 
 	// const $pathLand = $svg.append('path.land');
-	$pathCountry = $.map
+	$pathCountry = $.globe
 		.selectAll('.country')
 		.data(countries)
 		.enter()
 		.append('path.country');
 
-	$outline = $.map.append('circle.outline');
+	$outline = $.globe.append('circle.outline');
 
 	const graticule = d3.geoGraticule();
 	$pathGraticule.datum(graticule);
-
 	// $pathLand.datum(land).at('d', path);
 }
 
-function init(data) {
-	tweetData = data;
+function init() {
 	d3.loadData('assets/data/world-110m.json', (err, response) => {
 		if (err) console.log(err);
 		setup(response[0]);
 		ready = true;
+		resize();
 	});
 }
 
-export default { init, resize, handoff };
+export default { init, resize, step };

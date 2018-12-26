@@ -12,7 +12,7 @@ const $introHed = $intro.select('.intro__hed');
 const $title = $intro.selectAll('.intro__hed-text, .intro__watch');
 const $stepGroup = $intro.selectAll('.intro__steps');
 const $step = $intro.selectAll('.step');
-const $watch = $intro.selectAll('.intro__watch')
+const $watch = $intro.selectAll('.intro__watch');
 
 let badgeData = [];
 let width = null;
@@ -61,8 +61,7 @@ function showTitle() {
 	$watch
 		.transition()
 		.duration(500)
-		.translate([0, 0])
-
+		.translate([0, 0]);
 }
 
 function triggerExample() {
@@ -138,8 +137,6 @@ function exit(step) {
 	if (currentStep === 'title') runTitle();
 }
 
-function handoff(direction) {}
-
 function clear() {
 	Tweet.clear({ section: 'intro' });
 	Render.clear($.contextEx);
@@ -208,4 +205,4 @@ function init(data) {
 	badgeData = data.map(d => ({ ...d }));
 }
 
-export default { init, resize, enter, exit, handoff, clear };
+export default { init, resize, enter, exit, clear };

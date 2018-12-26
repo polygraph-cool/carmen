@@ -29,7 +29,7 @@ function getScale() {
 		offsetW = 0;
 		offsetH = Math.floor((h - imageH) / 2);
 	}
-	console.log({ scale, offsetW, offsetH });
+	// console.log({ scale, offsetW, offsetH });
 	return { scale, offsetW, offsetH };
 }
 
