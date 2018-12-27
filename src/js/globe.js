@@ -8,7 +8,6 @@ const $step = $section.selectAll('.step');
 // that all globe stuff should go inside
 
 // svg dom elements
-
 let globeContext = null;
 let globeCanvas = null;
 let land = null;
@@ -17,8 +16,11 @@ let flyingArcColor = 'red';
 let cityMarkerRadius = 2;
 let cityMarkerColor = '#999';
 let swoosh = null;
+let fauxSwoosh = null;
 let loftedness = 1.3;
 let center = null;
+
+var plane = document.getElementById('airplane');
 
 const pathColor = "#666";
 const lineWidth = 1;
@@ -28,7 +30,7 @@ let projection = null;
 let graticule = null;
 let path = null;
 let ready = false;
-
+let fauxPathElement = null;
 const current = {};
 
 function resize() {
@@ -53,7 +55,7 @@ function resize() {
 		const radius = height / 2.5;
 		const scale = radius;
 
-		console.log(globeCanvas.node());
+		fauxPathElement = $.globe.append("path");
 
 		globeCanvas
 			.attr("width", width)
@@ -75,6 +77,11 @@ function resize() {
 
 		path.projection(projection)
 			.context(globeContext);
+			;
+
+		fauxSwoosh = d3.line()
+			.curve(d3.curveNatural)
+			.defined(function(d) { return projection.invert(d); })
 			;
 
 		swoosh = d3.line()
@@ -126,7 +133,6 @@ function updateCanvasGlobe(){
 	const radius = height / 2.5;
 	const scale = radius;
 
-	// projection.rotate([0, -15]).clipAngle(90);
 	globeContext.clearRect(0, 0, width, height);
 	globeContext.beginPath();
 	globeContext.setLineDash([]);
@@ -134,8 +140,7 @@ function updateCanvasGlobe(){
 	globeContext.lineWidth = lineWidth;
 	globeContext.strokeStyle = pathColor;
 	globeContext.stroke();
-	globeContext.fillStyle = "#000000";
-  globeContext.fill();
+	projection.clipAngle(90);
 
 	globeContext.beginPath();
 	globeContext.setLineDash([]);
@@ -143,6 +148,7 @@ function updateCanvasGlobe(){
 	globeContext.lineWidth = lineWidth;
 	globeContext.strokeStyle = pathColor;
 	globeContext.stroke();
+
 }
 
 function updateMarkers(markers){
@@ -164,17 +170,6 @@ function updateMarkers(markers){
 	}
 }
 
-function updateArc(t,link,flyingArcLength){
-	// Flying arc
-
-	globeContext.beginPath();
-	swoosh(flyingArc(link));
-	globeContext.setLineDash([t * flyingArcLength * 1.7, 1e6]);
-	globeContext.lineWidth = flyingArcWidth;
-	globeContext.strokeStyle = flyingArcColor;
-	globeContext.stroke();
-}
-
 function goTo(coordsStart,coordsEnd) {
 
 	let focalPoint = null;
@@ -190,6 +185,8 @@ function goTo(coordsStart,coordsEnd) {
 			loftedProjection.rotate(rotation);
 	};
 
+	let heading = 0;
+
 	var draw = function(t){
 
 		// Rotate globe to focus on the flying arc
@@ -204,6 +201,41 @@ function goTo(coordsStart,coordsEnd) {
 		globeContext.strokeStyle = flyingArcColor;
 		globeContext.stroke();
 
+		fauxPathElement.attr("d",fauxSwoosh(flyingArc([coordsStart,coordsEnd])));
+		var svgLine = fauxPathElement.node();
+		var lineLength = svgLine.getTotalLength();
+		var p = svgLine.getPointAtLength(t * flyingArcLength * 1.7);
+
+		var x = p.x;
+		var y = p.y;
+
+		var t2 = Math.min(t + .05, 1);
+		var p2 = svgLine.getPointAtLength(t2 * flyingArcLength * 1.7);
+
+		var x2 = p2.x
+		var y2 = p2.y
+
+		var dP = [x2 - x, y2 - y];
+		var mag = dP[0] * dP[0] + dP[1] * dP[1];
+		if(mag > 0.00000005) { // Don't update heading for ships that aren't moving; it's distracting
+				var targetHeading = -Math.atan2(dP[1], dP[0]) * 180 / Math.PI + 90;
+				var dH = targetHeading - heading;
+				if(dH > 180) dH -= 360; // Prevent spinouts
+				if(dH < -180) dH += 360;
+				heading += (dH) * 0.5;
+
+				if(heading > 360) heading -= 360;
+				if(heading < -360) heading += 360;
+		}
+		var r = 135 + heading * -(Math.PI/180)
+
+		globeContext.save();
+		globeContext.translate(x, y);
+		globeContext.rotate(r);
+		globeContext.drawImage(plane, -(40/2), -(40/2), 40, 40);
+		globeContext.restore();
+
+
 	}
 
 	function shuffle() {
@@ -211,7 +243,7 @@ function goTo(coordsStart,coordsEnd) {
 		flyingArcLength = lineLength(flyingArc([coordsStart, coordsEnd]));
 
 		// flyingArcLength = lineLength(flyingArc(link));
-		var transitionEase = d3.easeQuad;
+		var transitionEase = d3.easeLinear;
 		var timer = d3.timer(tick);
 		var transitionDuration = 4000;
 
