@@ -12,10 +12,14 @@ const g = svg.select('g');
 const globe = g.select('.g-globe');
 const nodes = g.select('.g-nodes');
 const vor = g.select('.g-voronoi');
+
+const globeCanvas = chart.select('.globe__canvas');
+
 const chartTweets = chart.select('.chart__tweets');
 const exploreTweets = d3.select('.figure__tweets')
 const exploreNav = d3.select('.explore__nav');
 const header = d3.select('header');
+
 
 export default {
 	section,
@@ -29,6 +33,7 @@ export default {
 	svg,
 	g,
 	globe,
+	globeCanvas,
 	nodes,
 	vor,
 	chartTweets,
