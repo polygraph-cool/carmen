@@ -31,6 +31,7 @@ let graticule = null;
 let path = null;
 let ready = false;
 let fauxPathElement = null;
+let textElement = null;
 const current = {};
 
 function resize() {
@@ -56,6 +57,8 @@ function resize() {
 		const scale = radius;
 
 		fauxPathElement = $.globe.append("path");
+
+		textElement = $.globe.append("text");
 
 		globeCanvas
 			.attr("width", width)
@@ -170,10 +173,47 @@ function updateMarkers(markers){
 	}
 }
 
+function addFinalMarker(coord){
+	var p = projection(coord),
+			x = p[0],
+			y = p[1];
+
+	globeContext.beginPath();
+	globeContext.arc(x, y, 10, 0, 2 * Math.PI);
+	globeContext.strokeStyle = "rgba(255,0,0,.5)";
+
+	globeContext.stroke();
+
+	globeContext.beginPath();
+	globeContext.arc(x, y, 20, 0, 2 * Math.PI);
+	globeContext.strokeStyle = "rgba(255,0,0,.5)";
+	globeContext.stroke();
+}
+
+function updateTextLabels(textString,coord){
+	var p = projection(coord),
+			x = p[0],
+			y = p[1];
+
+	var offset = 40;
+
+	textElement.attr("transform","translate("+x+","+(y+offset)+")")
+	var gDistance = d3.geoDistance(coord, projection.invert(center));
+
+	if(gDistance < 1.57){
+		textElement.style("display","block");
+	}
+	else{
+		textElement.style("display","none");
+	}
+}
+
 function goTo(coordsStart,coordsEnd) {
 
 	let focalPoint = null;
 	let flyingArcLength = null;
+
+	textElement.text(current.city);
 
 	function focusGlobeOnPoint(point) {
 	    var x = point[0],
@@ -187,12 +227,15 @@ function goTo(coordsStart,coordsEnd) {
 
 	let heading = 0;
 
+	let finalPlaneCoors = null;
+
 	var draw = function(t){
 
 		// Rotate globe to focus on the flying arc
 		focusGlobeOnPoint(focalPoint(t));
 		updateCanvasGlobe();
 		updateMarkers([coordsStart,coordsEnd]);
+		updateTextLabels(current.city,coordsEnd);
 
 		globeContext.beginPath();
 		swoosh(flyingArc([coordsStart,coordsEnd]));
@@ -205,6 +248,10 @@ function goTo(coordsStart,coordsEnd) {
 		var svgLine = fauxPathElement.node();
 		var lineLength = svgLine.getTotalLength();
 		var p = svgLine.getPointAtLength(t * flyingArcLength * 1.7);
+
+		var pF = svgLine.getPointAtLength(1 * flyingArcLength * 1.7);
+		var xF = pF.x;
+		var yF = pF.y;
 
 		var x = p.x;
 		var y = p.y;
@@ -228,14 +275,16 @@ function goTo(coordsStart,coordsEnd) {
 				if(heading < -360) heading += 360;
 		}
 		var r = 135 + heading * -(Math.PI/180)
-
+		var gDistance = d3.geoDistance([x,y], [xF,yF]);
+		// console.log();
+		if(gDistance == 0){
+			addFinalMarker(coordsEnd);
+		}
 		globeContext.save();
 		globeContext.translate(x, y);
 		globeContext.rotate(r);
 		globeContext.drawImage(plane, -(40/2), -(40/2), 40, 40);
 		globeContext.restore();
-
-
 	}
 
 	function shuffle() {
@@ -253,12 +302,6 @@ function goTo(coordsStart,coordsEnd) {
 				draw(t);
 				if (t0 >= 1) {
 						timer.stop();
-
-						// The current target becomes the next source. Pick the next
-						// target at random.
-						// var targetLinks = linksMap.get(link.targetId);
-						// link = pluckRandom(targetLinks);
-						// shuffle();
 				};
 		}
 	}
@@ -268,9 +311,10 @@ function goTo(coordsStart,coordsEnd) {
 }
 
 function update() {
+	console.log(current);
 	var newCoords = [+current.lon,+current.lat];
-	if(!globeCoordinates){
-		globeCoordinates = [-74,43];
+	if(!globeCoordinates || current.step == "categories"){
+		globeCoordinates = [-74.0060,40.7128];
 	}
 	if (ready && globeCoordinates[0] != newCoords[0] && globeCoordinates[1] != newCoords[1]) { //ensure lines aren't drawn when no new coordinates
 		goTo(globeCoordinates,newCoords);
