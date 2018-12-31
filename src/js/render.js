@@ -68,9 +68,14 @@ function clear(ctx) {
 	ctx.clearRect(0, 0, width, height);
 }
 
+function getDPR() {
+	return DPR;
+}
+
 export default {
 	resize,
 	dot,
 	clear,
-	getScale
+	getScale,
+	getDPR
 };

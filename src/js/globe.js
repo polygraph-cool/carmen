@@ -1,5 +1,6 @@
 import * as topojson from 'topojson';
 import $ from './dom';
+import Render from './render';
 
 const $section = d3.select('#globe');
 const $step = $section.selectAll('.step');
@@ -24,6 +25,8 @@ let path = null;
 let fauxPathElement = null;
 let textElement = null;
 let ready = false;
+let width = 0;
+let height = 0;
 
 const current = {};
 
@@ -58,12 +61,10 @@ function flyingArc(coords) {
 }
 
 function updateCanvasGlobe() {
-	const height = $.chart.node().offsetHeight;
-	const width = $.chart.node().offsetWidth;
 	const sphere = { type: 'Sphere' };
 	center = [width / 2, height / 2];
 
-	$.contextGlobe.clearRect(0, 0, width, height);
+	Render.clear($.contextGlobe);
 	$.contextGlobe.beginPath();
 	$.contextGlobe.setLineDash([]);
 	path(sphere);
@@ -270,8 +271,8 @@ function resize() {
 
 	// resize all the globe stuff
 	if (ready) {
-		const height = $.chart.node().offsetHeight;
-		const width = $.chart.node().offsetWidth;
+		height = $.chart.node().offsetHeight * Render.getDPR();
+		width = $.chart.node().offsetWidth * Render.getDPR();
 
 		const radius = height / 2.5;
 		const scale = radius;
