@@ -20,10 +20,10 @@
 				text-shadow 0 0 3px $bg
 
 #chart
-	.globe__canvas
+	.canvas__globe
 		display block
 
-#airplane
+.airplane
 	pointer-events none
 	width auto
 	height auto
@@ -42,9 +42,11 @@
 		display none
 		text-anchor middle
 		font-weight 300
-	transition opacity 250ms ease-in-out
+		transition opacity 250ms ease-in-out
+	
 	&.is-hidden
 		opacity 0
+	
 	.graticule
 		fill none
 		stroke $gray-light
