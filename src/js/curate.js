@@ -225,10 +225,7 @@ function resize() {
 
 	const stepSize = $step.size();
 	const stepHeight = window.innerHeight;
-	$step
-		.st('height', stepHeight)
-		.classed('is-visible', true)
-		.classed('is-visible', true);
+	$step.st('height', stepHeight).classed('is-visible', true);
 	// .st('height', (d, i) => stepHeight * (i === stepSize - 1 ? 2 : 1))
 
 	const { scale, offsetW, offsetH } = Render.getScale();

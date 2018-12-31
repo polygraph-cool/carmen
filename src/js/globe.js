@@ -266,11 +266,7 @@ function step(index) {
 function resize() {
 	// resize stepper elements
 	const stepHeight = window.innerHeight;
-
-	const stepSize = $step.size();
-	$step
-		.st('height', (d, i) => stepHeight * (i === stepSize - 1 ? 2 : 1))
-		.classed('is-visible', true);
+	$step.st('height', stepHeight).classed('is-visible', true);
 
 	// resize all the globe stuff
 	if (ready) {
