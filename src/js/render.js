@@ -47,6 +47,10 @@ function resize() {
 	$.canvasEx
 		.at({ width: width * DPR, height: height * DPR })
 		.st({ width, height });
+
+	$.canvasGlobe
+		.at({ width: width * DPR, height: height * DPR })
+		.st({ width, height });
 }
 
 function dot({ d, ctx }) {

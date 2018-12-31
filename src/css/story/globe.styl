@@ -19,12 +19,34 @@
 			p
 				text-shadow 0 0 3px $bg
 
+#chart
+	.canvas__globe
+		display block
 
+.airplane
+	pointer-events none
+	width auto
+	height auto
+	display block
+	visibility hidden
 
 #chart .g-globe
-	transition opacity 250ms ease-in-out
+	path
+		stroke green
+		stroke-width 5px
+		fill none
+		visibility hidden
+		display none
+	text
+		fill white
+		display none
+		text-anchor middle
+		font-weight 300
+		transition opacity 250ms ease-in-out
+	
 	&.is-hidden
 		opacity 0
+	
 	.graticule
 		fill none
 		stroke $gray-light
