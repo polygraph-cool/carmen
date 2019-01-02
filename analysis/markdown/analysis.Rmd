@@ -1,0 +1,60 @@
+---
+title: "analysis"
+author: "Amber Thomas"
+date: "1/2/2019"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Introduction
+
+This file exists to download data and process it for use in our web project. 
+
+## Loading Packages
+
+```{r}
+library(tidyverse)
+library(googledrive)
+library(here)
+```
+
+## Downloading Data
+
+All of the data exists in Google Drive as several separate files. I'll need to pull them all down, append the category (from the file name), combine them all into one file, and then remove any that haven't yet been quality checked. 
+
+```{r}
+categories <- c("edutainment", "feminism", "inspiration", "latina", "style", "travel")
+# TODO: Add "cultural_icon" back in
+```
+
+```{r}
+downloadData <- function(category){
+  name <- paste0(category, "_for_qa")
+  path <- paste0(category, ".csv")
+  
+  googledrive::drive_download(name, path = here::here("large_files", path), type = "csv", overwrite = TRUE)
+  
+  colnames <- c("id", "GUID_x", "contents", "author", "profane_words", "profanity_flag", "promo_flag", "categories", "primary_category", "parent_categories", "zeno_notes", "zeno_remove", "zeno_corrected", "star_tweet", "qa")
+  
+  data <- read.csv(here::here("large_files", path), stringsAsFactors = FALSE, header = TRUE, col.names = colnames, na.strings = c("", " ")) %>%
+    select(-c(id, GUID_x, profane_words, zeno_notes)) %>%
+    # remove if zeno_remove is not blank
+    filter(is.na(zeno_remove),
+      # remove if not QA'd yet
+            !is.na(qa),
+      # remove if profanity
+            profanity_flag == FALSE,
+      # remove if promo
+            promo_flag == FALSE) %>%
+    mutate(category = ifelse(is.na(zeno_corrected), category, zeno_corrected)) %>% 
+    select(c(contents, author, category, star_tweet))
+}
+```
+
+```{r}
+allData <- map_dfr(categories, downloadData)
+```
+
