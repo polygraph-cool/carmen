@@ -54,7 +54,66 @@ downloadData <- function(category){
 }
 ```
 
-```{r}
-allData <- map_dfr(categories, downloadData)
+```{r message = false}
+allData <- map_dfr(categories, downloadData) %>% 
+  separate_rows(category, sep = ",") %>% 
+  mutate(category = trimws(category))
 ```
+
+
+Now, we need to look at just the starred tweets. These will be exported as their own independent file and used in the `curate` section. 
+
+```{r}
+starred <- allData %>% 
+  filter(!is.na(star_tweet))
+
+write.csv(starred, "../../src/assets/data/curate.csv", row.names = FALSE, na = "")
+```
+
+Now, we need to randomize all of the tweets, and split them into separate files, each containing 1000 tweets. 
+
+```{r}
+# Make 10 random starred tweets "special"
+randomStar <- starred[sample(nrow(starred)), ]
+special <- randomStar %>% 
+  filter(row_number() <= 10)
+
+## Write special to file
+
+write.csv(special, "../../src/assets/data/explore-special.csv", row.names = FALSE, na = "")
+
+
+## Combine unspecial starred with non-starred, randomize, and split
+unspecial <- randomStar %>% 
+  filter(row_number() > 10)
+
+nonstarred <- allData %>% 
+  filter(is.na(star_tweet))
+
+allNonSpecial <- rbind(unspecial, nonstarred)
+
+randomized <- allNonSpecial[sample(nrow(allNonSpecial)), ]
+```
+
+```{r}
+number <- 1000
+
+startRows <- seq(1, nrow(randomized), by = number) 
+endRows <- seq(number, nrow(randomized), by = number)
+endRowsAll <- append(endRows, nrow(randomized))
+
+splitFiles <- function(startRow, endRow){
+  
+  data <- randomized[startRow:endRow, ]
+  
+  fileName <- paste0("explore-", ceiling(endRow / number), ".csv")
+  
+  write.csv(data, paste0("../../src/assets/data/", fileName), row.names = FALSE, na = "", append = FALSE)
+  
+}
+
+map2_dfr(startRows, endRowsAll, splitFiles)
+```
+
+
 
