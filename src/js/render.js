@@ -62,6 +62,11 @@ function dot({ d, ctx }) {
 	ctx.arc(x, y, r, 0, 2 * Math.PI);
 	ctx.fillStyle = d.fill || '#f30';
 	ctx.fill();
+	if (d.stroke) {
+		ctx.strokeStyle = d.stroke;
+		ctx.lineWidth = 2;
+		ctx.stroke();
+	}
 }
 
 function clear(ctx) {

@@ -22,7 +22,7 @@ const $nav = $curate.select('nav');
 const $step = $curate.selectAll('.step');
 
 let badgeData = [];
-let tweetData = null
+let tweetData = [];
 let nodes = [];
 
 let width = 0;
@@ -32,14 +32,20 @@ let centerY = 0;
 let radius = 0;
 let currentStep = null;
 let timer = null;
+let triggeredVor = false;
 
 const ease = d3.easeCubicOut;
 
-const scaleStrength = d3.scaleLinear();
 const voronoi = d3.voronoi();
 
 function handleVorEnter({ data }) {
-	const { x, y } = data;
+	const { x, y, index } = data;
+	nodes.forEach(d => {
+		if (d.index === index) d.stroke = '#fff';
+		else d.stroke = '#000';
+		Render.dot({ d, ctx: $.contextFg });
+	});
+
 	Tweet.clear({ section: 'curate' });
 	Tweet.create({
 		data: exampleTweet,
@@ -58,13 +64,6 @@ function handleNavClick() {
 	runNav(cat);
 }
 
-function handleTick() {
-	Render.clear($.contextFg);
-	nodes.forEach(d => {
-		Render.dot({ d, ctx: $.contextFg });
-	});
-}
-
 function handleEnd() {
 	// VORONOI
 	voronoi
@@ -73,6 +72,7 @@ function handleEnd() {
 		.extent([[0, 0], [width, height]]);
 
 	let $vorPath = $.vor.selectAll('path');
+	$vorPath.remove();
 
 	const polygons = voronoi.polygons(nodes);
 
@@ -89,6 +89,18 @@ function handleEnd() {
 	// else $vorPath.on('mouseenter', handleVorEnter);
 }
 
+function handleTick() {
+	const a = simulation.alpha();
+	if (!triggeredVor && a < 0.5) {
+		triggeredVor = true;
+		handleEnd();
+	}
+	Render.clear($.contextFg);
+	nodes.forEach(d => {
+		Render.dot({ d, ctx: $.contextFg });
+	});
+}
+
 function runSim() {
 	// const alpha = 1;
 	// const alphaDecay = 0.0227;
@@ -100,6 +112,12 @@ function runSim() {
 	const alphaTarget = 0.0;
 	const velocityDecay = 0.4;
 	const manyBodyStrength = -radius * 1.5;
+
+	// disable mouse interaction while it sim is running
+	$.vor.selectAll('path').on('mouseenter', () => {});
+
+	// reset trigger for rendering voronoi
+	triggeredVor = false;
 
 	simulation = d3
 		.forceSimulation(nodes)
@@ -128,6 +146,7 @@ function runNav(cat) {
 	nodes = badgeData.filter(d => d.category === cat).slice(0, sample);
 
 	nodes.forEach(d => {
+		d.stroke = '#000';
 		d.sr = d.or;
 		d.tr = radius;
 	});
@@ -170,6 +189,7 @@ function runIntro() {
 		d.sr = d.r;
 		d.tr = d.or;
 		d.fill = Colors[d.category];
+		d.stroke = null;
 	});
 
 	if (timer) timer.stop();
@@ -249,7 +269,7 @@ function init(data) {
 	badgeData = data.badge.map(d => ({
 		...d
 	}));
-	tweetData = data.curate
+	tweetData = data.curate;
 	// .slice(0, 1);
 	$nav.selectAll('button').on('click', handleNavClick);
 }
