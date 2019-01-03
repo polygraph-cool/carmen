@@ -9,7 +9,7 @@ function create({ data, x = 0, y = 0, fade, offset, section }) {
 			? $.exploreTweets.append('div.tweet')
 			: $.chartTweets.append('div.tweet');
 
-	const { name, handle, text, time } = data;
+	const { author, handle, text, time } = data;
 	$tweet.append('p.tweet__name').text(name);
 	$tweet.append('p.tweet__handle').text(handle);
 	$tweet.append('p.tweet__text').text(text);

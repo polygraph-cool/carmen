@@ -12,9 +12,6 @@ import getData from './load-data'
 import badgePos from './badge-pos';
 import categories from './categories';
 
-// Imported tweet data
-let curateData = null
-let exploreData = null
 
 const DPR = window.devicePixelRatio ? Math.min(window.devicePixelRatio, 2) : 1;
 
@@ -102,10 +99,10 @@ function onCurateStepExit(el) {
 function setup(data) {
 	console.log({data})
 	// sections
-	Intro.init(data, curateData);
-	Globe.init(data);
-	Curate.init(data);
-	Explore.init(data);
+	Intro.init(data);
+	// Globe.init(data);
+	// Curate.init(data);
+	// Explore.init(data);
 
 	resize();
 
@@ -185,18 +182,13 @@ function loadData() {
 			return Math.floor(percent * badgePos.length);
 		});
 
-		// import tweet data
-		Promise.all([getData()])
-			.then((results) => {
-				curateData = results[0].curate
-				exploreData = results[0].explore
-			})
-
-		// const withCat = assignCategoryLayer(counts);
-		const withCat = assignCategoryRandom(counts);
-
-		//const allData = {withCat: withCat, curate: curateData, explore: exploreData}
-		resolve(withCat);
+		getData().then((results) => {
+			const withCat = assignCategoryRandom(counts);
+			const curateData = results.curate
+			const exploreData = results.explore
+			const allData = {badge: withCat, curate: curateData, explore: exploreData}
+			resolve(allData)
+		})
 	});
 }
 

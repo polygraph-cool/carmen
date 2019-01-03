@@ -70,7 +70,9 @@ function triggerExample() {
 	const r = Math.floor(Math.random() * badgeData.length);
 	const d = badgeData[r];
 	const { x, y } = d;
-	console.log({tweetData})
+
+	const randomTweet = Math.floor(Math.random() * tweetData.length)
+	const test = tweetData[randomTweet]
 
 	d.fill = '#f30';
 
@@ -78,7 +80,7 @@ function triggerExample() {
 	Render.clear($.contextEx);
 	Render.dot({ d, ctx: $.contextEx });
 	Tweet.create({
-		data: exampleTweet,
+		data: tweetData[randomTweet],
 		x,
 		y,
 		fade: true,
@@ -203,10 +205,9 @@ function resize() {
 	enter(currentStep);
 }
 
-function init(data, tweets) {
-	badgeData = data.map(d => ({ ...d }));
-	tweetData = tweets
-		console.log({tweets})
+function init(data) {
+	badgeData = data.badge.map(d => ({ ...d }));
+	tweetData = data.curate
 }
 
 export default { init, resize, enter, exit, clear };

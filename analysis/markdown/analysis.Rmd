@@ -37,7 +37,7 @@ downloadData <- function(category){
   
   googledrive::drive_download(name, path = here::here("large_files", path), type = "csv", overwrite = TRUE)
   
-  colnames <- c("id", "GUID_x", "contents", "author", "profane_words", "profanity_flag", "promo_flag", "categories", "primary_category", "parent_categories", "zeno_notes", "zeno_remove", "zeno_corrected", "star_tweet", "qa")
+  colnames <- c("id", "GUID_x", "text", "handle", "profane_words", "profanity_flag", "promo_flag", "categories", "primary_category", "parent_categories", "zeno_notes", "zeno_remove", "zeno_corrected", "star_tweet", "qa")
   
   data <- read.csv(here::here("large_files", path), stringsAsFactors = FALSE, header = TRUE, col.names = colnames, na.strings = c("", " ")) %>%
     select(-c(id, GUID_x, profane_words, zeno_notes)) %>%
@@ -50,7 +50,7 @@ downloadData <- function(category){
       # remove if promo
             promo_flag == FALSE) %>%
     mutate(category = ifelse(is.na(zeno_corrected), category, zeno_corrected)) %>% 
-    select(c(contents, author, category, star_tweet))
+    select(c(text, handle, category, star_tweet))
 }
 ```
 
@@ -108,7 +108,7 @@ splitFiles <- function(startRow, endRow){
   
   fileName <- paste0("explore-", ceiling(endRow / number), ".csv")
   
-  write.csv(data, paste0("../../src/assets/data/", fileName), row.names = FALSE, na = "", append = FALSE)
+  write.csv(data, paste0("../../src/assets/data/", fileName), row.names = FALSE, na = "")
   
 }
 
