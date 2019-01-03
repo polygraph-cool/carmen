@@ -1,6 +1,8 @@
 import * as topojson from 'topojson';
 import $ from './dom';
 import Render from './render';
+import Tweet from './tweet';
+
 
 const $section = d3.select('#globe');
 const $step = $section.selectAll('.step');
