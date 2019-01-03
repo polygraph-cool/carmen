@@ -96,7 +96,7 @@ function onCurateStepExit(el) {
 }
 
 function setup(data) {
-	console.log({ data });
+	// console.log({ data });
 	// sections
 	Intro.init(data);
 	Globe.init(data);

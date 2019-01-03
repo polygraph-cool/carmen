@@ -16,9 +16,9 @@ let col = null;
 let diameter = null;
 let pageWidth = null;
 
-let tweetCount = -1
+let tweetCount = -1;
 
-let tweetData = null
+let tweetData = null;
 
 const exampleTweet = {
 	name: 'The Pudding',
@@ -37,8 +37,8 @@ function showTweet() {
 	const selRow = Math.floor(Math.random() * row);
 	const selCol = Math.floor(Math.random() * col);
 
-	tweetCount = tweetCount + 1
-	console.log({tweetCount})
+	tweetCount += 1;
+	console.log({ tweetCount });
 
 	// console.log({col, row, selRow, selCol})
 	const exDot = $tweets.append('div.figure__tweets-dot');
@@ -94,8 +94,8 @@ function resize() {
 }
 
 function init(data) {
-	tweetData = data.explore
-	console.log({tweetData})
+	tweetData = data.explore;
+	// console.log({tweetData})
 	$explore.select('button').on('click', showTweet);
 	resize();
 }

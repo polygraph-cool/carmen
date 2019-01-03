@@ -2,14 +2,11 @@ import $ from './dom';
 import Tweet from './tweet';
 import Render from './render';
 
-const BADGE_W = 1400;
-const BADGE_H = 1400;
 const BADGE_R = 3;
 
 const $intro = d3.select('#intro');
 const $introHed = $intro.select('.intro__hed');
 const $title = $intro.selectAll('.intro__hed-text, .intro__watch');
-const $stepGroup = $intro.selectAll('.intro__steps');
 const $step = $intro.selectAll('.step');
 const $watch = $intro.selectAll('.intro__watch');
 
@@ -103,7 +100,7 @@ function revealDots() {
 		// d.l = 0;
 		// d.target = 128;
 		// d.rate = 1 + Math.random() * 10;
-		d.fill = '#000';
+		d.fill = d.fill || '#f30';
 		Render.dot({ d, ctx: $.contextFg });
 	});
 }
@@ -145,11 +142,6 @@ function resize() {
 
 	const { scale, offsetW, offsetH } = Render.getScale();
 	// console.log({ width, height, scale, offsetW, offsetH });
-	badgeData.forEach(b => {
-		b.x = scale * b.cx + offsetW;
-		b.y = scale * b.cy + offsetH;
-		b.r = scale * BADGE_R;
-	});
 
 	// someTweets.forEach(t => {
 	// 	t.x = scale * t.cx + offsetW;
@@ -169,9 +161,10 @@ function resize() {
 	// const sz = Math.floor((radius * 4 * 7) / 5)
 
 	const radius = scale * BADGE_R;
+	const pad = 4;
 
 	$.chartTweets.st('width', width).st('height', height);
-	const unit = (radius + scale) * 2;
+	const unit = radius * 2 + scale * pad;
 
 	const area = width * height;
 	const unitSQ = unit * unit;
@@ -182,15 +175,36 @@ function resize() {
 
 	numDots += col * 2;
 
+	badgeData.forEach(b => {
+		b.x = scale * b.cx + offsetW;
+		b.y = scale * b.cy + offsetH;
+		b.r = scale * BADGE_R;
+	});
+
+	const rem = Math.max(offsetW % unit, offsetH % unit);
+	const off = unit - rem;
+	console.log({ unit, rem, off });
+
+	// const off = 0;
+	// console.log(off);
+	// console.log({ x0, y0, scale });
+	// console.log(scale * )
+
 	const bgData = d3.range(numDots).map(i => ({
 		d: {
-			x: (i % col) * unit,
-			y: Math.floor(i / col) * unit,
+			x: (i % col) * unit - 0,
+			y: Math.floor(i / col) * unit - 0,
 			r: scale * BADGE_R,
 			fill: '#333'
 		},
 		ctx: $.contextBg
 	}));
+
+	// const near = bgData.find(
+	// 	d =>
+	// 		Math.abs(d.d.x - badgeData[0].x) < 2 &&
+	// 		Math.abs(d.d.y - badgeData[0].y) < 2
+	// ).d;
 
 	Render.clear($.contextBg);
 	bgData.forEach(Render.dot);
