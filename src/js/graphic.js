@@ -59,6 +59,7 @@ function updateSection(index) {
 		break;
 	case 'globe':
 		$.canvasGlobe.classed('is-hidden', false);
+		$.globe.classed('is-hidden', false);
 		break;
 	case 'curate':
 		$.canvasFg.classed('is-hidden', false);

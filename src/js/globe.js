@@ -72,7 +72,6 @@ function updateCanvasGlobe() {
 	$.contextGlobe.strokeStyle = PATH_COLOR;
 	$.contextGlobe.stroke();
 	projection.clipAngle(90);
-
 	$.contextGlobe.beginPath();
 	$.contextGlobe.setLineDash([]);
 	path(land);
@@ -171,6 +170,8 @@ function goTo(coordsStart, coordsEnd) {
 		$.contextGlobe.beginPath();
 		swoosh(flyingArc([coordsStart, coordsEnd]));
 		$.contextGlobe.setLineDash([t * flyingArcLength * 1.7, 1e6]);
+		$.contextGlobe.strokeStyle = "RED";
+		updateCanvasGlobe
 		$.contextGlobe.lineWidth = ARC_WIDTH;
 
 		$.contextGlobe.stroke();
@@ -240,10 +241,9 @@ function goTo(coordsStart, coordsEnd) {
 }
 
 function update() {
-	console.log(current);
 	const newCoords = [+current.lon, +current.lat];
 	if (!globeCoordinates || current.step === 'categories') {
-		globeCoordinates = [-74.006, 40.7128];
+		globeCoordinates = [-98.5795, 39.8283];
 	}
 	if (
 		ready &&
@@ -285,7 +285,8 @@ function resize() {
 			.scale(scale)
 			.translate([width / 2, height / 2])
 			.precision(0.1)
-			.clipAngle(90);
+			.clipAngle(90)
+			;
 
 		loftedProjection = d3
 			.geoOrthographic()
@@ -293,6 +294,14 @@ function resize() {
 			.translate([width / 2, height / 2])
 			.precision(0.1)
 			.clipAngle(90);
+
+		const x = -98.5795;
+		const y = 39.8283;
+		const cx = x;
+		const cy = y;
+		const rotation = [-cx, -cy];
+		projection.rotate(rotation);
+		loftedProjection.rotate(rotation);
 
 		path.projection(projection).context($.contextGlobe);
 		fauxSwoosh = d3
@@ -313,7 +322,7 @@ function resize() {
 function setup(world) {
 	projection = d3.geoOrthographic();
 	path = d3.geoPath();
-	land = topojson.feature(world, world.objects.land);
+	land = topojson.feature(world, world.objects.countries);
 }
 
 function init() {
