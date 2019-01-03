@@ -47,7 +47,7 @@ function updateSection(index) {
 	$.globe.classed('is-hidden', true);
 	$.canvasBg.classed('is-hidden', true);
 	$.canvasFg.classed('is-hidden', true);
-	$.canvasEx.classed('is-hidden', true);
+	//$.canvasEx.classed('is-hidden', true);
 	$.canvasGlobe.classed('is-hidden', true);
 	Intro.clear();
 	Curate.clear();

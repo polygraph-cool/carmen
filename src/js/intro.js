@@ -67,7 +67,8 @@ function triggerExample() {
 
 	Tweet.clear({ section: 'intro' });
 	Render.clear($.contextEx);
-	Render.dot({ d, ctx: $.contextEx });
+	console.log({d})
+	Render.dot({ d, ctx: $.contextEx, fill: '#fff' });
 	Tweet.create({
 		data,
 		x,
@@ -214,6 +215,7 @@ function resize() {
 function init(data) {
 	badgeData = data.badge.map(d => ({ ...d }));
 	tweetData = data.curate;
+	$.canvasEx.classed('is-hidden', false)
 }
 
 export default { init, resize, enter, exit, clear };

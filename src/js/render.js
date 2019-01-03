@@ -53,14 +53,15 @@ function resize() {
 		.st({ width, height });
 }
 
-function dot({ d, ctx }) {
+function dot({ d, ctx, fill }) {
 	const x = d.x * DPR;
 	const y = d.y * DPR;
 	const r = d.r * DPR;
 	ctx.beginPath();
 	ctx.moveTo(x + r, y);
 	ctx.arc(x, y, r, 0, 2 * Math.PI);
-	ctx.fillStyle = d.fill || '#f30';
+	//console.log({fill})
+	ctx.fillStyle = fill ? fill : d.fill// || '#fff';
 	ctx.fill();
 	if (d.stroke) {
 		ctx.strokeStyle = d.stroke;
