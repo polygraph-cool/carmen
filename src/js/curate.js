@@ -22,6 +22,7 @@ const $nav = $curate.select('nav');
 const $step = $curate.selectAll('.step');
 
 let badgeData = [];
+let tweetData = null
 let nodes = [];
 
 let width = 0;
@@ -245,9 +246,10 @@ function resize() {
 }
 
 function init(data) {
-	badgeData = data.map(d => ({
+	badgeData = data.badge.map(d => ({
 		...d
 	}));
+	tweetData = data.curate
 	// .slice(0, 1);
 	$nav.selectAll('button').on('click', handleNavClick);
 }

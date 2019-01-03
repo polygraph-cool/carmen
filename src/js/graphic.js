@@ -100,9 +100,9 @@ function setup(data) {
 	console.log({data})
 	// sections
 	Intro.init(data);
-	// Globe.init(data);
-	// Curate.init(data);
-	// Explore.init(data);
+	Globe.init(data);
+	Curate.init(data);
+	Explore.init(data);
 
 	resize();
 
