@@ -67,7 +67,7 @@ function triggerExample() {
 
 	Tweet.clear({ section: 'intro' });
 	Render.clear($.contextEx);
-	console.log({d})
+	console.log({ d });
 	Render.dot({ d, ctx: $.contextEx, fill: '#fff' });
 	Tweet.create({
 		data,
@@ -116,6 +116,11 @@ function runTitle() {
 function runExamples() {
 	hideTitle();
 	triggerExample();
+}
+
+function enterSection() {
+	Render.clear($.contextBg);
+	revealDots();
 }
 
 function enter(step) {
@@ -215,7 +220,7 @@ function resize() {
 function init(data) {
 	badgeData = data.badge.map(d => ({ ...d }));
 	tweetData = data.curate;
-	$.canvasEx.classed('is-hidden', false)
+	$.canvasEx.classed('is-hidden', false);
 }
 
-export default { init, resize, enter, exit, clear };
+export default { init, resize, enter, enterSection, exit, clear };

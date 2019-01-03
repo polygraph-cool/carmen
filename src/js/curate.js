@@ -220,6 +220,10 @@ function runIntro() {
 	});
 }
 
+function enterSection() {
+	Render.clear($.contextFg);
+}
+
 function enter(step) {
 	Tweet.clear({ section: 'curate' });
 	currentStep = step;
@@ -274,4 +278,4 @@ function init(data) {
 	$nav.selectAll('button').on('click', handleNavClick);
 }
 
-export default { init, resize, enter, exit, clear };
+export default { init, resize, enter, enterSection, exit, clear };

@@ -47,7 +47,6 @@ function updateSection(index) {
 	$.globe.classed('is-hidden', true);
 	$.canvasBg.classed('is-hidden', true);
 	$.canvasFg.classed('is-hidden', true);
-	//$.canvasEx.classed('is-hidden', true);
 	$.canvasGlobe.classed('is-hidden', true);
 	Intro.clear();
 	Curate.clear();
@@ -56,6 +55,7 @@ function updateSection(index) {
 	case 'intro':
 		$.canvasBg.classed('is-hidden', false);
 		$.canvasFg.classed('is-hidden', false);
+		Intro.enterSection()
 		break;
 	case 'globe':
 		$.canvasGlobe.classed('is-hidden', false);
@@ -63,6 +63,7 @@ function updateSection(index) {
 		break;
 	case 'curate':
 		$.canvasFg.classed('is-hidden', false);
+		Curate.enterSection()
 		break;
 
 	case 'explore':
