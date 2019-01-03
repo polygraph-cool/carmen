@@ -1,6 +1,5 @@
 import $ from './dom';
 import Tweet from './tweet';
-import tweetPos from './tweet-pos';
 import Render from './render';
 
 const BADGE_W = 1400;
@@ -18,16 +17,9 @@ let badgeData = [];
 let width = null;
 let height = null;
 let timeout = null;
-let tweetData = null
+let tweetData = null;
 
 let currentStep = null;
-
-const exampleTweet = {
-	name: 'The Pudding',
-	handle: '@puddingviz',
-	text: 'We ❤️ Carmen Sandiego',
-	time: '11/14/18 12:39 PM'
-};
 
 function hideTitle() {
 	const titleWidth = $intro.select('.intro__hed').node().offsetWidth;
@@ -66,13 +58,13 @@ function showTitle() {
 }
 
 function triggerExample() {
-	const delay = 4000;
-	const r = Math.floor(Math.random() * badgeData.length);
-	const d = badgeData[r];
+	const ranPos = Math.floor(Math.random() * badgeData.length);
+	const d = badgeData[ranPos];
 	const { x, y } = d;
 
-	const randomTweet = Math.floor(Math.random() * tweetData.length)
-	const test = tweetData[randomTweet]
+	const ranIndex = Math.floor(Math.random() * tweetData.length);
+	const data = tweetData[ranIndex];
+	const delay = data.text.length * 50;
 
 	d.fill = '#f30';
 
@@ -80,7 +72,7 @@ function triggerExample() {
 	Render.clear($.contextEx);
 	Render.dot({ d, ctx: $.contextEx });
 	Tweet.create({
-		data: tweetData[randomTweet],
+		data,
 		x,
 		y,
 		fade: true,
@@ -207,7 +199,7 @@ function resize() {
 
 function init(data) {
 	badgeData = data.badge.map(d => ({ ...d }));
-	tweetData = data.curate
+	tweetData = data.curate;
 }
 
 export default { init, resize, enter, exit, clear };

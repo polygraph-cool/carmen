@@ -8,10 +8,9 @@ import Curate from './curate';
 import Explore from './explore';
 import Render from './render';
 
-import getData from './load-data'
+import loadData from './load-data';
 import badgePos from './badge-pos';
 import categories from './categories';
-
 
 const DPR = window.devicePixelRatio ? Math.min(window.devicePixelRatio, 2) : 1;
 
@@ -97,7 +96,7 @@ function onCurateStepExit(el) {
 }
 
 function setup(data) {
-	console.log({data})
+	console.log({ data });
 	// sections
 	Intro.init(data);
 	Globe.init(data);
@@ -173,7 +172,7 @@ function assignCategoryLayer(counts) {
 	});
 }
 
-function loadData() {
+function prepareData() {
 	return new Promise(resolve => {
 		const sum = d3.sum(categories, d => d.count);
 
@@ -182,13 +181,19 @@ function loadData() {
 			return Math.floor(percent * badgePos.length);
 		});
 
-		getData().then((results) => {
-			const withCat = assignCategoryRandom(counts);
-			const curateData = results.curate
-			const exploreData = results.explore
-			const allData = {badge: withCat, curate: curateData, explore: exploreData}
-			resolve(allData)
-		})
+		loadData()
+			.then(results => {
+				const withCat = assignCategoryRandom(counts);
+				const curateData = results.curate;
+				const exploreData = results.explore;
+				const allData = {
+					badge: withCat,
+					curate: curateData,
+					explore: exploreData
+				};
+				resolve(allData);
+			})
+			.catch(console.log);
 	});
 }
 
@@ -207,8 +212,7 @@ function svgToJSON() {
 }
 
 function init() {
-
-	loadData().then(setup);
+	prepareData().then(setup);
 	// svgToJSON();
 }
 

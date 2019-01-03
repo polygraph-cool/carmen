@@ -1,7 +1,7 @@
 import $ from './dom';
 
 const REM = 16;
-const PAD = REM;
+const PAD = REM * 3;
 
 function create({ data, x = 0, y = 0, fade, offset, section }) {
 	const $tweet =
@@ -9,8 +9,8 @@ function create({ data, x = 0, y = 0, fade, offset, section }) {
 			? $.exploreTweets.append('div.tweet')
 			: $.chartTweets.append('div.tweet');
 
-	const { author, handle, text, time } = data;
-	$tweet.append('p.tweet__name').text(name);
+	const { handle, text, time } = data;
+	// $tweet.append('p.tweet__name').text(name);
 	$tweet.append('p.tweet__handle').text(handle);
 	$tweet.append('p.tweet__text').text(text);
 	$tweet.append('p.tweet__time').text(time);
