@@ -18,6 +18,7 @@ let badgeData = [];
 let width = null;
 let height = null;
 let timeout = null;
+let tweetData = null
 
 let currentStep = null;
 
@@ -69,6 +70,7 @@ function triggerExample() {
 	const r = Math.floor(Math.random() * badgeData.length);
 	const d = badgeData[r];
 	const { x, y } = d;
+	console.log({tweetData})
 
 	d.fill = '#f30';
 
@@ -201,8 +203,10 @@ function resize() {
 	enter(currentStep);
 }
 
-function init(data) {
+function init(data, tweets) {
 	badgeData = data.map(d => ({ ...d }));
+	tweetData = tweets
+		console.log({tweets})
 }
 
 export default { init, resize, enter, exit, clear };

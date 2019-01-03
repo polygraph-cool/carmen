@@ -100,8 +100,9 @@ function onCurateStepExit(el) {
 }
 
 function setup(data) {
+	console.log({data})
 	// sections
-	Intro.init(data);
+	Intro.init(data, curateData);
 	Globe.init(data);
 	Curate.init(data);
 	Explore.init(data);
@@ -194,6 +195,7 @@ function loadData() {
 		// const withCat = assignCategoryLayer(counts);
 		const withCat = assignCategoryRandom(counts);
 
+		//const allData = {withCat: withCat, curate: curateData, explore: exploreData}
 		resolve(withCat);
 	});
 }
@@ -213,6 +215,7 @@ function svgToJSON() {
 }
 
 function init() {
+
 	loadData().then(setup);
 	// svgToJSON();
 }
