@@ -8,6 +8,7 @@ const canvasEx = chart.select('.canvas__ex');
 const contextEx = canvasEx.node().getContext('2d');
 const canvasGlobe = chart.select('.canvas__globe');
 const contextGlobe = canvasGlobe.node().getContext('2d');
+const overlay = chart.select('.chart__overlay');
 
 const svg = chart.select('svg');
 const g = svg.select('g');
@@ -31,6 +32,7 @@ export default {
 	contextEx,
 	canvasGlobe,
 	contextGlobe,
+	overlay,
 	svg,
 	g,
 	globe,

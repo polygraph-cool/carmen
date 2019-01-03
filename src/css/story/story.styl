@@ -20,13 +20,20 @@ figure#chart
 		opacity 0
 		pointer-events none
 
-	.overlay
-		background radial-gradient(640.00px at 50% 50%, rgba(255, 255, 255, 0) 0%, #000000 100%)
+	.chart__overlay
+		// background radial-gradient(1280px at 50% 50%, rgba(255, 255, 255, 0) 0%, #000000 100%)
+		background radial-gradient(circle at center, rgba(0,0,0,0) 0%, rgba(0,0,0,1) 100%)
+		top 0
+		left 0
 		height 100%
 		width 100%
 		overflow hidden
 		position relative
 		z-index 2
+		pointer-events none
+		&.is-hidden
+			opacity 0
+			
 
 	canvas
 		position absolute

@@ -41,13 +41,14 @@ function onIntroStepExit(el) {
 function updateSection(index) {
 	const $section = $.section.filter((d, i) => i === index);
 	const id = $section.at('id');
-	console.log('section', id);
+	// console.log('section', id);
 	$.chart.classed('is-hidden', false);
 	$.exploreNav.classed('is-hidden', true);
 	$.globe.classed('is-hidden', true);
 	$.canvasBg.classed('is-hidden', true);
 	$.canvasFg.classed('is-hidden', true);
 	$.canvasGlobe.classed('is-hidden', true);
+	$.overlay.classed('is-hidden', true)
 	Intro.clear();
 	Curate.clear();
 	Explore.clear();
@@ -55,6 +56,7 @@ function updateSection(index) {
 	case 'intro':
 		$.canvasBg.classed('is-hidden', false);
 		$.canvasFg.classed('is-hidden', false);
+		$.overlay.classed('is-hidden', false)
 		Intro.enterSection()
 		break;
 	case 'globe':

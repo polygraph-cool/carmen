@@ -119,7 +119,7 @@ function runExamples() {
 }
 
 function enterSection() {
-	Render.clear($.contextBg);
+	Render.clear($.contextFg);
 	revealDots();
 }
 
