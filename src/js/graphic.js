@@ -8,8 +8,13 @@ import Curate from './curate';
 import Explore from './explore';
 import Render from './render';
 
+import getData from './load-data'
 import badgePos from './badge-pos';
 import categories from './categories';
+
+// Imported tweet data
+let curateData = null
+let exploreData = null
 
 const DPR = window.devicePixelRatio ? Math.min(window.devicePixelRatio, 2) : 1;
 
@@ -178,6 +183,13 @@ function loadData() {
 			const percent = d.count / sum;
 			return Math.floor(percent * badgePos.length);
 		});
+
+		// import tweet data
+		Promise.all([getData()])
+			.then((results) => {
+				curateData = results[0].curate
+				exploreData = results[0].explore
+			})
 
 		// const withCat = assignCategoryLayer(counts);
 		const withCat = assignCategoryRandom(counts);
