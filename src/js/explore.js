@@ -16,6 +16,10 @@ let col = null;
 let diameter = null;
 let pageWidth = null;
 
+let tweetCount = -1
+
+let tweetData = null
+
 const exampleTweet = {
 	name: 'The Pudding',
 	handle: '@puddingviz',
@@ -32,6 +36,9 @@ function showTweet() {
 	removeTweets();
 	const selRow = Math.floor(Math.random() * row);
 	const selCol = Math.floor(Math.random() * col);
+
+	tweetCount = tweetCount + 1
+	console.log({tweetCount})
 
 	// console.log({col, row, selRow, selCol})
 	const exDot = $tweets.append('div.figure__tweets-dot');
@@ -54,7 +61,7 @@ function showTweet() {
 	$slide.st('left', posX);
 
 	Tweet.create({
-		data: exampleTweet,
+		data: tweetData[tweetCount],
 		x: selCol * diameter,
 		y: selRow * diameter,
 		fade: true,
@@ -86,7 +93,9 @@ function resize() {
 	});
 }
 
-function init() {
+function init(data) {
+	tweetData = data.explore
+	console.log({tweetData})
 	$explore.select('button').on('click', showTweet);
 	resize();
 }
