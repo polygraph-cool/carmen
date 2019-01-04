@@ -1,7 +1,7 @@
 export default {
 	edutainment: '#e50914',
-	travel: '#62c6f9',
-	'role-model': '#29cc7a',
+	travel: '#f99128',
+	'role-model': '#00ca56',
 	fashion: '#fcd206',
-	'pop-culture': '#3d66f9'
+	'cultural-icon': '#3d66f9'
 };
