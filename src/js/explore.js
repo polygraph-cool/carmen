@@ -29,7 +29,7 @@ const exampleTweet = {
 
 function removeTweets() {
 	Tweet.clear({ section: 'explore', delay: true });
-	$tweets.selectAll('.figure__tweets-dot').remove();
+	$tweets.selectAll('.figure__tweets-g').remove();
 }
 
 function showTweet() {
@@ -41,7 +41,29 @@ function showTweet() {
 	console.log({ tweetCount });
 
 	// console.log({col, row, selRow, selCol})
-	const exDot = $tweets.append('div.figure__tweets-dot');
+	const gExDot = $tweets.append('div.figure__tweets-g');
+
+	const exDot = gExDot.append('div.figure__tweets-dot')
+
+	const concentric = [0, 1, 2]
+	const mult = [2, 4, 8]
+	const mapDia = concentric.map(d => {
+		const dia = mult[d] * diameter
+		return {...d,
+		diameter: dia}
+	})
+
+	const exConc = gExDot.selectAll('.figure__tweets-conc')
+		.data(mapDia)
+		.enter()
+		.append('div.figure__tweets-conc')
+		.st('height', d => d.diameter)
+		.st('width', d => d.diameter)
+		.st('border-radius', '50%')
+		// .st('backgroundSize', d => `${diameter * (d + mult)}px ${diameter * (d + mult)}px`)
+		.st('top', d => selRow * diameter - ((d.diameter - diameter) / 2))
+		.st('left', d => selCol * diameter - ((d.diameter - diameter) / 2))
+
 
 	exDot.st({
 		height: diameter,
