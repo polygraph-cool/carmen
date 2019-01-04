@@ -32,10 +32,15 @@ function removeTweets() {
 	$tweets.selectAll('.figure__tweets-g').remove();
 }
 
-function showTweet() {
+function showTweet(forceMiddle) {
 	removeTweets();
-	const selRow = Math.floor(Math.random() * row);
-	const selCol = Math.floor(Math.random() * col);
+	let selRow = Math.floor(Math.random() * row);
+	let selCol = Math.floor(Math.random() * col);
+
+	if (forceMiddle) {
+		selRow = Math.floor(row / 2);
+		selCol = Math.floor(col / 2);
+	}
 
 	tweetCount += 1;
 	console.log({ tweetCount });
@@ -43,17 +48,17 @@ function showTweet() {
 	// console.log({col, row, selRow, selCol})
 	const gExDot = $tweets.append('div.figure__tweets-g');
 
-	const exDot = gExDot.append('div.figure__tweets-dot')
+	const exDot = gExDot.append('div.figure__tweets-dot');
 
-	const concentric = [0, 1, 2]
-	const mult = [2, 4, 8]
+	const concentric = [0, 1, 2];
+	const mult = [2, 4, 8];
 	const mapDia = concentric.map(d => {
-		const dia = mult[d] * diameter
-		return {...d,
-		diameter: dia}
-	})
+		const dia = mult[d] * diameter;
+		return { ...d, diameter: dia };
+	});
 
-	const exConc = gExDot.selectAll('.figure__tweets-conc')
+	const exConc = gExDot
+		.selectAll('.figure__tweets-conc')
 		.data(mapDia)
 		.enter()
 		.append('div.figure__tweets-conc')
@@ -61,9 +66,8 @@ function showTweet() {
 		.st('width', d => d.diameter)
 		.st('border-radius', '50%')
 		// .st('backgroundSize', d => `${diameter * (d + mult)}px ${diameter * (d + mult)}px`)
-		.st('top', d => selRow * diameter - ((d.diameter - diameter) / 2))
-		.st('left', d => selCol * diameter - ((d.diameter - diameter) / 2))
-
+		.st('top', d => selRow * diameter - (d.diameter - diameter) / 2)
+		.st('left', d => selCol * diameter - (d.diameter - diameter) / 2);
 
 	exDot.st({
 		height: diameter,
@@ -96,6 +100,10 @@ function clear() {
 	Tweet.clear({ section: 'explore' });
 }
 
+function enterSection() {
+	showTweet(true);
+}
+
 function resize() {
 	const headerH = $.header.node().offsetHeight;
 	const height = window.innerHeight - headerH;
@@ -122,4 +130,4 @@ function init(data) {
 	resize();
 }
 
-export default { init, resize, clear };
+export default { init, resize, clear, enterSection };

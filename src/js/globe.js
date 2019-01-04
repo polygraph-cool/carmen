@@ -6,7 +6,6 @@ import Color from './colors';
 
 
 
-
 const $section = d3.select('#globe');
 const $step = $section.selectAll('.step');
 const $planeEl = d3.select('.airplane').node();
@@ -32,6 +31,7 @@ let textElement = null;
 let ready = false;
 let width = 0;
 let height = 0;
+let stepWidth = 0;
 
 const current = {};
 
@@ -65,6 +65,11 @@ function flyingArc(coords) {
 	return [projection(source), loftedProjection(middle), projection(target)];
 }
 
+
+function clearScreen() {
+	Render.clear($.contextGlobe);
+}
+
 function updateCanvasGlobe() {
 	const sphere = { type: 'Sphere' };
 	center = [width / 2, height / 2];
@@ -85,19 +90,19 @@ function updateCanvasGlobe() {
 	$.contextGlobe.stroke();
 }
 
-function addTweetBox(coord){
-
-	console.log(current);
-
+function addTweetBox(coord) {
 	const p = projection(coord);
 
-	const x = p[0];
+	const x = p[0] + stepWidth;
 
 	const y = p[1];
-
-	if(current.step != "categories"){
-
-		var data = { text:current.tweet,handle:current.user,category:"money",star_tweet:"x"};
+	if (current.step !== 'categories') {
+		const data = {
+			text: current.tweet,
+			handle: current.user,
+			category: 'money',
+			star_tweet: 'x'
+		};
 		Tweet.create({
 			data,
 			x,
@@ -297,7 +302,7 @@ function goTo(coordsStart, coordsEnd) {
 			draw(t);
 			if (t0 >= 1) {
 				timer.stop();
-				addTweetBox(coordsEnd)
+				addTweetBox(coordsEnd);
 			}
 		};
 
@@ -337,14 +342,15 @@ function step(index) {
 function resize() {
 	// resize stepper elements
 	const stepHeight = window.innerHeight;
+	stepWidth = d3.select('.globe__steps').node().offsetWidth;
 	$step.st('height', stepHeight).classed('is-visible', true);
 
 	// resize all the globe stuff
 	if (ready) {
-		height = $.chart.node().offsetHeight * Render.getDPR();
-		width = $.chart.node().offsetWidth * Render.getDPR();
-
-		const radius = height / 2.5;
+		height = $.canvasGlobe.node().offsetHeight * Render.getDPR();
+		width = $.canvasGlobe.node().offsetWidth * Render.getDPR();
+		const smaller = Math.min(width, height);
+		const radius = smaller / 2.5;
 		const scale = radius;
 
 		fauxPathElement = $.globe.append('path');
@@ -355,8 +361,7 @@ function resize() {
 			.scale(scale)
 			.translate([width / 2, height / 2])
 			.precision(0.1)
-			.clipAngle(90)
-			;
+			.clipAngle(90);
 
 		loftedProjection = d3
 			.geoOrthographic()
