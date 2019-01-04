@@ -88,7 +88,7 @@ function triggerExample() {
 
 		const delay = data.text.length * 50;
 
-		d.fill = '#f30';
+		d.fill = '#fff';
 
 		Tweet.clear({ section: 'intro' });
 		Render.clear($.contextEx);
@@ -128,7 +128,7 @@ function revealDots() {
 		// d.l = 0;
 		// d.target = 128;
 		// d.rate = 1 + Math.random() * 10;
-		d.fill = d.fill || '#f30';
+		d.fill = d.fill || '#e50914';
 		Render.dot({ d, ctx: $.contextFg });
 	});
 }
@@ -178,13 +178,6 @@ function resize() {
 	mobile = width < BP;
 
 	const { scale, offsetW, offsetH } = Render.getScale();
-	// console.log({ width, height, scale, offsetW, offsetH });
-
-	// someTweets.forEach(t => {
-	// 	t.x = scale * t.cx + offsetW;
-	// 	t.y = scale * t.cy + offsetH;
-	// 	t.r = scale * BADGE_R;
-	// });
 
 	const stepHeight = window.innerHeight;
 
@@ -193,24 +186,7 @@ function resize() {
 		.st('height', (d, i) => stepHeight * (i === stepSize - 1 ? 2 : 1))
 		.classed('is-visible', true);
 
-	// const radius = Math.floor((BADGE_R * width) / BADGE_W);
-
-	// const sz = Math.floor((radius * 4 * 7) / 5)
-
-	const radius = scale * BADGE_R;
-	const pad = 4;
-
 	$.chartTweets.st('width', width).st('height', height);
-	const unit = radius * 2 + scale * pad;
-
-	const area = width * height;
-	const unitSQ = unit * unit;
-
-	let numDots = Math.ceil(area / unitSQ);
-
-	const col = Math.ceil(width / unit) + 1;
-
-	numDots += col * 2;
 
 	badgeData.forEach(b => {
 		b.x = scale * b.cx + offsetW;
@@ -218,33 +194,7 @@ function resize() {
 		b.r = scale * BADGE_R;
 	});
 
-	const rem = Math.max(offsetW % unit, offsetH % unit);
-	const off = unit - rem;
-	console.log({ unit, rem, off });
-
-	// const off = 0;
-	// console.log(off);
-	// console.log({ x0, y0, scale });
-	// console.log(scale * )
-
-	const bgData = d3.range(numDots).map(i => ({
-		d: {
-			x: (i % col) * unit - 0,
-			y: Math.floor(i / col) * unit - 0,
-			r: scale * BADGE_R,
-			fill: '#333'
-		},
-		ctx: $.contextBg
-	}));
-
-	// const near = bgData.find(
-	// 	d =>
-	// 		Math.abs(d.d.x - badgeData[0].x) < 2 &&
-	// 		Math.abs(d.d.y - badgeData[0].y) < 2
-	// ).d;
-
 	Render.clear($.contextBg);
-	bgData.forEach(Render.dot);
 	enter(currentStep);
 }
 
