@@ -1,7 +1,7 @@
 import $ from './dom';
 
 const REM = 16;
-const PAD = REM * 3;
+const PAD = REM * 4;
 
 function create({ data, x = 0, y = 0, fade, offset, pushLeft, section }) {
 	const $tweet =

@@ -1,4 +1,4 @@
-const NUM_FILES = 12;
+const NUM_FILES = 13;
 const INDEX = Math.ceil(Math.random() * NUM_FILES);
 
 function loadData() {
