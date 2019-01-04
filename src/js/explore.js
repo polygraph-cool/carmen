@@ -33,7 +33,10 @@ function removeTweets() {
 }
 
 function showTweet(forceMiddle) {
-	removeTweets();
+	// setTimeout(d => {
+	// 	removeTweets()
+	// }, 1000)
+
 	let selRow = Math.floor(Math.random() * row);
 	let selCol = Math.floor(Math.random() * col);
 
@@ -43,57 +46,70 @@ function showTweet(forceMiddle) {
 	}
 
 	tweetCount += 1;
-	console.log({ tweetCount });
-
-	// console.log({col, row, selRow, selCol})
-	const gExDot = $tweets.append('div.figure__tweets-g');
-
-	const exDot = gExDot.append('div.figure__tweets-dot');
-
-	const concentric = [0, 1, 2];
-	const mult = [2, 4, 8];
-	const mapDia = concentric.map(d => {
-		const dia = mult[d] * diameter;
-		return { ...d, diameter: dia };
-	});
-
-	const exConc = gExDot
-		.selectAll('.figure__tweets-conc')
-		.data(mapDia)
-		.enter()
-		.append('div.figure__tweets-conc')
-		.st('height', d => d.diameter)
-		.st('width', d => d.diameter)
-		.st('border-radius', '50%')
-		// .st('backgroundSize', d => `${diameter * (d + mult)}px ${diameter * (d + mult)}px`)
-		.st('top', d => selRow * diameter - (d.diameter - diameter) / 2)
-		.st('left', d => selCol * diameter - (d.diameter - diameter) / 2);
-
-	exDot.st({
-		height: diameter,
-		width: diameter,
-		backgroundSize: `${diameter}px ${diameter}px`,
-		top: selRow * diameter,
-		left: selCol * diameter
-	});
-
 	// translate div
 
 	// center highlighted dot
 	const posX = pageWidth / 2 - selCol * diameter - diameter / 2;
-	// console.log({pageWidth})
-	// console.log({posX})
 
 	$slide.st('left', posX);
 
-	Tweet.create({
-		data: tweetData[tweetCount],
-		x: selCol * diameter,
-		y: selRow * diameter,
-		fade: true,
-		offset: true,
-		section: 'explore'
-	});
+	setTimeout(d => {
+		removeTweets()
+		const gExDot = $tweets.append('div.figure__tweets-g');
+
+		const exDot = gExDot.append('div.figure__tweets-dot');
+
+		const concentric = [0, 1, 2];
+		const mult = [2, 4, 8];
+		const mapDia = concentric.map(d => {
+			const dia = mult[d] * diameter;
+			return { ...d, diameter: dia };
+		});
+
+		const exConc = gExDot
+			.selectAll('.figure__tweets-conc')
+			.data(mapDia)
+			.enter()
+			.append('div.figure__tweets-conc')
+			.st('opacity', 0)
+			.st('height', d => d.diameter)
+			.st('width', d => d.diameter)
+			.st('border-radius', '50%')
+			// .st('backgroundSize', d => `${diameter * (d + mult)}px ${diameter * (d + mult)}px`)
+			.st('top', d => selRow * diameter - (d.diameter - diameter) / 2)
+			.st('left', d => selCol * diameter - (d.diameter - diameter) / 2)
+			.transition()
+			.delay((d, i) => i * 50)
+			.duration(500)
+			.st('opacity', 1)
+
+
+		exDot.st({
+			height: diameter,
+			width: diameter,
+			backgroundSize: `${diameter}px ${diameter}px`,
+			top: selRow * diameter,
+			left: selCol * diameter,
+			opacity: 0
+		})
+		.transition()
+		.duration(200)
+		.st('opacity', 1)
+
+		Tweet.create({
+			data: tweetData[tweetCount],
+			x: selCol * diameter,
+			y: selRow * diameter,
+			fade: true,
+			offset: true,
+			section: 'explore'
+		});
+
+	}, 800)
+
+	// console.log({col, row, selRow, selCol})
+
+
 }
 
 function clear() {
