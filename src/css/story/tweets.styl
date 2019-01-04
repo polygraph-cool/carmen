@@ -1,3 +1,15 @@
+.globe-tweets
+	.tweet
+		&__image
+			display block
+			background-image url('assets/images/carmen-caper.png')
+			width 100%
+			height 100px
+			background-size cover
+			position absolute
+			top 0px
+			transform translate(0px,-100%)
+
 .tweet
 	position absolute
 	background-color $fg
@@ -6,9 +18,11 @@
 	border-radius 10px
 	padding 1rem
 	transform translate(-50%, -50%)
-	z-index 10
+  z-index 10
+	&__image
+		display none
 
-	&__name
+  &__name
 		margin 0
 		font-weight 700
 
