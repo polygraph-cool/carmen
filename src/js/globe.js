@@ -2,6 +2,9 @@ import * as topojson from 'topojson';
 import $ from './dom';
 import Render from './render';
 import Tweet from './tweet';
+import Color from './colors';
+
+
 
 const $section = d3.select('#globe');
 const $step = $section.selectAll('.step');
@@ -62,6 +65,7 @@ function flyingArc(coords) {
 	return [projection(source), loftedProjection(middle), projection(target)];
 }
 
+
 function clearScreen() {
 	Render.clear($.contextGlobe);
 }
@@ -92,7 +96,6 @@ function addTweetBox(coord) {
 	const x = p[0] + stepWidth;
 
 	const y = p[1];
-
 	if (current.step !== 'categories') {
 		const data = {
 			text: current.tweet,
@@ -169,12 +172,49 @@ function updateTextLabels(textString, coord) {
 	}
 }
 
+function showStatic(globeCoordinates){
+
+	textElement.text(current.city);
+	let focalPoint = null;
+
+	function focusGlobeOnPoint(point) {
+		const x = point[0];
+
+		const y = point[1];
+
+		const cx = x;
+
+		const cy = y - 0;
+
+		const rotation = [-cx, -cy];
+		projection.rotate(rotation);
+		loftedProjection.rotate(rotation);
+	}
+
+	function draw(globeCoordinates) {
+		// Rotate globe to focus on the flying arc
+		focusGlobeOnPoint(globeCoordinates);
+		updateCanvasGlobe();
+		//updateMarkers([coordsStart, coordsEnd]);
+		updateTextLabels(current.city, globeCoordinates);
+		addFinalMarker(globeCoordinates);
+		addTweetBox(globeCoordinates)
+		// $.contextGlobe.save();
+		// $.contextGlobe.translate(x, y);
+		// $.contextGlobe.rotate(r);
+		// $.contextGlobe.restore();
+	};
+	if(current.step != "categories"){
+		draw(globeCoordinates);
+	}
+
+}
+
 function goTo(coordsStart, coordsEnd) {
 	let focalPoint = null;
 	let flyingArcLength = null;
-
 	textElement.text(current.city);
-
+	//&&
 	function focusGlobeOnPoint(point) {
 		const x = point[0];
 
@@ -201,8 +241,7 @@ function goTo(coordsStart, coordsEnd) {
 		$.contextGlobe.beginPath();
 		swoosh(flyingArc([coordsStart, coordsEnd]));
 		$.contextGlobe.setLineDash([t * flyingArcLength * 1.7, 1e6]);
-		$.contextGlobe.strokeStyle = 'RED';
-		updateCanvasGlobe;
+		$.contextGlobe.strokeStyle = "RED";
 		$.contextGlobe.lineWidth = ARC_WIDTH;
 
 		$.contextGlobe.stroke();
@@ -239,6 +278,7 @@ function goTo(coordsStart, coordsEnd) {
 		const r = 135 + heading * -(Math.PI / 180);
 		const gDistance = d3.geoDistance([x, y], [xF, yF]);
 
+
 		if (gDistance === 0) {
 			addFinalMarker(coordsEnd);
 		}
@@ -268,26 +308,27 @@ function goTo(coordsStart, coordsEnd) {
 
 		const timer = d3.timer(tick);
 	};
-
 	shuffle();
+
 }
 
 function update() {
 	const newCoords = [+current.lon, +current.lat];
+	Tweet.clear({ section: 'globe' });
+
 	if (!globeCoordinates || current.step === 'categories') {
-		globeCoordinates = [-98.5795, 39.8283];
-		clearScreen();
+		globeCoordinates = [-74.0060, 40.7128];
 	}
-	if (
-		ready &&
-		globeCoordinates[0] !== newCoords[0] &&
-		globeCoordinates[1] !== newCoords[1]
-	) {
-		// ensure lines aren't drawn when no new coordinates
-		goTo(globeCoordinates, newCoords);
+	if (ready) {
+
+		if(globeCoordinates[0] == newCoords[0] && globeCoordinates[1] == newCoords[1]){
+			showStatic(globeCoordinates);
+		}
+		else{
+			goTo(globeCoordinates, newCoords);
+		}
 	}
 	globeCoordinates = newCoords;
-	Tweet.clear({ section: 'globe' });
 }
 
 function step(index) {
@@ -329,8 +370,8 @@ function resize() {
 			.precision(0.1)
 			.clipAngle(90);
 
-		const x = -98.5795;
-		const y = 39.8283;
+		const x = -74.0060;
+		const y = 40.7128;
 		const cx = x;
 		const cy = y;
 		const rotation = [-cx, -cy];
@@ -357,6 +398,18 @@ function setup(world) {
 	projection = d3.geoOrthographic();
 	path = d3.geoPath();
 	land = topojson.feature(world, world.objects.countries);
+	var stepsColors = d3.select(".globe__steps").selectAll(".step").each(function(d){
+		var stepName = d3.select(this).attr("data-step");
+
+		d3.select(this).select(".destination-wrapper")
+			.style("color",Color[stepName])
+
+		d3.select(this).select(".destination-wrapper")
+			.select(".destination-plane")
+			.select("path")
+			.style("fill",Color[stepName])
+			;
+	})
 }
 
 function init() {
