@@ -19,6 +19,9 @@ const PATH_COLOR = '#666';
 const LOFT = 1.8;
 const LINE_WIDTH = 1;
 
+let loftedness = 1.3;
+
+
 let land = null;
 let swoosh = null;
 let fauxSwoosh = null;
@@ -60,10 +63,14 @@ function lineLength(points) {
 }
 
 function flyingArc(coords) {
-	const source = coords[0];
-	const target = coords[1];
-	const middle = locationAlongArc(source, target, 0.5);
-	return [projection(source), loftedProjection(middle), projection(target)];
+    var source = coords[0];
+    var target = coords[1];
+    var middle = locationAlongArc(source, target, 0.5);
+    return [
+        projection(source),
+        loftedProjection(middle),
+        projection(target)
+    ];
 }
 
 function updateCanvasGlobe() {
@@ -214,21 +221,22 @@ function showStatic(globeCoordinates){
 
 }
 
+function createImages(){
+}
+
 function goTo(coordsStart, coordsEnd) {
 	let focalPoint = null;
 	let flyingArcLength = null;
 	textElement.text(current.country);
 	//&&
 	function focusGlobeOnPoint(point) {
+
 		const x = point[0];
-
 		const y = point[1];
-
 		const cx = x;
-
-		const cy = y - 0;
-
+		const cy = y + 10;
 		const rotation = [-cx, -cy];
+
 		projection.rotate(rotation);
 		loftedProjection.rotate(rotation);
 	}
@@ -372,12 +380,12 @@ function resize() {
 			.precision(0.1)
 			.clipAngle(90);
 
-		loftedProjection = d3
-			.geoOrthographic()
-			.scale(((height - 10) / 2) * LOFT)
-			.translate([width / 2, height / 2])
-			.precision(0.1)
-			.clipAngle(90);
+		loftedProjection = d3.geoOrthographic()
+    	.scale(((height - 10) / 2) * loftedness)
+    	.translate([width / 2, height / 2])
+    	.precision(0.1)
+			.clipAngle(90)
+			;
 
 		const x = firstStepCoords[0];
 		const y = firstStepCoords[1];
