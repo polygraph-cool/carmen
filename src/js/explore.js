@@ -32,15 +32,33 @@ function removeTweets() {
 	$tweets.selectAll('.figure__tweets-g').remove();
 }
 
+
+
+function loadMoreData() {
+	const NUM_FILES = 13;
+	const INDEX = Math.ceil(Math.random() * NUM_FILES);
+
+	return new Promise((resolve, reject) => {
+		d3.loadData(
+			`assets/data/explore-${INDEX}.csv`,
+			(err, response) => {
+				if (err) reject(err);
+				else resolve(response);
+			}
+		);
+	});
+}
+
+function setupData(response){
+	tweetData = d3.shuffle(response[0])
+	return tweetData
+}
+
 function showTweet(forceMiddle) {
-	// setTimeout(d => {
-	// 	removeTweets()
-	// }, 1000)
 
 	let selRow = Math.floor(Math.random() * row);
 	let selCol = Math.floor(Math.random() * col);
 
-	console.log({selRow, selCol, diameter})
 
 	if (forceMiddle) {
 		selRow = Math.floor(row / 2);
@@ -48,6 +66,17 @@ function showTweet(forceMiddle) {
 	}
 
 	tweetCount += 1;
+	const fileLength = tweetData.length
+
+	if (tweetCount === fileLength){
+		return new Promise((resolve, reject) => {
+			loadMoreData()
+				.then(setupData)
+				.then(resolve)
+				.catch(reject);
+		});
+	}
+
 	// translate div
 
 	// center highlighted dot
@@ -108,10 +137,6 @@ function showTweet(forceMiddle) {
 		});
 
 	}, 800)
-
-	// console.log({col, row, selRow, selCol})
-
-
 }
 
 function clear() {
@@ -132,14 +157,10 @@ function resize() {
 	const count = 130000;
 	const radius = Math.ceil((BADGE_R * height) / BADGE_H);
 	diameter = radius * 2;
-	// row = Math.floor(count / height);
-	// col = Math.floor(count / row);
 	// number of dots of a certain size that can fit on the screen
 	row = Math.floor(height / diameter)
 	// number of col needed to add up to the total count with the calculated rows
 	col = Math.floor(count / row)
-
-	console.log({row, height, diameter})
 
 	$dots.st({
 		width: col * diameter,
@@ -149,7 +170,6 @@ function resize() {
 
 function init(data) {
 	tweetData = data.explore;
-	// console.log({tweetData})
 	$explore.select('button').on('click', showTweet);
 	resize();
 }
