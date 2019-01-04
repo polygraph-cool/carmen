@@ -156,6 +156,7 @@ function setup(data) {
 }
 
 function assignCategoryRandom(counts) {
+	console.log(badgePos.length)
 	const pool = [].concat(...counts.map((d, i) => d3.range(d).map(() => i)));
 	const shuffled = Shuffle(pool);
 	return badgePos.map((d, i) => ({
@@ -173,7 +174,7 @@ function assignCategoryLayer(counts) {
 	});
 
 	thresh.reverse();
-	// console.log(thresh, badgePos.length);
+
 	return badgePos.map((d, i) => {
 		const index = thresh.findIndex(t => t <= i);
 		return {

@@ -64,7 +64,7 @@ function handleNavClick() {
 	$button.classed('is-active', true);
 	cat = $button.at('data-id');
 	// console.log({ cat, tweetData });
-	filteredTweets = tweetData.filter(d => d.category === cat);
+
 	runNav(cat);
 }
 
@@ -137,6 +137,8 @@ function runSim() {
 }
 
 function runNav(cat) {
+	filteredTweets = tweetData.filter(d => d.category === cat);
+	// 100 tweets for edutainment
 	Tweet.clear({ section: 'curate' });
 	const c = Categories.find(c => c.cat === cat);
 	const sample = Math.floor(c.count * sampleSize);
@@ -147,7 +149,9 @@ function runNav(cat) {
 		n.r = n.or;
 	});
 
-	nodes = badgeData.filter(d => d.category === cat).slice(0, sample);
+	nodes = badgeData
+		.filter(d => d.category === cat)
+		.slice(0, filteredTweets.length);
 
 	nodes.forEach(d => {
 		d.stroke = '#000';
@@ -308,8 +312,6 @@ function init(data) {
 		...d
 	}));
 	tweetData = data.curate;
-	filteredTweets = tweetData.filter(d => d.category === cat);
-	// .slice(0, 1);
 	$nav.selectAll('button').on('click', handleNavClick);
 	setupLabels();
 }
