@@ -69,7 +69,6 @@ cleanCultural <- read.csv(here::here("large_files", "cultural_icon.csv"), string
     mutate(cleanParent = gsub("\\[|\\'|]", "", parent_categories)) %>% 
     mutate(category = ifelse(is.na(zeno_corrected), cleanParent, zeno_corrected)) %>% 
     select(c(text, handle, category, star_tweet))
-  
 ```
 
 
