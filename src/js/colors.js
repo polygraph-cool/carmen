@@ -3,5 +3,5 @@ export default {
 	travel: '#62c6f9',
 	'role-model': '#29cc7a',
 	fashion: '#fcd206',
-	style: '#fcd206'
+	'pop-culture': '#3d66f9'
 };
