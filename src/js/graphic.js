@@ -54,6 +54,7 @@ function updateSection(index) {
 	Intro.clear();
 	Curate.clear();
 	Explore.clear();
+	Globe.clear();
 	switch (id) {
 	case 'intro':
 		$.canvasBg.classed('is-hidden', false);
@@ -65,6 +66,7 @@ function updateSection(index) {
 		$.canvasGlobe.classed('is-hidden', false);
 		$.globe.classed('is-hidden', false);
 		$.chartTweets.classed('globe-tweets', true);
+		Globe.enterSection();
 		break;
 	case 'curate':
 		$.canvasFg.classed('is-hidden', false);

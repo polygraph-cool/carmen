@@ -5,6 +5,7 @@ import Tweet from './tweet';
 import Color from './colors';
 
 
+const firstStepCoords = [46.738586,24.7136];
 
 const $section = d3.select('#globe');
 const $step = $section.selectAll('.step');
@@ -15,7 +16,7 @@ const ARC_WIDTH = 2;
 const MARKER_RADIUS = 2;
 const MARKER_COLOR = '#999';
 const PATH_COLOR = '#666';
-const LOFT = 1.3;
+const LOFT = 1.8;
 const LINE_WIDTH = 1;
 
 let land = null;
@@ -65,11 +66,6 @@ function flyingArc(coords) {
 	return [projection(source), loftedProjection(middle), projection(target)];
 }
 
-
-function clearScreen() {
-	Render.clear($.contextGlobe);
-}
-
 function updateCanvasGlobe() {
 	const sphere = { type: 'Sphere' };
 	center = [width / 2, height / 2];
@@ -91,12 +87,13 @@ function updateCanvasGlobe() {
 }
 
 function addTweetBox(coord) {
+	console.log(active);
 	const p = projection(coord);
 
 	const x = p[0] + stepWidth;
 
 	const y = p[1];
-	if (current.step !== 'categories') {
+	if (current.step !== 'categories' && active) {
 		const data = {
 			text: current.tweet,
 			handle: current.user,
@@ -154,15 +151,22 @@ function addFinalMarker(coord) {
 }
 
 function updateTextLabels(textString, coord) {
+
+	var width = +$.canvasGlobe
+		.attr("width");
+
+	var svgWidth = +$.svg.style("width").replace("px","");
+
 	const p = projection(coord);
 
-	const x = p[0];
+	const x = p[0] + (svgWidth-width);
 
 	const y = p[1];
 
 	const offset = 40;
 
 	textElement.attr('transform', `translate(${x},${y + offset})`);
+
 	const gDistance = d3.geoDistance(coord, projection.invert(center));
 
 	if (gDistance < 1.57) {
@@ -174,7 +178,7 @@ function updateTextLabels(textString, coord) {
 
 function showStatic(globeCoordinates){
 
-	textElement.text(current.city);
+	textElement.text(current.country);
 	let focalPoint = null;
 
 	function focusGlobeOnPoint(point) {
@@ -213,7 +217,7 @@ function showStatic(globeCoordinates){
 function goTo(coordsStart, coordsEnd) {
 	let focalPoint = null;
 	let flyingArcLength = null;
-	textElement.text(current.city);
+	textElement.text(current.country);
 	//&&
 	function focusGlobeOnPoint(point) {
 		const x = point[0];
@@ -236,7 +240,7 @@ function goTo(coordsStart, coordsEnd) {
 		focusGlobeOnPoint(focalPoint(t));
 		updateCanvasGlobe();
 		updateMarkers([coordsStart, coordsEnd]);
-		updateTextLabels(current.city, coordsEnd);
+		updateTextLabels(current.country, coordsEnd);
 
 		$.contextGlobe.beginPath();
 		swoosh(flyingArc([coordsStart, coordsEnd]));
@@ -314,14 +318,19 @@ function goTo(coordsStart, coordsEnd) {
 
 function update() {
 	const newCoords = [+current.lon, +current.lat];
+	console.log(newCoords);
 	Tweet.clear({ section: 'globe' });
 
-	if (!globeCoordinates || current.step === 'categories') {
-		globeCoordinates = [-74.0060, 40.7128];
+	if (current.step === 'categories') {
+		globeCoordinates = firstStepCoords;
+		console.log(globeCoordinates);
 	}
 	if (ready) {
-
-		if(globeCoordinates[0] == newCoords[0] && globeCoordinates[1] == newCoords[1]){
+		if(current.step === 'categories'){
+			updateCanvasGlobe();
+			textElement.text("")
+		}
+		else if(globeCoordinates[0] == newCoords[0] && globeCoordinates[1] == newCoords[1]){
 			showStatic(globeCoordinates);
 		}
 		else{
@@ -370,8 +379,8 @@ function resize() {
 			.precision(0.1)
 			.clipAngle(90);
 
-		const x = -74.0060;
-		const y = 40.7128;
+		const x = firstStepCoords[0];
+		const y = firstStepCoords[1];
 		const cx = x;
 		const cy = y;
 		const rotation = [-cx, -cy];
@@ -412,6 +421,19 @@ function setup(world) {
 	})
 }
 
+let active = false;
+
+function clear() {
+	active = false;
+	Tweet.clear({ section: 'globe' });
+	Render.clear($.contextEx);
+}
+
+function enterSection() {
+	Render.clear($.contextFg);
+	active = true;
+}
+
 function init() {
 	d3.loadData('assets/data/world-110m.json', (err, response) => {
 		if (err) console.log(err);
@@ -422,4 +444,4 @@ function init() {
 	});
 }
 
-export default { init, resize, step };
+export default { init, resize, step, enterSection, clear};
