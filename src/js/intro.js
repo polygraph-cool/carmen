@@ -22,6 +22,7 @@ let tweetData = null;
 let currentStep = null;
 let exampleCounter = 0;
 let mobile = false;
+let active = false;
 
 function hideTitle() {
 	const titleWidth = $intro.select('.intro__hed').node().offsetWidth;
@@ -80,28 +81,30 @@ function chooseBadge() {
 }
 
 function triggerExample() {
-	const data = chooseTweet();
+	if (active) {
+		const data = chooseTweet();
 
-	const d = chooseBadge();
+		const d = chooseBadge();
 
-	const delay = data.text.length * 50;
+		const delay = data.text.length * 50;
 
-	d.fill = '#f30';
+		d.fill = '#f30';
 
-	Tweet.clear({ section: 'intro' });
-	Render.clear($.contextEx);
-	Render.dot({ d, ctx: $.contextEx, fill: '#fff', concentric: true });
-	Tweet.create({
-		data,
-		x: d.x,
-		y: d.y,
-		fade: true,
-		offset: true,
-		pushLeft: true,
-		section: 'intro'
-	});
-	exampleCounter += 1;
-	timeout = setTimeout(triggerExample, delay);
+		Tweet.clear({ section: 'intro' });
+		Render.clear($.contextEx);
+		Render.dot({ d, ctx: $.contextEx, fill: '#fff', concentric: true });
+		Tweet.create({
+			data,
+			x: d.x,
+			y: d.y,
+			fade: true,
+			offset: true,
+			pushLeft: true,
+			section: 'intro'
+		});
+		exampleCounter += 1;
+		timeout = setTimeout(triggerExample, delay);
+	}
 }
 
 // function revealTick() {
@@ -145,6 +148,7 @@ function runExamples() {
 function enterSection() {
 	Render.clear($.contextFg);
 	revealDots();
+	active = true;
 }
 
 function enter(step) {
@@ -161,6 +165,7 @@ function exit(step) {
 }
 
 function clear() {
+	active = false;
 	Tweet.clear({ section: 'intro' });
 	Render.clear($.contextEx);
 	if (timeout) clearTimeout(timeout);
