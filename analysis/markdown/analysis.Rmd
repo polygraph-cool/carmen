@@ -46,13 +46,19 @@ downloadData <- function(category){
       # remove if not QA'd yet
             !is.na(qa),
       # remove if profanity
-            profanity_flag == FALSE,
+            #profanity_flag == FALSE,
       # remove if promo
             promo_flag == FALSE) %>%
-    mutate(category = ifelse(is.na(zeno_corrected), category, zeno_corrected)) %>% 
+    mutate(cleanParent = gsub("\\[|\\'|]", "", parent_categories)) %>% 
+    mutate(category = ifelse(is.na(zeno_corrected), cleanParent, zeno_corrected)) %>% 
     select(c(text, handle, category, star_tweet))
 }
 ```
+
+```{r}
+cleanCultural <- read.csv(here::here("large_files", "cultural_icon.csv")
+```
+
 
 ```{r message = false}
 allData <- map_dfr(categories, downloadData) %>% 
@@ -64,11 +70,13 @@ allData <- map_dfr(categories, downloadData) %>%
 Now, we need to look at just the starred tweets. These will be exported as their own independent file and used in the `curate` section. 
 
 ```{r}
-fashionCat <- c("style", "stye", "style - cosplay", "style - costume")
+fashionCat <- c("style", "stye", "style - cosplay", "style - costume", "fashion", "cosplay", "halloween", "cultural style")
+feminismCat <- c("feminism", "femnisim", "feminist", "feminsim", "role model")
 
 allDataCleaned <- allData %>% 
   mutate(category = case_when(
     category %in% fashionCat ~ "fashion",
+    category %in% feminismCat ~ "feminism",
     category == "role model" ~ "role-model", 
     TRUE ~ category
   ))
