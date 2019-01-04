@@ -31,13 +31,13 @@ categories <- c("edutainment", "feminism", "inspiration", "latina", "style", "tr
 ```
 
 ```{r}
+colnames <- c("id", "GUID_x", "text", "handle", "profane_words", "profanity_flag", "promo_flag", "categories", "primary_category", "parent_categories", "zeno_notes", "zeno_remove", "zeno_corrected", "star_tweet", "qa")
+
 downloadData <- function(category){
   name <- paste0(category, "_for_qa")
   path <- paste0(category, ".csv")
   
   googledrive::drive_download(name, path = here::here("large_files", path), type = "csv", overwrite = TRUE)
-  
-  colnames <- c("id", "GUID_x", "text", "handle", "profane_words", "profanity_flag", "promo_flag", "categories", "primary_category", "parent_categories", "zeno_notes", "zeno_remove", "zeno_corrected", "star_tweet", "qa")
   
   data <- read.csv(here::here("large_files", path), stringsAsFactors = FALSE, header = TRUE, col.names = colnames, na.strings = c("", " ")) %>%
     select(-c(id, GUID_x, profane_words, zeno_notes)) %>%
@@ -56,12 +56,25 @@ downloadData <- function(category){
 ```
 
 ```{r}
-cleanCultural <- read.csv(here::here("large_files", "cultural_icon.csv")
+cleanCultural <- read.csv(here::here("large_files", "cultural_icon.csv"), stringsAsFactors = FALSE, header = TRUE, col.names = colnames, na.strings = c("", " ")) %>%
+  select(-c(id, GUID_x, profane_words, zeno_notes)) %>%
+    # remove if zeno_remove is not blank
+    filter(is.na(zeno_remove),
+      # remove if not QA'd yet
+            !is.na(qa),
+      # remove if profanity
+            #profanity_flag == FALSE,
+      # remove if promo
+            promo_flag == FALSE) %>%
+    mutate(cleanParent = gsub("\\[|\\'|]", "", parent_categories)) %>% 
+    mutate(category = ifelse(is.na(zeno_corrected), cleanParent, zeno_corrected)) %>% 
+    select(c(text, handle, category, star_tweet))
 ```
 
 
 ```{r message = false}
 allData <- map_dfr(categories, downloadData) %>% 
+  bind_rows(cleanCultural) %>% 
   separate_rows(category, sep = ",") %>% 
   mutate(category = trimws(category))
 ```
@@ -72,12 +85,21 @@ Now, we need to look at just the starred tweets. These will be exported as their
 ```{r}
 fashionCat <- c("style", "stye", "style - cosplay", "style - costume", "fashion", "cosplay", "halloween", "cultural style")
 feminismCat <- c("feminism", "femnisim", "feminist", "feminsim", "role model")
+eduCat <- c("edutainment only", "edutainment")
+iconCat <- c("lgbtq", "lgbt", "games", "pop culture", "pop culture", "cultural icon", "nostalgia", "waldo", "game", "rockapella", "search", "like carmen", "nosalgia", "icon", "theme song", "pop culture game", "pop", "nostaligia", "netflix", "nostalia", "pop sugar")
 
 allDataCleaned <- allData %>% 
+  mutate(category = tolower(category)) %>% 
   mutate(category = case_when(
     category %in% fashionCat ~ "fashion",
-    category %in% feminismCat ~ "feminism",
+    category %in% feminismCat ~ "role-model",
     category == "role model" ~ "role-model", 
+    category %in% eduCat ~ "edutainment",
+    category %in% iconCat ~ "cultural-icon",
+    grepl("pop culture", category) ~ "cultural-icon",
+    grepl("pop - culture", category) ~ "cultural-icon",
+    category == "latina" ~ "role-model",
+    category == "inspiration" ~ "role-model",
     TRUE ~ category
   ))
 
