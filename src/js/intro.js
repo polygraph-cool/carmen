@@ -4,6 +4,8 @@ import Render from './render';
 import specialTweets from './intro-tweets.json';
 
 const BADGE_R = 3;
+const REM = 16;
+const BP = 800;
 
 const $intro = d3.select('#intro');
 const $introHed = $intro.select('.intro__hed');
@@ -12,12 +14,14 @@ const $step = $intro.selectAll('.step');
 const $watch = $intro.selectAll('.intro__watch');
 
 let badgeData = [];
-let width = null;
-let height = null;
+let width = 0;
+let height = 0;
+let stepWidth = 0;
 let timeout = null;
 let tweetData = null;
 let currentStep = null;
 let exampleCounter = 0;
+let mobile = false;
 
 function hideTitle() {
 	const titleWidth = $intro.select('.intro__hed').node().offsetWidth;
@@ -63,12 +67,22 @@ function chooseTweet() {
 	return tweetData[ranIndex];
 }
 
+function chooseBadge() {
+	let found = false;
+	while (!found) {
+		const ranPos = Math.floor(Math.random() * badgeData.length);
+		const d = badgeData[ranPos];
+		if (mobile || d.x < width - (stepWidth + REM)) {
+			found = d;
+		}
+	}
+	return found;
+}
+
 function triggerExample() {
 	const data = chooseTweet();
 
-	const ranPos = Math.floor(Math.random() * badgeData.length);
-	const d = badgeData[ranPos];
-	const { x, y } = d;
+	const d = chooseBadge();
 
 	const delay = data.text.length * 50;
 
@@ -79,10 +93,11 @@ function triggerExample() {
 	Render.dot({ d, ctx: $.contextEx, fill: '#fff', concentric: true });
 	Tweet.create({
 		data,
-		x,
-		y,
+		x: d.x,
+		y: d.y,
 		fade: true,
 		offset: true,
+		pushLeft: true,
 		section: 'intro'
 	});
 	exampleCounter += 1;
@@ -154,6 +169,8 @@ function clear() {
 function resize() {
 	width = $.chart.node().offsetWidth;
 	height = $.chart.node().offsetHeight;
+	stepWidth = $step.node().offsetWidth;
+	mobile = width < BP;
 
 	const { scale, offsetW, offsetH } = Render.getScale();
 	// console.log({ width, height, scale, offsetW, offsetH });
