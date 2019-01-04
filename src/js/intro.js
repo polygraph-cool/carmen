@@ -4,6 +4,75 @@ import Render from './render';
 
 const BADGE_R = 3;
 
+const curatedTweets = [
+	{
+		text:"Happy International Women's Day! Unofficial sponsor: Carmen Sandiego. If nothing else, hat to face ratio goals.",
+		handle:"@aparnapkin",
+		star_tweet:"x",
+		category:"role-model"
+	},
+	{
+		text:"Glad I played Carmen SanDiego. I know Chechnya from the Czech Republic, the capital of Sri Lanka is columbo and the Baht is Thai currency.",
+		handle:"@CaffeinatedChem",
+		star_tweet:"x",
+		category:"edutainment"
+	},
+	{
+		text:"I first learned about feminism and geography in the same place: Where in the World is Carmen Sandiego?",
+		handle:"@juliarebeccaj",
+		star_tweet:"x",
+		category:"edutainment"
+	},
+	{
+		text:"I'm fairly certain that watching episodes of 'Where in the World is Carmen Sandiego?' made me the Geography teacher I am today. Thanks @PBS",
+		handle:"@educator_murray",
+		star_tweet:"x",
+		category:"edutainment"
+	},
+	{
+		text:"Where in the world is Carmen Sandiego? Seriously, where the hell is she?",
+		handle:"@aaronpaul_8",
+		star_tweet:"x",
+		category:"pop-culture"
+	},
+	{
+		text:"(Sung to the Carmen Sandiego theme) Where in the world is...Lin-Manuel Miranda?",
+		handle:"@Lin_Manuel",
+		star_tweet:"x",
+		category:"pop-culture"
+	},
+	{
+		text:"I feel like Carmen San Diego with this large, trench, red coat. 🙌😘",
+		handle:"@KeshiaGeee",
+		star_tweet:"x",
+		category:"fashion"
+	},
+	{
+		text:"I need a red hat & a red trench coat. Trying to get my Carmen Sandiego on.",
+		handle:"@xosdlc",
+		star_tweet:"x",
+		category:"fashion"
+	},
+	{
+		text:"Been traveling the world like I'm Carmen Sandiego 😋",
+		handle:"@NamesDEEJ",
+		star_tweet:"x",
+		category:"travel"
+	},
+	{
+		text:"#CarmenSandiego is the woman who inspired me to go travelling. CAN'T WAIT.",
+		handle:"@InfoPro_Tasha",
+		star_tweet:"x",
+		category:"travel"
+	},
+	{
+		text:"Carmen Sandiego is a rebellious, successful, smart Latina who teaches kids about geography and to push yourself to be the best you can be. A goddamn hero in my book.",
+		handle:"@iglvzx",
+		star_tweet:"x",
+		category:"role-model"
+	}
+]
+
 const $intro = d3.select('#intro');
 const $introHed = $intro.select('.intro__hed');
 const $title = $intro.selectAll('.intro__hed-text, .intro__watch');
@@ -69,6 +138,7 @@ function triggerExample() {
 	Render.clear($.contextEx);
 	console.log({ d });
 	Render.dot({ d, ctx: $.contextEx, fill: '#fff', concentric: true });
+	console.log(data);
 	Tweet.create({
 		data,
 		x,
