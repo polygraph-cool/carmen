@@ -10,6 +10,7 @@ import Render from './render';
 
 import loadData from './load-data';
 import badgePos from './badge-pos';
+import culturePos from './culture-pos';
 import categories from './categories';
 
 const DPR = window.devicePixelRatio ? Math.min(window.devicePixelRatio, 2) : 1;
@@ -192,6 +193,8 @@ function assignCategoryLayer(counts) {
 	});
 }
 
+
+
 function prepareData() {
 	return new Promise(resolve => {
 		const sum = d3.sum(categories, d => d.count);
@@ -201,13 +204,22 @@ function prepareData() {
 			return Math.floor(percent * badgePos.length);
 		});
 
+		const culture = culturePos.map(d => {
+			return {
+				...d,
+				category: 'cultural-icon'
+			}
+		})
+
 		loadData()
 			.then(results => {
 				const withCat = assignCategoryRandom(counts);
+				const fullBadge = withCat.concat(culture)
 				const curateData = results.curate;
 				const exploreData = results.explore;
 				const allData = {
-					badge: withCat,
+					badgeOnly: withCat,
+					fullBadge: fullBadge,
 					curate: curateData,
 					explore: exploreData
 				};
@@ -233,7 +245,7 @@ function svgToJSON() {
 
 function init() {
 	prepareData().then(setup);
-	// svgToJSON();
+	//svgToJSON();
 }
 
 export default { init, resize };

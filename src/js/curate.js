@@ -71,6 +71,7 @@ function handleNavClick() {
 }
 
 function handleEnd() {
+	console.log("vor created")
 	// VORONOI
 	voronoi
 		.x(d => d.x)
@@ -189,7 +190,6 @@ function runNav(cat) {
 function runIntro() {
 	// hide hover text and buttons
 	$fade.classed('is-hidden', true)
-	console.log({$fade})
 	// disable mouse interaction while it sim is running
 	$.vor.selectAll('path').on('mouseenter', () => {});
 
@@ -315,7 +315,7 @@ function setupLabels() {
 }
 
 function init(data) {
-	badgeData = data.badge.map(d => ({
+	badgeData = data.fullBadge.map(d => ({
 		...d
 	}));
 	tweetData = data.curate;

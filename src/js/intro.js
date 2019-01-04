@@ -200,7 +200,7 @@ function resize() {
 }
 
 function init(data) {
-	badgeData = data.badge.map(d => ({ ...d }));
+	badgeData = data.badgeOnly.map(d => ({ ...d }))
 	tweetData = data.curate;
 	$.canvasEx.classed('is-hidden', false);
 }
