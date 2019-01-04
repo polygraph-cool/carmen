@@ -16,7 +16,7 @@ const exampleTweet = {
 
 let sampleSize = 0;
 let simulation = null;
-let cat = 'edutainment'
+let cat = 'edutainment';
 
 const $curate = d3.select('#curate');
 const $nav = $curate.select('nav');
@@ -25,7 +25,7 @@ const $step = $curate.selectAll('.step');
 let badgeData = [];
 let tweetData = [];
 let nodes = [];
-let filteredTweets = []
+let filteredTweets = [];
 
 let width = 0;
 let height = 0;
@@ -43,7 +43,6 @@ const voronoi = d3.voronoi();
 function handleVorEnter({ data }) {
 	const { x, y, index } = data;
 	nodes.forEach(d => {
-		console.log({d})
 		if (d.index === index) d.stroke = '#fff';
 		else d.stroke = '#000';
 		Render.dot({ d, ctx: $.contextFg, concentric: false });
@@ -51,7 +50,7 @@ function handleVorEnter({ data }) {
 
 	Tweet.clear({ section: 'curate' });
 	Tweet.create({
-		data: (filteredTweets[index]) ? filteredTweets[index] : exampleTweet,
+		data: filteredTweets[index] ? filteredTweets[index] : exampleTweet,
 		x,
 		y,
 		offset: true,
@@ -64,8 +63,8 @@ function handleNavClick() {
 	const $button = d3.select(this);
 	$button.classed('is-active', true);
 	cat = $button.at('data-id');
-	console.log({cat, tweetData})
-	filteredTweets = tweetData.filter(d => d.category === cat)
+	// console.log({ cat, tweetData });
+	filteredTweets = tweetData.filter(d => d.category === cat);
 	runNav(cat);
 }
 
@@ -180,6 +179,12 @@ function runNav(cat) {
 }
 
 function runIntro() {
+	// disable mouse interaction while it sim is running
+	$.vor.selectAll('path').on('mouseenter', () => {});
+
+	// reset trigger for rendering voronoi
+	triggeredVor = false;
+
 	if (simulation) simulation.stop();
 	Render.clear($.contextBg);
 	Render.clear($.contextFg);
@@ -233,7 +238,10 @@ function enter(step) {
 	Tweet.clear({ section: 'curate' });
 	currentStep = step;
 	if (currentStep === 'intro') runIntro();
-	else if (currentStep === 'nav') runNav('edutainment');
+	else if (currentStep === 'nav') {
+		runNav('edutainment');
+		$nav.selectAll('button').classed('is-active', (d, i) => i === 0);
+	}
 }
 
 function exit(step) {
@@ -279,7 +287,7 @@ function init(data) {
 		...d
 	}));
 	tweetData = data.curate;
-	filteredTweets = tweetData.filter(d => d.category === cat)
+	filteredTweets = tweetData.filter(d => d.category === cat);
 	// .slice(0, 1);
 	$nav.selectAll('button').on('click', handleNavClick);
 }

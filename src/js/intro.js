@@ -4,6 +4,8 @@ import Render from './render';
 import specialTweets from './intro-tweets.json';
 
 const BADGE_R = 3;
+const REM = 16;
+const BP = 800;
 
 const $intro = d3.select('#intro');
 const $introHed = $intro.select('.intro__hed');
@@ -12,12 +14,15 @@ const $step = $intro.selectAll('.step');
 const $watch = $intro.selectAll('.intro__watch');
 
 let badgeData = [];
-let width = null;
-let height = null;
+let width = 0;
+let height = 0;
+let stepWidth = 0;
 let timeout = null;
 let tweetData = null;
 let currentStep = null;
 let exampleCounter = 0;
+let mobile = false;
+let active = false;
 
 function hideTitle() {
 	const titleWidth = $intro.select('.intro__hed').node().offsetWidth;
@@ -63,30 +68,43 @@ function chooseTweet() {
 	return tweetData[ranIndex];
 }
 
+function chooseBadge() {
+	let found = false;
+	while (!found) {
+		const ranPos = Math.floor(Math.random() * badgeData.length);
+		const d = badgeData[ranPos];
+		if (mobile || d.x < width - (stepWidth + REM)) {
+			found = d;
+		}
+	}
+	return found;
+}
+
 function triggerExample() {
-	const data = chooseTweet();
+	if (active) {
+		const data = chooseTweet();
 
-	const ranPos = Math.floor(Math.random() * badgeData.length);
-	const d = badgeData[ranPos];
-	const { x, y } = d;
+		const d = chooseBadge();
 
-	const delay = data.text.length * 50;
+		const delay = data.text.length * 50;
 
-	d.fill = '#f30';
+		d.fill = '#f30';
 
-	Tweet.clear({ section: 'intro' });
-	Render.clear($.contextEx);
-	Render.dot({ d, ctx: $.contextEx, fill: '#fff', concentric: true });
-	Tweet.create({
-		data,
-		x,
-		y,
-		fade: true,
-		offset: true,
-		section: 'intro'
-	});
-	exampleCounter += 1;
-	timeout = setTimeout(triggerExample, delay);
+		Tweet.clear({ section: 'intro' });
+		Render.clear($.contextEx);
+		Render.dot({ d, ctx: $.contextEx, fill: '#fff', concentric: true });
+		Tweet.create({
+			data,
+			x: d.x,
+			y: d.y,
+			fade: true,
+			offset: true,
+			pushLeft: true,
+			section: 'intro'
+		});
+		exampleCounter += 1;
+		timeout = setTimeout(triggerExample, delay);
+	}
 }
 
 // function revealTick() {
@@ -130,6 +148,7 @@ function runExamples() {
 function enterSection() {
 	Render.clear($.contextFg);
 	revealDots();
+	active = true;
 }
 
 function enter(step) {
@@ -146,6 +165,7 @@ function exit(step) {
 }
 
 function clear() {
+	active = false;
 	Tweet.clear({ section: 'intro' });
 	Render.clear($.contextEx);
 	if (timeout) clearTimeout(timeout);
@@ -154,6 +174,8 @@ function clear() {
 function resize() {
 	width = $.chart.node().offsetWidth;
 	height = $.chart.node().offsetHeight;
+	stepWidth = $step.node().offsetWidth;
+	mobile = width < BP;
 
 	const { scale, offsetW, offsetH } = Render.getScale();
 	// console.log({ width, height, scale, offsetW, offsetH });
