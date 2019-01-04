@@ -64,7 +64,16 @@ allData <- map_dfr(categories, downloadData) %>%
 Now, we need to look at just the starred tweets. These will be exported as their own independent file and used in the `curate` section. 
 
 ```{r}
-starred <- allData %>% 
+fashionCat <- c("style", "stye", "style - cosplay", "style - costume")
+
+allDataCleaned <- allData %>% 
+  mutate(category = case_when(
+    category %in% fashionCat ~ "fashion",
+    category == "role model" ~ "role-model", 
+    TRUE ~ category
+  ))
+
+starred <- allDataCleaned %>% 
   filter(!is.na(star_tweet))
 
 write.csv(starred, "../../src/assets/data/curate.csv", row.names = FALSE, na = "")
@@ -87,7 +96,7 @@ write.csv(special, "../../src/assets/data/explore-special.csv", row.names = FALS
 unspecial <- randomStar %>% 
   filter(row_number() > 10)
 
-nonstarred <- allData %>% 
+nonstarred <- allDataCleaned %>% 
   filter(is.na(star_tweet))
 
 allNonSpecial <- rbind(unspecial, nonstarred)

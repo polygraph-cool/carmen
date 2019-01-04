@@ -104,11 +104,11 @@ function dot({ d, ctx, fill, concentric}) {
 		ctx.stroke()
 	}
 
-	// if (d.stroke) {
-	// 	ctx.strokeStyle = d.stroke;
-	// 	ctx.lineWidth = 2;
-	// 	ctx.stroke();
-	// }
+	if (d.stroke) {
+		ctx.strokeStyle = d.stroke;
+		ctx.lineWidth = 2;
+		ctx.stroke();
+	}
 }
 
 
