@@ -118,7 +118,6 @@ function dot({ d, ctx, fill, concentric }) {
 }
 
 function clear(ctx) {
-	console.log("clear context running")
 	ctx.clearRect(0, 0, width, height);
 }
 

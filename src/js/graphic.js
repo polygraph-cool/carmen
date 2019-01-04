@@ -81,6 +81,12 @@ function updateSection(index) {
 		Explore.enterSection();
 		break;
 
+	case 'outro':
+	$.canvasEx.classed('is-hidden', false);
+	$.chart.classed('is-hidden', true);
+	$.exploreNav.classed('is-hidden', true);
+	break;
+
 	default:
 		break;
 	}
@@ -127,6 +133,7 @@ function setup(data) {
 			let index = +d3.select(el).attr('data-index');
 			index = Math.max(0, index - 1);
 			updateSection(index);
+			console.log({el})
 		},
 		offset: 0.2
 	});
