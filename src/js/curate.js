@@ -7,6 +7,7 @@ import Colors from './colors';
 const BADGE_R = 3;
 const DURATION = 1000;
 
+
 const exampleTweet = {
 	name: 'The Pudding',
 	handle: '@puddingviz',
@@ -21,6 +22,7 @@ let cat = 'edutainment';
 const $curate = d3.select('#curate');
 const $nav = $curate.select('nav');
 const $step = $curate.selectAll('.step');
+const $fade = $step.selectAll('.step__fade')
 
 let badgeData = [];
 let tweetData = [];
@@ -137,6 +139,8 @@ function runSim() {
 }
 
 function runNav(cat) {
+	// unhide text and buttons
+	$fade.classed('is-hidden', false)
 	filteredTweets = tweetData.filter(d => d.category === cat);
 	// 100 tweets for edutainment
 	Tweet.clear({ section: 'curate' });
@@ -183,6 +187,9 @@ function runNav(cat) {
 }
 
 function runIntro() {
+	// hide hover text and buttons
+	$fade.classed('is-hidden', true)
+	console.log({$fade})
 	// disable mouse interaction while it sim is running
 	$.vor.selectAll('path').on('mouseenter', () => {});
 
