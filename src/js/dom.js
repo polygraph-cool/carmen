@@ -9,6 +9,7 @@ const contextEx = canvasEx.node().getContext('2d');
 const canvasGlobe = chart.select('.canvas__globe');
 const contextGlobe = canvasGlobe.node().getContext('2d');
 const overlay = chart.select('.chart__overlay');
+const chartCurate = chart.select('.chart__curate');
 
 const svg = chart.select('svg');
 const g = svg.select('g');
@@ -38,6 +39,7 @@ export default {
 	globe,
 	nodes,
 	vor,
+	chartCurate,
 	chartTweets,
 	exploreTweets,
 	exploreNav,
