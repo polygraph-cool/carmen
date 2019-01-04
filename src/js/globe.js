@@ -62,10 +62,6 @@ function flyingArc(coords) {
 	return [projection(source), loftedProjection(middle), projection(target)];
 }
 
-function clearScreen(){
-	Render.clear($.contextGlobe);
-}
-
 function updateCanvasGlobe() {
 	const sphere = { type: 'Sphere' };
 	center = [width / 2, height / 2];
@@ -194,6 +190,8 @@ function goTo(coordsStart, coordsEnd) {
 		updateMarkers([coordsStart, coordsEnd]);
 		updateTextLabels(current.city, coordsEnd);
 
+
+
 		$.contextGlobe.beginPath();
 		swoosh(flyingArc([coordsStart, coordsEnd]));
 		$.contextGlobe.setLineDash([t * flyingArcLength * 1.7, 1e6]);
@@ -272,7 +270,6 @@ function update() {
 	const newCoords = [+current.lon, +current.lat];
 	if (!globeCoordinates || current.step === 'categories') {
 		globeCoordinates = [-98.5795, 39.8283];
-		clearScreen();
 	}
 	if (
 		ready &&
