@@ -132,8 +132,8 @@ function runSim() {
 		.velocityDecay(velocityDecay)
 		.force('x', d3.forceX(centerX))
 		.force('y', d3.forceY(centerY))
-		.force('charge', d3.forceManyBody().strength(manyBodyStrength))
-		.on('end', handleEnd);
+		.force('charge', d3.forceManyBody().strength(manyBodyStrength));
+	// .on('end', handleEnd);
 }
 
 function runNav(cat) {
@@ -226,6 +226,7 @@ function runIntro() {
 		if (t === 1) {
 			// stop this timer for this layout and start a new one
 			timer.stop();
+			$.chartCurate.classed('is-hidden', false);
 		}
 	});
 }
@@ -237,6 +238,9 @@ function enterSection() {
 function enter(step) {
 	Tweet.clear({ section: 'curate' });
 	currentStep = step;
+
+	$.chartCurate.classed('is-hidden', true);
+
 	if (currentStep === 'intro') runIntro();
 	else if (currentStep === 'nav') {
 		runNav('edutainment');
@@ -279,7 +283,24 @@ function resize() {
 
 	radius = BADGE_R * 3;
 
+	$.chart
+		.select('.chart__curate')
+		.selectAll('.curate__label')
+		.st('left', d => scale * d.cx + offsetW)
+		.st('top', d => scale * d.cy + offsetH);
+
 	enter(currentStep);
+}
+
+function setupLabels() {
+	const $label = $.chart
+		.select('.chart__curate')
+		.selectAll('div.curate__label')
+		.data(Categories)
+		.enter()
+		.append('div')
+		.at('class', d => `curate__label ${d.cat}`);
+	$label.append('p').text(d => d.label);
 }
 
 function init(data) {
@@ -290,6 +311,7 @@ function init(data) {
 	filteredTweets = tweetData.filter(d => d.category === cat);
 	// .slice(0, 1);
 	$nav.selectAll('button').on('click', handleNavClick);
+	setupLabels();
 }
 
 export default { init, resize, enter, enterSection, exit, clear };
