@@ -37,21 +37,21 @@ function resize() {
 	width = $.chart.node().offsetWidth * DPR;
 	height = $.chart.node().offsetHeight * DPR;
 	$.canvasBg
-		.at({ width: width * DPR, height: height * DPR })
-		.st({ width, height });
+		.at({ width, height })
+		.st({ width: width / DPR, height: height / DPR });
 
 	$.canvasFg
-		.at({ width: width * DPR, height: height * DPR })
-		.st({ width, height });
+		.at({ width, height })
+		.st({ width: width / DPR, height: height / DPR });
 
 	$.canvasEx
-		.at({ width: width * DPR, height: height * DPR })
-		.st({ width, height });
+		.at({ width, height })
+		.st({ width: width / DPR, height: height / DPR });
 
-	const globeW = width - d3.select('.globe__steps').node().offsetWidth;
+	const globeW = width - d3.select('.globe__steps').node().offsetWidth * DPR;
 	$.canvasGlobe
-		.at({ width: globeW * DPR, height: height * DPR })
-		.st({ width: globeW, height });
+		.at({ width: globeW, height })
+		.st({ width: globeW / DPR, height: height / DPR });
 }
 
 function createConcentric({ ringNum, ctx }) {
