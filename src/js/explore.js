@@ -40,6 +40,8 @@ function showTweet(forceMiddle) {
 	let selRow = Math.floor(Math.random() * row);
 	let selCol = Math.floor(Math.random() * col);
 
+	console.log({selRow, selCol, diameter})
+
 	if (forceMiddle) {
 		selRow = Math.floor(row / 2);
 		selCol = Math.floor(col / 2);
@@ -130,8 +132,14 @@ function resize() {
 	const count = 130000;
 	const radius = Math.ceil((BADGE_R * height) / BADGE_H);
 	diameter = radius * 2;
-	row = Math.floor(count / height);
-	col = Math.floor(count / row);
+	// row = Math.floor(count / height);
+	// col = Math.floor(count / row);
+	// number of dots of a certain size that can fit on the screen
+	row = Math.floor(height / diameter)
+	// number of col needed to add up to the total count with the calculated rows
+	col = Math.floor(count / row)
+
+	console.log({row, height, diameter})
 
 	$dots.st({
 		width: col * diameter,

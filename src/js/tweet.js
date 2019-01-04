@@ -1,7 +1,7 @@
 import $ from './dom';
 
 const REM = 16;
-const PAD = REM * 3;
+const PAD = REM * 4;
 
 function create({ data, x = 0, y = 0, fade, offset, pushLeft, section }) {
 	const $tweet =
@@ -32,6 +32,8 @@ function create({ data, x = 0, y = 0, fade, offset, pushLeft, section }) {
 	let marginTop = offset ? -h * 1.35 : 0;
 	if (x + w >= chartW - PAD || pushLeft) marginLeft = -w;
 	if (x - w <= PAD) marginLeft = w;
+
+	console.log({w, h, chartW, chartH, x, y})
 
 	if (y + h >= chartH - PAD) marginTop += -h;
 	if (y - h <= PAD) marginTop = h;
