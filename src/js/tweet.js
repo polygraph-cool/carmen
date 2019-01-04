@@ -29,7 +29,7 @@ function create({ data, x = 0, y = 0, fade, offset, section }) {
 	const chartW = $.chartTweets.node().offsetWidth;
 	const chartH = $.chartTweets.node().offsetHeight;
 	let marginLeft = 0;
-	let marginTop = offset ? -h * 1.25 : 0;
+	let marginTop = offset ? -h * 1.35 : 0;
 	if (x + w >= chartW - PAD) marginLeft = -w;
 	if (x - w <= PAD) marginLeft = w;
 

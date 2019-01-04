@@ -53,7 +53,18 @@ function resize() {
 		.st({ width, height });
 }
 
-function dot({ d, ctx, fill }) {
+function createConcentric({ringNum, ctx}){
+	const r = ringNum * 3 * DPR
+	console.log({r})
+	ctx.beginPath()
+	ctx.moveTo(x + r, y)
+	ctx.arc(x, y, r, 0, 2 * Math.PI)
+	ctx.strokeStyle = fill ? fill : d.fill
+	ctx.lineWidth = 2
+	ctx.stroke()
+}
+
+function dot({ d, ctx, fill, concentric}) {
 	const x = d.x * DPR;
 	const y = d.y * DPR;
 	const r = d.r * DPR;
@@ -63,12 +74,44 @@ function dot({ d, ctx, fill }) {
 	//console.log({fill})
 	ctx.fillStyle = fill ? fill : d.fill// || '#fff';
 	ctx.fill();
-	if (d.stroke) {
-		ctx.strokeStyle = d.stroke;
-		ctx.lineWidth = 2;
-		ctx.stroke();
+
+	if (concentric === true){
+		//concentric 1
+		const r1 = d.r * 2 * DPR
+		ctx.beginPath()
+		ctx.moveTo(x + r1, y)
+		ctx.arc(x, y, r1, 0, 2 * Math.PI)
+		ctx.strokeStyle = fill ? fill : d.fill
+		ctx.lineWidth = 1
+		ctx.stroke()
+
+		// concentric 2
+		const r2 = d.r * 4 * DPR
+		ctx.beginPath()
+		ctx.moveTo(x + r2, y)
+		ctx.arc(x, y, r2, 0, 2 * Math.PI)
+		ctx.strokeStyle = fill ? fill : d.fill
+		ctx.lineWidth = 1
+		ctx.stroke()
+
+		// concentric 3
+		const r3 = d.r * 8 * DPR
+		ctx.beginPath()
+		ctx.moveTo(x + r3, y)
+		ctx.arc(x, y, r3, 0, 2 * Math.PI)
+		ctx.strokeStyle = fill ? fill : d.fill
+		ctx.lineWidth = 2
+		ctx.stroke()
 	}
+
+	// if (d.stroke) {
+	// 	ctx.strokeStyle = d.stroke;
+	// 	ctx.lineWidth = 2;
+	// 	ctx.stroke();
+	// }
 }
+
+
 
 function clear(ctx) {
 	ctx.clearRect(0, 0, width, height);

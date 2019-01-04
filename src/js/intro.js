@@ -68,8 +68,7 @@ function triggerExample() {
 	Tweet.clear({ section: 'intro' });
 	Render.clear($.contextEx);
 	console.log({ d });
-	Render.dot({ d, ctx: $.contextEx, fill: '#fff' });
-	console.log(data,x,y);
+	Render.dot({ d, ctx: $.contextEx, fill: '#fff', concentric: true });
 	Tweet.create({
 		data,
 		x,

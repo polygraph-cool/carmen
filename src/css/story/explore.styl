@@ -35,6 +35,14 @@
 			position absolute
 			//transform translate(-50%, 0)
 
+		&-conc
+			border 1px solid $red
+			position absolute
+			fill none
+			&:last-of-type
+				border 2px solid $red
+
+
 
 	.explore__title
 		position absolute
@@ -42,20 +50,32 @@
 		left 0
 		width 100%
 		text-transform uppercase
+		font-family $akhand
 		span
 			background-color $gray
 			color $fg
 			padding 0.5rem 1rem
-			set-type-size(x-large)
+			set-type-size(xxx-large)
+			box-shadow: 8px 8px 6px 0px rgba(0, 0, 0, 0.75);
 
 	.explore__nav
 		position fixed
 		bottom 0
 		left 0
-		padding 1rem
+		//padding 1rem
 		width 100%
 		transition opacity 250ms ease-in-out
-		background $bg
+		background linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, $bg 100%);
+		height 10%
+		display flex
+		align-items: center;
+		justify-content: center;
+
+		button
+			text-transform uppercase
+			font-family $akhand
+			set-type-size('large', true)
+			padding 0.3rem 1rem
 
 		&.is-hidden
 			opacity 0
