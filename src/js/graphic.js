@@ -48,8 +48,8 @@ function updateSection(index) {
 	$.canvasBg.classed('is-hidden', true);
 	$.canvasFg.classed('is-hidden', true);
 	$.canvasGlobe.classed('is-hidden', true);
-	$.overlay.classed('is-hidden', true)
-	$.chartTweets.classed("globe-tweets",false);
+	$.overlay.classed('is-hidden', true);
+	$.chartTweets.classed('globe-tweets', false);
 
 	Intro.clear();
 	Curate.clear();
@@ -58,23 +58,24 @@ function updateSection(index) {
 	case 'intro':
 		$.canvasBg.classed('is-hidden', false);
 		$.canvasFg.classed('is-hidden', false);
-		$.overlay.classed('is-hidden', false)
-		Intro.enterSection()
+		$.overlay.classed('is-hidden', false);
+		Intro.enterSection();
 		break;
 	case 'globe':
 		$.canvasGlobe.classed('is-hidden', false);
 		$.globe.classed('is-hidden', false);
-		$.chartTweets.classed("globe-tweets",true);
+		$.chartTweets.classed('globe-tweets', true);
 		break;
 	case 'curate':
 		$.canvasFg.classed('is-hidden', false);
-		Curate.enterSection()
+		Curate.enterSection();
 		break;
 
 	case 'explore':
 		$.canvasEx.classed('is-hidden', false);
 		$.chart.classed('is-hidden', true);
 		$.exploreNav.classed('is-hidden', false);
+		Explore.enterSection();
 		break;
 
 	default:
