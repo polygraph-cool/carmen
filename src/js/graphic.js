@@ -51,7 +51,7 @@ function updateSection(index) {
 	$.overlay.classed('is-hidden', true);
 	$.chartCurate.classed('is-hidden', true);
 	$.chartTweets.classed('globe-tweets', false);
-
+	$.chart.select(".chart__curate_purp").classed('is-hidden',true);
 	Intro.clear();
 	Curate.clear();
 	Explore.clear();
@@ -71,6 +71,7 @@ function updateSection(index) {
 		break;
 	case 'curate':
 		$.canvasFg.classed('is-hidden', false);
+		$.chart.select(".chart__curate_purp").classed('is-hidden',false);
 		Curate.enterSection();
 		break;
 

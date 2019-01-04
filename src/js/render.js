@@ -54,6 +54,11 @@ function resize() {
 		.st({ width: globeW / DPR, height: height / DPR });
 
 	const bgSize = getScale().scale * 30;
+
+	$.chart.select(".chart__curate_purp")
+		.st('background-image', 'url("assets/images/bg-dots-purp.png")')
+		.st('background-size', `${bgSize}px ${bgSize}px`);
+
 	$.chart
 		.st('background-image', 'url("assets/images/bg-dots.png")')
 		.st('background-size', `${bgSize}px ${bgSize}px`);
