@@ -1,6 +1,7 @@
 import $ from './dom';
 import Tweet from './tweet';
 import Render from './render';
+import specialTweets from './intro-tweets.json';
 
 const BADGE_R = 3;
 
@@ -15,8 +16,8 @@ let width = null;
 let height = null;
 let timeout = null;
 let tweetData = null;
-
 let currentStep = null;
+let exampleCounter = 0;
 
 function hideTitle() {
 	const titleWidth = $intro.select('.intro__hed').node().offsetWidth;
@@ -54,20 +55,27 @@ function showTitle() {
 		.translate([0, 0]);
 }
 
+function chooseTweet() {
+	if (exampleCounter < specialTweets.length) {
+		return specialTweets[exampleCounter];
+	}
+	const ranIndex = Math.floor(Math.random() * tweetData.length);
+	return tweetData[ranIndex];
+}
+
 function triggerExample() {
+	const data = chooseTweet();
+
 	const ranPos = Math.floor(Math.random() * badgeData.length);
 	const d = badgeData[ranPos];
 	const { x, y } = d;
 
-	const ranIndex = Math.floor(Math.random() * tweetData.length);
-	const data = tweetData[ranIndex];
 	const delay = data.text.length * 50;
 
 	d.fill = '#f30';
 
 	Tweet.clear({ section: 'intro' });
 	Render.clear($.contextEx);
-	console.log({ d });
 	Render.dot({ d, ctx: $.contextEx, fill: '#fff', concentric: true });
 	Tweet.create({
 		data,
@@ -77,6 +85,7 @@ function triggerExample() {
 		offset: true,
 		section: 'intro'
 	});
+	exampleCounter += 1;
 	timeout = setTimeout(triggerExample, delay);
 }
 
