@@ -233,7 +233,7 @@ function svgToJSON() {
 
 function init() {
 	prepareData().then(setup);
-	// svgToJSON();
+	//svgToJSON();
 }
 
 export default { init, resize };
