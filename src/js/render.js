@@ -78,7 +78,7 @@ function dot({ d, ctx, fill, concentric }) {
 	ctx.moveTo(x + r, y);
 	ctx.arc(x, y, r, 0, 2 * Math.PI);
 	// console.log({fill})
-	ctx.fillStyle = fill || d.fill; // || '#fff';
+	ctx.fillStyle = fill ? fill : d.fill; // || '#fff';
 	ctx.fill();
 
 	if (concentric === true) {
@@ -118,6 +118,7 @@ function dot({ d, ctx, fill, concentric }) {
 }
 
 function clear(ctx) {
+	console.log("clear context running")
 	ctx.clearRect(0, 0, width, height);
 }
 

@@ -88,7 +88,7 @@ function triggerExample() {
 
 		const delay = data.text.length * 50;
 
-		d.fill = '#fff';
+		//d.fill = '#fff';
 
 		Tweet.clear({ section: 'intro' });
 		Render.clear($.contextEx);
@@ -161,7 +161,7 @@ function enter(step) {
 function exit(step) {
 	if (timeout) clearTimeout(timeout);
 	currentStep = step === 'examples' ? 'title' : 'examples';
-	if (currentStep === 'title') runTitle();
+	if (currentStep === 'title') runTitle()
 }
 
 function clear() {
@@ -169,6 +169,7 @@ function clear() {
 	Tweet.clear({ section: 'intro' });
 	Render.clear($.contextEx);
 	if (timeout) clearTimeout(timeout);
+	console.log("intro clear running")
 }
 
 function resize() {
