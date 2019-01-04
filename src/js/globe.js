@@ -82,6 +82,27 @@ function updateCanvasGlobe() {
 	$.contextGlobe.stroke();
 }
 
+function addTweetBox(coord){
+
+	const p = projection(coord);
+
+	const x = p[0];
+
+	const y = p[1];
+
+	if(current.step != "categories"){
+		var data = { text:current.tweet,handle:current.user,category:"money",star_tweet:"x"};
+		Tweet.create({
+			data,
+			x,
+			y,
+			fade: true,
+			offset: true,
+			section: 'globe'
+		});
+	}
+}
+
 function updateMarkers(markers) {
 	for (const marker in markers) {
 		const coords = markers[marker];
@@ -153,7 +174,7 @@ function goTo(coordsStart, coordsEnd) {
 
 		const cx = x;
 
-		const cy = y - 25;
+		const cy = y - 0;
 
 		const rotation = [-cx, -cy];
 		projection.rotate(rotation);
@@ -168,6 +189,8 @@ function goTo(coordsStart, coordsEnd) {
 		updateCanvasGlobe();
 		updateMarkers([coordsStart, coordsEnd]);
 		updateTextLabels(current.city, coordsEnd);
+
+
 
 		$.contextGlobe.beginPath();
 		swoosh(flyingArc([coordsStart, coordsEnd]));
@@ -233,6 +256,7 @@ function goTo(coordsStart, coordsEnd) {
 			draw(t);
 			if (t0 >= 1) {
 				timer.stop();
+				addTweetBox(coordsEnd)
 			}
 		};
 
@@ -256,6 +280,7 @@ function update() {
 		goTo(globeCoordinates, newCoords);
 	}
 	globeCoordinates = newCoords;
+	Tweet.clear({ section: 'globe' });
 }
 
 function step(index) {

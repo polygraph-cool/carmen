@@ -49,6 +49,8 @@ function updateSection(index) {
 	$.canvasFg.classed('is-hidden', true);
 	$.canvasGlobe.classed('is-hidden', true);
 	$.overlay.classed('is-hidden', true)
+	$.chartTweets.classed("globe-tweets",false);
+
 	Intro.clear();
 	Curate.clear();
 	Explore.clear();
@@ -62,6 +64,7 @@ function updateSection(index) {
 	case 'globe':
 		$.canvasGlobe.classed('is-hidden', false);
 		$.globe.classed('is-hidden', false);
+		$.chartTweets.classed("globe-tweets",true);
 		break;
 	case 'curate':
 		$.canvasFg.classed('is-hidden', false);
