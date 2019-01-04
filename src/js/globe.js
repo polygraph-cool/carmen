@@ -36,6 +36,7 @@ let ready = false;
 let width = 0;
 let height = 0;
 let stepWidth = 0;
+let adjustRetina = 0;
 
 const current = {};
 
@@ -97,9 +98,9 @@ function addTweetBox(coord) {
 	console.log(active);
 	const p = projection(coord);
 
-	const x = p[0] + stepWidth;
+	const x = p[0]*(1/adjustRetina) + stepWidth;
 
-	const y = p[1];
+	const y = p[1]*(1/adjustRetina);
 	if (current.step !== 'categories' && active) {
 		const data = {
 			text: current.tweet,
@@ -146,13 +147,13 @@ function addFinalMarker(coord) {
 	const y = p[1];
 
 	$.contextGlobe.beginPath();
-	$.contextGlobe.arc(x, y, 10, 0, 2 * Math.PI);
+	$.contextGlobe.arc(x, y, 10*adjustRetina, 0, 2 * Math.PI);
 	$.contextGlobe.strokeStyle = 'rgba(255,0,0,.5)';
 
 	$.contextGlobe.stroke();
 
 	$.contextGlobe.beginPath();
-	$.contextGlobe.arc(x, y, 20, 0, 2 * Math.PI);
+	$.contextGlobe.arc(x, y, 20*adjustRetina, 0, 2 * Math.PI);
 	$.contextGlobe.strokeStyle = 'rgba(255,0,0,.5)';
 	$.contextGlobe.stroke();
 }
@@ -160,15 +161,15 @@ function addFinalMarker(coord) {
 function updateTextLabels(textString, coord) {
 
 	var width = +$.canvasGlobe
-		.attr("width");
+		.style("width").replace("px","");
 
 	var svgWidth = +$.svg.style("width").replace("px","");
 
 	const p = projection(coord);
 
-	const x = p[0] + (svgWidth-width);
+	const x = p[0]*(1/adjustRetina) + (svgWidth-width);
 
-	const y = p[1];
+	const y = p[1]*(1/adjustRetina);
 
 	const offset = 40;
 
@@ -297,7 +298,8 @@ function goTo(coordsStart, coordsEnd) {
 		$.contextGlobe.save();
 		$.contextGlobe.translate(x, y);
 		$.contextGlobe.rotate(r);
-		$.contextGlobe.drawImage($planeEl, -(40 / 2), -(40 / 2), 40, 40);
+
+		$.contextGlobe.drawImage($planeEl, -(40*adjustRetina / 2), -(40*adjustRetina / 2), 40*adjustRetina, 40*adjustRetina);
 		$.contextGlobe.restore();
 	};
 
@@ -412,6 +414,17 @@ function resize() {
 }
 
 function setup(world) {
+
+	var widthCanvasDom = +$.canvasGlobe
+		.style("width").replace("px","");
+
+	var widthRetinaDom = +$.canvasGlobe
+		.attr("width");
+
+	adjustRetina = (widthRetinaDom/widthCanvasDom);
+
+	console.log(adjustRetina);
+
 	projection = d3.geoOrthographic();
 	path = d3.geoPath();
 	land = topojson.feature(world, world.objects.countries);
