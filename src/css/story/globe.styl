@@ -1,12 +1,17 @@
 #globe
 	.globe__steps
 		position relative
-		max-width 20rem
-		margin 0
-		padding 1rem
 		pointer-events none
-		background linear-gradient(to bottom, rgba(0,0,0,0) 0px, rgba(0,0,0,0) 150px, rgba(61,61,55,0.75) 400px, rgba(61,61,55,0.75) 95%, rgba(0,0,0,0) 100%)
-
+		background none
+		max-width 31rem
+		margin-left auto
+		margin-right 0
+		padding 1rem
+		+mq('bp-4')
+			max-width 20rem
+			margin 0
+			padding 1rem
+			background linear-gradient(to bottom, rgba(0,0,0,0) 0px, rgba(0,0,0,0) 150px, rgba(61,61,55,0.75) 400px, rgba(61,61,55,0.75) 95%, rgba(0,0,0,0) 100%)
 		.step
 			display flex
 			flex-direction column
@@ -15,8 +20,17 @@
 			opacity .4
 			transition opacity .5s
 			&:first-of-type
+				justify-content center
+				+mq('bp-4')
+					justify-content flex-end
 				.step__destination, .step__location, .destination-wrapper
 					display none
+
+			&__contents
+				background-color rgba($gray-dark, 0.85)
+				+mq('bp-4')
+					background-color transparent
+
 			.destination-wrapper
 				display flex
 				svg

@@ -8,6 +8,8 @@ const DPR = window.devicePixelRatio ? Math.min(window.devicePixelRatio, 2) : 1;
 
 let width = 0;
 let height = 0;
+let mobile = false
+let BP = 800
 
 function getScale() {
 	const w = width / DPR;
@@ -36,6 +38,7 @@ function getScale() {
 function resize() {
 	width = $.chart.node().offsetWidth * DPR;
 	height = $.chart.node().offsetHeight * DPR;
+	mobile = width < BP;
 	$.canvasBg
 		.at({ width, height })
 		.st({ width: width / DPR, height: height / DPR });
@@ -48,7 +51,9 @@ function resize() {
 		.at({ width, height })
 		.st({ width: width / DPR, height: height / DPR });
 
-	const globeW = width - d3.select('.globe__steps').node().offsetWidth * DPR;
+
+	const globeStepW = d3.select('.globe__steps').node().offsetWidth
+	const globeW = mobile ? globeStepW * DPR : width - globeStepW * DPR;
 	$.canvasGlobe
 		.at({ width: globeW, height })
 		.st({ width: globeW / DPR, height: height / DPR });

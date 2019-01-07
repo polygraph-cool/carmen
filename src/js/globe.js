@@ -21,6 +21,8 @@ const LINE_WIDTH = 1;
 
 let loftedness = 1.3;
 
+let mobile = false
+let BP = 800
 
 let land = null;
 let swoosh = null;
@@ -99,6 +101,7 @@ function addTweetBox(coord) {
 	const p = projection(coord);
 
 	const x = p[0]*(1/adjustRetina) + stepWidth;
+	console.log({x})
 
 	const y = p[1]*(1/adjustRetina);
 	if (current.step !== 'categories' && active) {
@@ -362,10 +365,15 @@ function step(index) {
 }
 
 function resize() {
+	const sectionWidth = $section.node().offsetWidth
+	// check if mobile
+	mobile = sectionWidth < BP;
 	// resize stepper elements
-	const stepHeight = window.innerHeight;
+	const stepHeight = mobile ? window.innerHeight * 1.5 : window.innerHeight;
 	stepWidth = d3.select('.globe__steps').node().offsetWidth;
 	$step.st('height', stepHeight)//.classed('is-visible', true);
+	console.log({mobile, width, BP})
+
 
 	// resize all the globe stuff
 	if (ready) {
@@ -374,6 +382,8 @@ function resize() {
 		const smaller = Math.min(width, height);
 		const radius = smaller / 2.5;
 		const scale = radius;
+
+
 
 		fauxPathElement = $.globe.append('path');
 
