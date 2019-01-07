@@ -39,14 +39,19 @@ header.is-sticky
 			color $gray
 			text-transform uppercase
 			set-type-size('x-small')
+			display none
+			+mq('bp-4')
+				display block
 
 	a.logo
 		display block
 		border none
 		svg
-			height 1.5rem
+			height 1rem
 			width auto
 			padding 0 1rem
+			+mq('bp-4')
+				height 1.5rem
 
 	.header__toggle
 		position fixed
