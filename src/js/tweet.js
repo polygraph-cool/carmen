@@ -31,8 +31,8 @@ function create({ data, x = 0, y = 0, fade, offset, pushLeft, section }) {
 	const drawW = chartW - PAD
 	let marginLeft = 0;
 	let marginTop = offset ? -h * 1.35 : 0;
-	if (x + w >= drawW) marginLeft = -((x + w) - drawW)
-	else if (x - w <= PAD || pushLeft) marginLeft = (w - x) + PAD
+	if (x + w >= drawW && section != 'explore') marginLeft = -((x + w) - drawW)
+	else if (x - w <= PAD || pushLeft && section != 'explore') marginLeft = (w - x) + PAD
 	//if (x + fullW >= drawW || pushLeft) marginLeft = drawW - fullW//-(w * 2);
 	//if (x - w <= PAD) marginLeft = w;
 
