@@ -1,16 +1,18 @@
 #intro
 	.intro__hed
 		position fixed
-		bottom 1rem
-		left 0
+		top 4rem
+		+mq('bp-4')
+			bottom 1rem
+			left 0
 
 		&.is-hidden
 			pointer-events none
 
 		&-text
-			font-size 5.5rem
+			font-size 3.5rem
 			text-transform uppercase
-			padding 0 0.75rem 0.75rem 0.75rem
+			padding 0 1rem 0.75rem 1rem
 			margin 0
 			margin-bottom 0.75rem
 			background-color $gray-darkest
@@ -18,14 +20,39 @@
 			position relative
 			z-index set-index(bottom)
 			font-family 'Akhand Soft'
-			line-height 1
+			+mq('bp-4')
+				line-height 1
+				font-size 5.5rem
+				padding 0 0.75rem 0.75rem 0.75rem
 
-		img
+			&-desktop
+				display none
+				+mq('bp-4')
+					display inline-block
+
+			&-mobile
+				display inline-block
+				+mq('bp-4')
+					display none
+
+		.break-desktop
+			display none
+			+mq('bp-4')
+				display block
+		.break-mobile
+			display block
+			+mq('bp-4')
+				display none
+
+		.carmen-crouch
 			max-width 175px
 			margin-bottom 0
 			transform translateY(20px)
 			position relative
 			z-index set-index(middle)
+			display none
+			+mq('bp-4')
+				display block
 
 	.intro__watch
 
@@ -40,12 +67,16 @@
 		&-text
 			margin 0 0.5rem 0 0
 			text-transform uppercase
-			set-type-size('small', true)
+			set-type-size('x-small', true)
+			+mq('bp-4')
+				set-type-size('small', true)
 
 		svg
-			height 1.25rem
+			height 1rem
 			padding 0
 			width auto
+			+mq('bp-4')
+				height 1.25rem
 
 
 	.intro__steps
@@ -54,6 +85,9 @@
 		margin-left auto
 		margin-right 0
 		padding 1rem
+		margin-top 75%
+		+mq('bp-4')
+			margin-top 0
 
 		.step
 			display flex
@@ -95,3 +129,12 @@
 			.cat
 				padding 0 0.25rem
 				border-radius 2px
+
+	.carmen-swing
+		max-height 80%
+		width auto
+		position fixed
+		z-index set-index(middle)
+		visibility: visible;
+		top 0
+		right 0
