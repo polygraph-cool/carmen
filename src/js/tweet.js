@@ -3,6 +3,8 @@ import $ from './dom';
 const REM = 16;
 const PAD = REM * 4;
 
+const $step = d3.selectAll('.intro__steps')
+
 function create({ data, x = 0, y = 0, fade, offset, pushLeft, section }) {
 	const $tweet =
 		section === 'explore'
@@ -28,14 +30,25 @@ function create({ data, x = 0, y = 0, fade, offset, pushLeft, section }) {
 	const h = +$tweet.node().offsetHeight / 2;
 	const chartW = $.chartTweets.node().offsetWidth;
 	const chartH = $.chartTweets.node().offsetHeight;
+	const yOffAm = -h * 1.35
+	const drawW = chartW - PAD
 	let marginLeft = 0;
-	let marginTop = offset ? -h * 1.35 : 0;
-	if (x + w >= chartW - PAD || pushLeft) marginLeft = -w;
-	if (x - w <= PAD) marginLeft = w;
+	let marginTop = offset ? yOffAm : 0;
+	let stepWidth = $step.node().offsetWidth
+	if (x + w >= drawW && section != 'explore') marginLeft = -((x + w) - drawW)
+	else if (x + w >= drawW - stepWidth && pushLeft) marginLeft = -((x + w) - (drawW - stepWidth))
+	else if (x - w <= PAD && section != 'explore') marginLeft = (w - x) + PAD
+	//if (x + fullW >= drawW || pushLeft) marginLeft = drawW - fullW//-(w * 2);
+	//if (x - w <= PAD) marginLeft = w;
 
-	if (y + h >= chartH - PAD) marginTop += -h;
-	if (y - h <= PAD) marginTop = h;
+	const boxTop = offset ? y + yOffAm : y
+
+	if (boxTop <= h) marginTop = -(yOffAm)
+
+	// if (y + (2 * h) >= chartH - PAD) marginTop += -h;
+	// if (y - (2 * h) <= PAD) marginTop = h;
 	$tweet.st({ marginLeft, marginTop });
+	console.log({boxTop, w, h, x, y, chartW, chartH, marginLeft, marginTop})
 }
 
 function clear({ section, fade }) {

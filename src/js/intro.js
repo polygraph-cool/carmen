@@ -10,6 +10,7 @@ const BP = 800;
 const $intro = d3.select('#intro');
 const $introHed = $intro.select('.intro__hed');
 const $title = $intro.selectAll('.intro__hed-text, .intro__watch');
+const $swing = $intro.selectAll('.carmen-swing')
 const $step = $intro.selectAll('.step');
 const $watch = $intro.selectAll('.intro__watch');
 
@@ -38,6 +39,11 @@ function hideTitle() {
 		.transition()
 		.duration(500)
 		.translate([-titleWidth, 20]);
+
+	$swing
+		.transition()
+		.duration(500)
+		.translate([-width, 0])
 }
 
 function showTitle() {
@@ -58,6 +64,11 @@ function showTitle() {
 		.transition()
 		.duration(500)
 		.translate([0, 0]);
+
+	$swing
+		.transition()
+		.duration(500)
+		.translate([0, 0])
 }
 
 function chooseTweet() {
@@ -99,7 +110,7 @@ function triggerExample() {
 			y: d.y,
 			fade: true,
 			offset: true,
-			pushLeft: true,
+			pushLeft: !mobile,
 			section: 'intro'
 		});
 		exampleCounter += 1;
