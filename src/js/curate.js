@@ -252,6 +252,11 @@ function enter(step) {
 
 	$.chartCurate.classed('is-hidden', true);
 
+	$step.filter(function(d,i){
+		return d3.select(this).attr("data-step") == step
+	}).classed("is-visible",true);
+
+
 	if (currentStep === 'intro') runIntro();
 	else if (currentStep === 'nav') {
 		runNav('edutainment');
@@ -278,7 +283,7 @@ function resize() {
 
 	const stepSize = $step.size();
 	const stepHeight = window.innerHeight;
-	$step.st('height', stepHeight).classed('is-visible', true);
+	$step.st('height', stepHeight)//.classed('is-visible', true);
 	// .st('height', (d, i) => stepHeight * (i === stepSize - 1 ? 2 : 1))
 
 	const { scale, offsetW, offsetH } = Render.getScale();

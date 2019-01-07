@@ -42,6 +42,7 @@ function onIntroStepExit(el) {
 function updateSection(index) {
 	const $section = $.section.filter((d, i) => i === index);
 	const id = $section.at('id');
+
 	// console.log('section', id);
 	$.chart.classed('is-hidden', false);
 	$.exploreNav.classed('is-hidden', true);

@@ -12,6 +12,8 @@
 			flex-direction column
 			justify-content flex-end
 			min-height 480px
+			opacity .4
+			transition opacity .5s
 			&:first-of-type
 				.step__destination, .step__location, .destination-wrapper
 					display none
@@ -65,7 +67,9 @@
 			&:last-of-type
 				justify-content center
 			p
-				text-shadow 0 0 3px $bg
+				span
+					text-shadow 0 0 3px $bg
+				visibility visible
 
 .airplane
 	pointer-events none

@@ -355,6 +355,9 @@ function step(index) {
 	['step', 'lat', 'lon', 'tweet', 'user', 'city', 'country'].forEach(d => {
 		current[d] = $s.at(`data-${d}`);
 	});
+
+	$s.classed('is-visible', true);
+
 	update();
 }
 
@@ -362,7 +365,7 @@ function resize() {
 	// resize stepper elements
 	const stepHeight = window.innerHeight;
 	stepWidth = d3.select('.globe__steps').node().offsetWidth;
-	$step.st('height', stepHeight).classed('is-visible', true);
+	$step.st('height', stepHeight)//.classed('is-visible', true);
 
 	// resize all the globe stuff
 	if (ready) {

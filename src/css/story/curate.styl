@@ -7,9 +7,11 @@
 	.step
 		max-width 20rem
 		min-height 480px
-		visibility hidden
+		//visibility hidden
+		opacity .4
 		&.is-visible
 			visibility visible
+			opacity 1
 
 		&__fade
 			opacity 1
@@ -35,6 +37,10 @@
 		.choice
 			margin-bottom 1rem
 			pointer-events none
+			button
+				font-family 'Akhand Soft'
+				text-transform uppercase
+				font-size 21px
 		button
 			pointer-events auto
 			background-color transparent
@@ -58,6 +64,8 @@
 .g-voronoi
 	path
 		fill-opacity 0
+		cursor hand
+		cursor pointer
 
 .chart__curate, .chart__curate_purp
 	position absolute
@@ -102,6 +110,8 @@
 			background-color $cat-role-model
 		&.travel:before
 			background-color $cat-travel
+		&.cultural-icon:before
+			background-color $cat-cultural-icon
 
 .chart__curate_purp
 	opacity .4
