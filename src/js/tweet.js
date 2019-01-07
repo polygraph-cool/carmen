@@ -3,6 +3,8 @@ import $ from './dom';
 const REM = 16;
 const PAD = REM * 4;
 
+const $step = d3.selectAll('.intro__steps')
+
 function create({ data, x = 0, y = 0, fade, offset, pushLeft, section }) {
 	const $tweet =
 		section === 'explore'
@@ -32,8 +34,10 @@ function create({ data, x = 0, y = 0, fade, offset, pushLeft, section }) {
 	const drawW = chartW - PAD
 	let marginLeft = 0;
 	let marginTop = offset ? yOffAm : 0;
+	let stepWidth = $step.node().offsetWidth
 	if (x + w >= drawW && section != 'explore') marginLeft = -((x + w) - drawW)
-	else if (x - w <= PAD || pushLeft && section != 'explore') marginLeft = (w - x) + PAD
+	else if (x + w >= drawW - stepWidth && pushLeft) marginLeft = -((x + w) - (drawW - stepWidth))
+	else if (x - w <= PAD && section != 'explore') marginLeft = (w - x) + PAD
 	//if (x + fullW >= drawW || pushLeft) marginLeft = drawW - fullW//-(w * 2);
 	//if (x - w <= PAD) marginLeft = w;
 

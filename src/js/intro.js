@@ -110,7 +110,7 @@ function triggerExample() {
 			y: d.y,
 			fade: true,
 			offset: true,
-			pushLeft: true,
+			pushLeft: !mobile,
 			section: 'intro'
 		});
 		exampleCounter += 1;
