@@ -14,7 +14,7 @@ function create({ data, x = 0, y = 0, fade, offset, pushLeft, section }) {
 	$tweet.append('p.tweet__handle').text(handle);
 	$tweet.append('p.tweet__text').text(text);
 	$tweet.append('p.tweet__time').text(time);
-	$tweet.append('div.tweet__image');
+	$tweet.append('div.tweet__image').attr("title","Picture of Carmen Sandiego");
 
 	$tweet
 		.st({ top: y, left: x })
