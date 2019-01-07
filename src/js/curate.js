@@ -37,6 +37,8 @@ let radius = 0;
 let currentStep = null;
 let timer = null;
 let triggeredVor = false;
+let mobile = false
+let BP = 800
 
 const ease = d3.easeCubicOut;
 
@@ -278,8 +280,9 @@ function resize() {
 	sampleSize = 0.05;
 	width = $.chart.node().offsetWidth;
 	height = $.chart.node().offsetHeight;
+	mobile = width < BP
 	centerX = width / 2;
-	centerY = height / 2;
+	centerY = mobile ? height * 2/3 : height / 2;
 
 	const stepSize = $step.size();
 	const stepHeight = window.innerHeight;
