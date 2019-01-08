@@ -18,7 +18,7 @@ const exampleTweet = {
 let sampleSize = 0;
 let simulation = null;
 let cat = 'edutainment';
-
+let active = false;
 const $curate = d3.select('#curate');
 const $nav = $curate.select('nav');
 const $step = $curate.selectAll('.step');
@@ -239,13 +239,17 @@ function runIntro() {
 		if (t === 1) {
 			// stop this timer for this layout and start a new one
 			timer.stop();
-			$.chartCurate.classed('is-hidden', false);
+			if(active){
+				$.chartCurate.classed('is-hidden', false);	
+			}
+
 		}
 	});
 }
 
 function enterSection() {
 	Render.clear($.contextFg);
+	active = true;
 }
 
 function enter(step) {
@@ -274,6 +278,7 @@ function exit(step) {
 
 function clear() {
 	Tweet.clear({ section: 'curate' });
+	active = false;
 }
 
 function resize() {
