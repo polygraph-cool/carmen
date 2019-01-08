@@ -4,6 +4,7 @@ const REM = 16;
 const PAD = REM * 4;
 
 const $step = d3.selectAll('.intro__steps')
+const $slide = d3.selectAll('.figure__dots')
 
 function create({ data, x = 0, y = 0, fade, offset, pushLeft, section }) {
 	const $tweet =
@@ -35,9 +36,19 @@ function create({ data, x = 0, y = 0, fade, offset, pushLeft, section }) {
 	let marginLeft = 0;
 	let marginTop = offset ? yOffAm : 0;
 	let stepWidth = $step.node().offsetWidth
-	if (x + w >= drawW && section != 'explore') marginLeft = -((x + w) - drawW)
-	else if (x + w >= drawW - stepWidth && pushLeft) marginLeft = -((x + w) - (drawW - stepWidth))
-	else if (x - w <= PAD && section != 'explore') marginLeft = (w - x) + PAD
+
+	if (section == 'explore'){
+		let slideWidth = $slide.node().offsetWidth
+		if(x + w >= slideWidth) marginLeft = -((x + w) - slideWidth)
+		else if (x - w <= 0 ) marginLeft = (w - x)
+		console.log({x, w, slideWidth, marginLeft})
+	}
+	else {
+		if (x + w >= drawW) marginLeft = -((x + w) - drawW)
+		else if (x + w >= drawW - stepWidth && pushLeft) marginLeft = -((x + w) - (drawW - stepWidth))
+		else if (x - w <= PAD) marginLeft = (w - x) + PAD
+	}
+
 	//if (x + fullW >= drawW || pushLeft) marginLeft = drawW - fullW//-(w * 2);
 	//if (x - w <= PAD) marginLeft = w;
 
