@@ -67,6 +67,7 @@ function handleNavClick() {
 	const $button = d3.select(this);
 	$button.classed('is-active', true);
 	cat = $button.at('data-id');
+
 	// console.log({ cat, tweetData });
 
 	runNav(cat);
@@ -144,7 +145,8 @@ function runSim() {
 function runNav(cat) {
 	// unhide text and buttons
 	$fade.classed('is-hidden', false)
-	filteredTweets = tweetData.filter(d => d.category === cat);
+	const roleModelCat = ['latina', 'inspiration', 'role-model', 'feminism']
+	filteredTweets = tweetData.filter(d => cat === 'role-model' ? roleModelCat.includes(d.category) : d.category === cat);
 	// 100 tweets for edutainment
 	Tweet.clear({ section: 'curate' });
 	const c = Categories.find(c => c.cat === cat);
@@ -240,7 +242,7 @@ function runIntro() {
 			// stop this timer for this layout and start a new one
 			timer.stop();
 			if(active){
-				$.chartCurate.classed('is-hidden', false);	
+				$.chartCurate.classed('is-hidden', false);
 			}
 
 		}
