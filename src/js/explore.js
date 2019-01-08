@@ -15,6 +15,7 @@ let row = null;
 let col = null;
 let diameter = null;
 let pageWidth = null;
+let sectionWidth = null
 
 let tweetCount = -1;
 
@@ -78,9 +79,14 @@ function showTweet(forceMiddle) {
 	}
 
 	// translate div
-
+	const dotPos = selCol * diameter - diameter / 2
 	// center highlighted dot
-	const posX = pageWidth / 2 - selCol * diameter - diameter / 2;
+	let posX = pageWidth / 2 - dotPos;
+	// don't let slide div expose background
+	if (dotPos < pageWidth / 2) posX = 0
+	const dif = sectionWidth - (pageWidth / 2)
+	console.log({dotPos, pageWidth, sectionWidth, posX, dif})
+	if (dotPos > dif) posX = - (sectionWidth - pageWidth)
 
 	$slide.st('left', posX);
 
@@ -166,6 +172,8 @@ function resize() {
 		width: col * diameter,
 		backgroundSize: `${radius * 2}px ${radius * 2}px`
 	});
+
+	sectionWidth = $dots.node().offsetWidth
 }
 
 function init(data) {
