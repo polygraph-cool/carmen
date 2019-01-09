@@ -43,6 +43,27 @@ header.is-sticky
 			+mq('bp-4')
 				display block
 
+	.right
+		display flex
+		flex-direction row
+
+		.logo__social
+			display none
+			+mq('bp-4')
+				display block
+				
+			svg
+				fill $gray-light
+				stroke $white
+				stroke-width 1px
+				padding 0 0.25rem
+				transition 200ms ease-in-out
+
+
+				&:hover
+					fill $gray
+					transition 200ms ease-in-out
+
 	a.logo
 		display block
 		border none
