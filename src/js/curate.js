@@ -45,7 +45,8 @@ const ease = d3.easeCubicOut;
 const voronoi = d3.voronoi();
 
 function handleVorEnter({ data }) {
-	const { x, y, index } = data;
+	let { x, y, index } = data;
+	y = y + 20;
 	nodes.forEach(d => {
 		if (d.index === index) d.stroke = '#fff';
 		else d.stroke = '#000';
@@ -53,6 +54,9 @@ function handleVorEnter({ data }) {
 	});
 
 	Tweet.clear({ section: 'curate' });
+
+	// console.log(filteredTweets[index]);
+
 	Tweet.create({
 		data: filteredTweets[index] ? filteredTweets[index] : exampleTweet,
 		x,
@@ -75,7 +79,6 @@ function handleNavClick() {
 }
 
 function handleEnd() {
-	console.log("vor created")
 	// VORONOI
 	voronoi
 		.x(d => d.x)
@@ -83,19 +86,27 @@ function handleEnd() {
 		.extent([[0, 0], [width, height]]);
 
 	let $vorPath = $.vor.selectAll('path');
-	$vorPath.remove();
+	d3.select(".g-voronoi").selectAll("path").remove();
 
 	const polygons = voronoi.polygons(nodes);
 
-	$vorPath = $vorPath
+	var vorPaths = d3.select(".g-voronoi").selectAll("path")
 		.data(polygons)
 		.enter()
 		.append('path')
-		.merge($vorPath);
+		;
 
-	$vorPath.at('d', d => (d ? `M${d.join('L')}Z` : null));
+	// $vorPath = $vorPath
+	// 	.data(polygons)
+	// 	.enter()
+	// 	.append('path')
+	// 	.merge($vorPath);
 
-	$vorPath.on('mouseenter', handleVorEnter);
+	vorPaths.at('d', d => (d ? `M${d.join('L')}Z` : null));
+
+	// $vorPath.at('d', d => (d ? `M${d.join('L')}Z` : null));
+	vorPaths.on('mouseenter', handleVorEnter);
+	// $vorPath.on('mouseenter', handleVorEnter);
 	// $vorPath.on('mouseout', handleVorE);
 	// else $vorPath.on('mouseenter', handleVorEnter);
 }
@@ -144,6 +155,8 @@ function runSim() {
 }
 
 function runNav(cat) {
+
+	console.log("runningnav");
 	// unhide text and buttons
 	$fade.classed('is-hidden', false)
 	const roleModelCat = ['latina', 'inspiration', 'role-model', 'feminism']
@@ -152,6 +165,8 @@ function runNav(cat) {
 	Tweet.clear({ section: 'curate' });
 	const c = Categories.find(c => c.cat === cat);
 	const sample = Math.floor(c.count * sampleSize);
+
+	console.log(filteredTweets);
 
 	badgeData.forEach(n => {
 		n.x = n.ox;
@@ -193,6 +208,7 @@ function runNav(cat) {
 }
 
 function runIntro() {
+	console.log("runningIntro");
 	// hide hover text and buttons
 	$fade.classed('is-hidden', true)
 	// disable mouse interaction while it sim is running
@@ -220,6 +236,24 @@ function runIntro() {
 	if (timer) timer.stop();
 	console.log({nodes})
 
+	var extentX = d3.extent(nodes,function(d){return d.tx});
+	var extentY = d3.extent(nodes,function(d){return d.ty});
+
+	var xRangeBefore = d3.scaleLinear().domain([0,1]).range([0,extentX[0]])
+	var yRangeBefore = d3.scaleLinear().domain([0,1]).range([0,height])
+
+	var xRangeAfter = d3.scaleLinear().domain([0,1]).range([extentX[1],width])
+	var yRangeAfter = d3.scaleLinear().domain([0,1]).range([0,height])
+
+	var extraNodes = [];
+
+	for (var dot in d3.range(200)){
+		extraNodes.push({x:xRangeBefore(Math.random()),y:yRangeBefore(Math.random()),r:nodes[0].r,fill:Colors["cultural-icon"],stroke:null});
+		extraNodes.push({x:xRangeAfter(Math.random()),y:yRangeAfter(Math.random()),r:nodes[0].r,fill:Colors["cultural-icon"],stroke:null});
+	}
+
+	console.log(extraNodes);
+
 	timer = d3.timer(elapsed => {
 		// compute how far through the animation we are (0 to 1)
 		const t = Math.min(1, ease(elapsed / DURATION));
@@ -237,6 +271,11 @@ function runIntro() {
 		nodes.forEach(d => {
 			Render.dot({ d, ctx: $.contextFg });
 		});
+
+		extraNodes.forEach(d => {
+			Render.dot({ d, ctx: $.contextFg });
+		});
+
 
 		// if this animation is over
 		if (t === 1) {
@@ -265,7 +304,7 @@ function enter(step) {
 		return d3.select(this).attr("data-step") == step
 	}).classed("is-visible",true);
 
-
+	console.log(currentStep);
 	if (currentStep === 'intro') runIntro();
 	else if (currentStep === 'nav') {
 		runNav('edutainment');
@@ -276,6 +315,7 @@ function enter(step) {
 function exit(step) {
 	Tweet.clear({ section: 'curate' });
 	currentStep = step === 'nav' ? 'intro' : 'nav';
+	console.log(step,currentStep);
 	if (currentStep === 'intro') runIntro();
 }
 
