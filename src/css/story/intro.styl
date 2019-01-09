@@ -1,4 +1,5 @@
 #intro
+	pointer-events none
 	.intro__hed
 		position fixed
 		top 4rem
@@ -87,6 +88,7 @@
 		margin-right 0
 		padding 1rem
 		margin-top 75%
+		pointer-events none
 		+mq('bp-4')
 			margin-top 0
 
@@ -97,8 +99,8 @@
 			opacity 0
 			transition opacity 250ms ease-in-out
 			min-height 480px
+			pointer-events none
 			&:first-of-type
-
 				p
 					position relative
 					padding-bottom 3rem
@@ -121,6 +123,7 @@
 				padding 1rem
 				border-radius 4px
 				font-weight 400
+				pointer-events all
 				strong
 					font-weight 700
 					background-color rgba($netflix-red-dark, 1)

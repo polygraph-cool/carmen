@@ -180,7 +180,6 @@ function clear() {
 	Tweet.clear({ section: 'intro' });
 	Render.clear($.contextEx);
 	if (timeout) clearTimeout(timeout);
-	console.log("intro clear running")
 }
 
 function resize() {

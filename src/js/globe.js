@@ -103,7 +103,7 @@ function addTweetBox(coord) {
 	const x = p[0]*(1/adjustRetina) + stepWidth;
 	console.log({x})
 
-	const y = p[1]*(1/adjustRetina);
+	const y = p[1]*(1/adjustRetina) - 10;
 	if (current.step !== 'categories' && active) {
 		const data = {
 			text: current.tweet,
