@@ -58,7 +58,8 @@ function handleVorEnter({ data }) {
 		x,
 		y,
 		offset: true,
-		section: 'curate'
+		section: 'curate',
+		category: filteredTweets[index].category,
 	});
 }
 
@@ -216,8 +217,8 @@ function runIntro() {
 		d.fill = Colors[d.category];
 		d.stroke = null;
 	});
-
 	if (timer) timer.stop();
+	console.log({nodes})
 
 	timer = d3.timer(elapsed => {
 		// compute how far through the animation we are (0 to 1)

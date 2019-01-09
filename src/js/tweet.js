@@ -6,11 +6,13 @@ const PAD = REM * 4;
 const $step = d3.selectAll('.intro__steps')
 const $slide = d3.selectAll('.figure__dots')
 
-function create({ data, x = 0, y = 0, fade, offset, pushLeft, section }) {
+function create({ data, x = 0, y = 0, fade, offset, pushLeft, section, category }) {
 	const $tweet =
 		section === 'explore'
 			? $.exploreTweets.append('div.tweet')
 			: $.chartTweets.append('div.tweet');
+
+		console.log({category})
 
 	const { handle, text, time } = data;
 	// $tweet.append('p.tweet__name').text(name);
