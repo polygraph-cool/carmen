@@ -166,17 +166,33 @@ function runNav(cat) {
 	const c = Categories.find(c => c.cat === cat);
 	const sample = Math.floor(c.count * sampleSize);
 
-	console.log(filteredTweets);
-
 	badgeData.forEach(n => {
 		n.x = n.ox;
 		n.y = n.oy;
 		n.r = n.or;
 	});
 
-	nodes = badgeData
-		.filter(d => d.category === cat)
-		.slice(0, filteredTweets.length);
+	function getRandom(arr, n) {
+	    var result = new Array(n),
+	        len = arr.length,
+	        taken = new Array(len);
+	    if (n > len)
+	        throw new RangeError("getRandom: more elements taken than available");
+	    while (n--) {
+	        var x = Math.floor(Math.random() * len);
+	        result[n] = arr[x in taken ? taken[x] : x];
+	        taken[x] = --len in taken ? taken[len] : len;
+	    }
+	    return result;
+	}
+
+	var filteredBadgedData = badgeData
+		.filter(d => d.category === cat);
+
+	nodes = getRandom(filteredBadgedData, filteredTweets.length);
+	// nodes = badgeData
+	// 	.filter(d => d.category === cat)
+	// 	.slice(0, filteredTweets.length);
 
 	nodes.forEach(d => {
 		d.stroke = '#000';
@@ -234,7 +250,6 @@ function runIntro() {
 		d.stroke = null;
 	});
 	if (timer) timer.stop();
-	console.log({nodes})
 
 	var extentX = d3.extent(nodes,function(d){return d.tx});
 	var extentY = d3.extent(nodes,function(d){return d.ty});
@@ -252,8 +267,6 @@ function runIntro() {
 		extraNodes.push({x:xRangeAfter(Math.random()),y:yRangeAfter(Math.random()),r:nodes[0].r,fill:Colors["cultural-icon"],stroke:null});
 	}
 
-	console.log(extraNodes);
-
 	timer = d3.timer(elapsed => {
 		// compute how far through the animation we are (0 to 1)
 		const t = Math.min(1, ease(elapsed / DURATION));
@@ -268,19 +281,25 @@ function runIntro() {
 		// console.log(nodes[0]);
 		// update what is drawn on screen
 		Render.clear($.contextFg);
+
 		nodes.forEach(d => {
 			Render.dot({ d, ctx: $.contextFg });
 		});
 
+		var thing = {x:50,y:50,r:20,fill:"purple",stroke:null};
 		extraNodes.forEach(d => {
-			Render.dot({ d, ctx: $.contextFg });
+			// Render.dot({ d:thing, ctx: $.contextFg });
+			d.r = nodes[0].tr;
+			Render.dot({ d:d, ctx: $.contextFg });
 		});
 
 
 		// if this animation is over
 		if (t === 1) {
+
 			// stop this timer for this layout and start a new one
 			timer.stop();
+
 			if(active){
 				$.chartCurate.classed('is-hidden', false);
 			}
