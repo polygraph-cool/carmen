@@ -257,7 +257,7 @@ function goTo(coordsStart, coordsEnd) {
 		$.contextGlobe.beginPath();
 		swoosh(flyingArc([coordsStart, coordsEnd]));
 		$.contextGlobe.setLineDash([t * flyingArcLength * 1.7, 1e6]);
-		$.contextGlobe.strokeStyle = Color.edutainment;
+		$.contextGlobe.strokeStyle = Color.fashion;
 		$.contextGlobe.lineWidth = ARC_WIDTH;
 
 		$.contextGlobe.stroke();
