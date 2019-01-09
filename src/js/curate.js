@@ -62,7 +62,8 @@ function handleVorEnter({ data }) {
 		x,
 		y,
 		offset: true,
-		section: 'curate'
+		section: 'curate',
+		category: filteredTweets[index].category,
 	});
 }
 
@@ -71,6 +72,7 @@ function handleNavClick() {
 	const $button = d3.select(this);
 	$button.classed('is-active', true);
 	cat = $button.at('data-id');
+
 	// console.log({ cat, tweetData });
 
 	runNav(cat);
@@ -157,7 +159,8 @@ function runNav(cat) {
 	console.log("runningnav");
 	// unhide text and buttons
 	$fade.classed('is-hidden', false)
-	filteredTweets = tweetData.filter(d => d.category === cat);
+	const roleModelCat = ['latina', 'inspiration', 'role-model', 'feminism']
+	filteredTweets = tweetData.filter(d => cat === 'role-model' ? roleModelCat.includes(d.category) : d.category === cat);
 	// 100 tweets for edutainment
 	Tweet.clear({ section: 'curate' });
 	const c = Categories.find(c => c.cat === cat);
@@ -230,8 +233,8 @@ function runIntro() {
 		d.fill = Colors[d.category];
 		d.stroke = null;
 	});
-
 	if (timer) timer.stop();
+	console.log({nodes})
 
 	var extentX = d3.extent(nodes,function(d){return d.tx});
 	var extentY = d3.extent(nodes,function(d){return d.ty});

@@ -71,7 +71,6 @@ function resize() {
 
 function createConcentric({ ringNum, ctx }) {
 	const r = ringNum * 3 * DPR;
-	console.log({ r });
 	ctx.beginPath();
 	ctx.moveTo(x + r, y);
 	ctx.arc(x, y, r, 0, 2 * Math.PI);
