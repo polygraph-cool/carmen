@@ -6,11 +6,13 @@ const PAD = REM * 4;
 const $step = d3.selectAll('.intro__steps')
 const $slide = d3.selectAll('.figure__dots')
 
-function create({ data, x = 0, y = 0, fade, offset, pushLeft, section }) {
+function create({ data, x = 0, y = 0, fade, offset, pushLeft, section, category }) {
 	const $tweet =
 		section === 'explore'
 			? $.exploreTweets.append('div.tweet')
 			: $.chartTweets.append('div.tweet');
+
+		console.log({category})
 
 	const { handle, text, time } = data;
 	// $tweet.append('p.tweet__name').text(name);
@@ -41,7 +43,6 @@ function create({ data, x = 0, y = 0, fade, offset, pushLeft, section }) {
 		let slideWidth = $slide.node().offsetWidth
 		if(x + w >= slideWidth) marginLeft = -((x + w) - slideWidth)
 		else if (x - w <= 0 ) marginLeft = (w - x)
-		console.log({x, w, slideWidth, marginLeft})
 	}
 	else {
 		if (x + w >= drawW) marginLeft = -((x + w) - drawW)
@@ -59,7 +60,6 @@ function create({ data, x = 0, y = 0, fade, offset, pushLeft, section }) {
 	// if (y + (2 * h) >= chartH - PAD) marginTop += -h;
 	// if (y - (2 * h) <= PAD) marginTop = h;
 	$tweet.st({ marginLeft, marginTop });
-	console.log({boxTop, w, h, x, y, chartW, chartH, marginLeft, marginTop})
 }
 
 function clear({ section, fade }) {

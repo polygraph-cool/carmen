@@ -92,14 +92,14 @@ allDataCleaned <- allData %>%
   mutate(category = tolower(category)) %>% 
   mutate(category = case_when(
     category %in% fashionCat ~ "fashion",
-    category %in% feminismCat ~ "role-model",
+    category %in% feminismCat ~ "feminism",
     category == "role model" ~ "role-model", 
     category %in% eduCat ~ "edutainment",
     category %in% iconCat ~ "cultural-icon",
     grepl("pop culture", category) ~ "cultural-icon",
     grepl("pop - culture", category) ~ "cultural-icon",
-    category == "latina" ~ "role-model",
-    category == "inspiration" ~ "role-model",
+    category == "latina" ~ "latina",
+    category == "inspiration" ~ "inspiration",
     TRUE ~ category
   ))
 
@@ -112,10 +112,10 @@ write.csv(starred, "../../src/assets/data/curate.csv", row.names = FALSE, na = "
 Now, we need to randomize all of the tweets, and split them into separate files, each containing 1000 tweets. 
 
 ```{r}
-# Make 10 random starred tweets "special"
+# Make 100 random starred tweets "special"
 randomStar <- starred[sample(nrow(starred)), ]
 special <- randomStar %>% 
-  filter(row_number() <= 10)
+  filter(row_number() <= 100)
 
 ## Write special to file
 
@@ -124,7 +124,7 @@ write.csv(special, "../../src/assets/data/explore-special.csv", row.names = FALS
 
 ## Combine unspecial starred with non-starred, randomize, and split
 unspecial <- randomStar %>% 
-  filter(row_number() > 10)
+  filter(row_number() > 100)
 
 nonstarred <- allDataCleaned %>% 
   filter(is.na(star_tweet))
