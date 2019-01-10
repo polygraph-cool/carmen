@@ -154,7 +154,7 @@ function setup(data) {
 		selector: '#globe .step',
 		enter: onGlobeStepEnter,
 		exit: onGlobeStepExit,
-		offset: 0.9
+		offset: 0.67
 	});
 
 	EnterView({

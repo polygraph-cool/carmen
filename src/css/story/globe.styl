@@ -14,16 +14,19 @@
 			padding 1rem
 			background linear-gradient(to bottom, rgba(0,0,0,0) 0px, rgba(0,0,0,0) 150px, rgba(61,61,55,0.75) 400px, rgba(61,61,55,0.75) 95%, rgba(0,0,0,0) 100%)
 		.step
-			display flex
-			flex-direction column
-			justify-content flex-end
+			//display flex
+			//flex-direction column
+			//justify-content flex-end
 			min-height 480px
 			opacity .4
 			transition opacity .5s
+			margin-bottom 50px
 			&:first-of-type
-				justify-content center
+				//justify-content center
+				margin-bottom 0px
 				+mq('bp-4')
-					justify-content flex-end
+					//justify-content flex-end
+					visibility visible
 				.step__destination, .step__location, .destination-wrapper
 					display none
 
@@ -53,7 +56,7 @@
 					background-color $cat-role-model
 				.fashion
 					background-color $cat-fashion
-				.cultural-icon
+				.cultural-icon, .pop-culture
 					background-color $cat-cultural-icon
 
 			.step__location

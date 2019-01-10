@@ -445,7 +445,13 @@ function setup(world) {
 		var stepName = d3.select(this).attr("data-step");
 
 		d3.select(this).select(".destination-wrapper")
-			.style("color",Color[stepName])
+			.style("color",function(d){
+				return "white";
+				if(stepName == "pop-culture"){
+					return d3.color(Color[stepName]).brighter(2)
+				}
+				return d3.color(Color[stepName]);
+			})
 
 		d3.select(this).select(".destination-wrapper")
 			.select(".destination-plane")
