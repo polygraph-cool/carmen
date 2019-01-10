@@ -225,6 +225,8 @@ function runNav(cat) {
 
 function runIntro() {
 	console.log("runningIntro");
+	$.chart.select(".chart__curate_purp").classed('is-hidden',false);
+
 	// hide hover text and buttons
 	$fade.classed('is-hidden', true)
 	// disable mouse interaction while it sim is running
@@ -286,7 +288,7 @@ function runIntro() {
 			Render.dot({ d, ctx: $.contextFg });
 		});
 
-		var thing = {x:50,y:50,r:20,fill:"purple",stroke:null};
+		// var thing = {x:50,y:50,r:20,fill:"purple",stroke:null};
 		extraNodes.forEach(d => {
 			// Render.dot({ d:thing, ctx: $.contextFg });
 			d.r = nodes[0].tr;
@@ -327,6 +329,7 @@ function enter(step) {
 	if (currentStep === 'intro') runIntro();
 	else if (currentStep === 'nav') {
 		runNav('edutainment');
+		$.chart.select(".chart__curate_purp").classed('is-hidden',true);
 		$nav.selectAll('button').classed('is-active', (d, i) => i === 0);
 	}
 }

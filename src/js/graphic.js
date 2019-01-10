@@ -40,6 +40,9 @@ function onIntroStepExit(el) {
 }
 
 function updateSection(index) {
+
+	console.log("updating section");
+
 	const $section = $.section.filter((d, i) => i === index);
 	const id = $section.at('id');
 
