@@ -112,15 +112,22 @@ function handleEnd() {
 }
 
 function handleTick() {
+
 	const a = simulation.alpha();
+
+	console.log(a, triggeredVor);
+
 	if (!triggeredVor && a < 0.5) {
 		triggeredVor = true;
 		handleEnd();
 	}
-	Render.clear($.contextFg);
-	nodes.forEach(d => {
-		Render.dot({ d, ctx: $.contextFg });
-	});
+	if(currentStep == "nav"){
+		Render.clear($.contextFg);
+		nodes.forEach(d => {
+			Render.dot({ d, ctx: $.contextFg });
+		});	
+	}
+
 }
 
 function runSim() {
@@ -238,6 +245,8 @@ function runIntro() {
 	triggeredVor = false;
 
 	if (simulation) simulation.stop();
+	if (timer) timer.stop();
+
 	Render.clear($.contextBg);
 	Render.clear($.contextFg);
 
@@ -253,7 +262,6 @@ function runIntro() {
 		d.fill = Colors[d.category];
 		d.stroke = null;
 	});
-	if (timer) timer.stop();
 
 	var extentX = d3.extent(nodes,function(d){return d.tx});
 	var extentY = d3.extent(nodes,function(d){return d.ty});
