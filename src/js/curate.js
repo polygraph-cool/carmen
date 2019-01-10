@@ -214,6 +214,7 @@ function runNav(cat) {
 
 		// if this animation is over
 		if (t === 1) {
+			console.log("timer stopped");
 			// stop this timer for this layout and start a new one
 			timer.stop();
 		}
@@ -224,6 +225,7 @@ function runNav(cat) {
 }
 
 function runIntro() {
+	console.log(simulation);
 	console.log("runningIntro");
 	$.chart.select(".chart__curate_purp").classed('is-hidden',false);
 
@@ -298,7 +300,7 @@ function runIntro() {
 
 		// if this animation is over
 		if (t === 1) {
-
+			console.log("timer stopped");
 			// stop this timer for this layout and start a new one
 			timer.stop();
 
