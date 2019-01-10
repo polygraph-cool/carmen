@@ -115,7 +115,7 @@ function handleTick() {
 
 	const a = simulation.alpha();
 
-	console.log(a, triggeredVor);
+	// console.log(a, triggeredVor);
 
 	if (!triggeredVor && a < 0.5) {
 		triggeredVor = true;
@@ -125,7 +125,7 @@ function handleTick() {
 		Render.clear($.contextFg);
 		nodes.forEach(d => {
 			Render.dot({ d, ctx: $.contextFg });
-		});	
+		});
 	}
 
 }
@@ -346,9 +346,12 @@ function enter(step) {
 
 function exit(step) {
 	Tweet.clear({ section: 'curate' });
-	currentStep = step === 'nav' ? 'intro' : 'nav';
-	console.log(step,currentStep);
-	if (currentStep === 'intro') runIntro();
+	if(step == "nav"){
+		runIntro();
+		currentStep = "intro"
+	}
+	// currentStep = step === 'nav' ? 'intro' : 'nav';
+	// console.log(step,currentStep);
 }
 
 function clear() {
