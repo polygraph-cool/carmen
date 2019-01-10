@@ -19,7 +19,9 @@ function create({ data, x = 0, y = 0, fade, offset, pushLeft, section, category 
 	$tweet.append('p.tweet__handle').text(handle);
 	$tweet.append('p.tweet__text').text(text);
 	$tweet.append('p.tweet__time').text(time);
-	$tweet.append('div.tweet__image').attr("title","Picture of Carmen Sandiego");
+
+	var grabRandomImage = d3.scaleQuantize().domain([0,1]).range([1,2,3,4,5])
+	$tweet.append('div.tweet__image-'+grabRandomImage(Math.random())).attr("title","Picture of Carmen Sandiego");
 
 	$tweet
 		.st({ top: y, left: x })
