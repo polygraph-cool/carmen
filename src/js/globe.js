@@ -371,8 +371,11 @@ function resize() {
 	// resize stepper elements
 	const stepHeight = mobile ? window.innerHeight * 1.5 : window.innerHeight;
 	stepWidth = d3.select('.globe__steps').node().offsetWidth;
-	$step.st('height', stepHeight)//.classed('is-visible', true);
-	console.log({mobile, width, BP})
+	if(mobile){
+		$step.st('height', stepHeight)//.classed('is-visible', true);	
+	}
+
+	// console.log({mobile, width, BP})
 
 
 	// resize all the globe stuff
