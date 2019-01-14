@@ -54,7 +54,7 @@ function updateSection(index) {
 	$.chartCurate.classed('is-hidden', true);
 	$.chartTweets.classed('globe-tweets', false);
 	$.chart.select('.chart__curate_purp').classed('is-hidden', true);
-	// Intro.clear();
+	Intro.clear();
 	Curate.clear();
 	Explore.clear();
 	Globe.clear();
@@ -65,8 +65,8 @@ function updateSection(index) {
 		$.canvasFg.classed('is-hidden', false);
 		$.vor.classed('is-hidden', false);
 		// $.overlay.classed('is-hidden', false);
+		Intro.enterSection();
 		Curate.enterSection(true);
-		// Intro.enterSection();
 		break;
 	case 'globe':
 		$.canvasGlobe.classed('is-hidden', false);
@@ -122,7 +122,7 @@ function onCurateStepExit(el) {
 function setup(data) {
 	// console.log({ data });
 	// sections
-	// Intro.init(data);
+	Intro.init(data);
 	Curate.init(data);
 	Globe.init(data);
 	Explore.init(data);
@@ -215,7 +215,8 @@ function prepareData() {
 		loadData()
 			.then(results => {
 				const withCat = assignCategoryRandom(counts);
-				const fullBadge = withCat.concat(culture);
+				// const fullBadge = withCat.concat(culture);
+				const fullBadge = withCat;
 				const curateData = results.curate;
 				const exploreData = results.explore;
 				const allData = {

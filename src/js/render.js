@@ -86,18 +86,17 @@ function dot({ d, ctx, fill, concentric }) {
 	ctx.beginPath();
 	ctx.moveTo(x + r, y);
 	ctx.arc(x, y, r, 0, 2 * Math.PI);
-	// console.log({fill})
+
 	ctx.fillStyle = fill || d.fill;
 	ctx.fill();
 
-	// console.log(d.x);
 	if (concentric === true) {
 		// concentric 1
 		const r1 = d.r * 2 * DPR;
 		ctx.beginPath();
 		ctx.moveTo(x + r1, y);
 		ctx.arc(x, y, r1, 0, 2 * Math.PI);
-		ctx.strokeStyle = fill || d.fill;
+		ctx.strokeStyle = '#fff';
 		ctx.lineWidth = 1;
 		ctx.stroke();
 
@@ -106,7 +105,7 @@ function dot({ d, ctx, fill, concentric }) {
 		ctx.beginPath();
 		ctx.moveTo(x + r2, y);
 		ctx.arc(x, y, r2, 0, 2 * Math.PI);
-		ctx.strokeStyle = fill || d.fill;
+		ctx.strokeStyle = '#fff';
 		ctx.lineWidth = 1;
 		ctx.stroke();
 
@@ -115,7 +114,7 @@ function dot({ d, ctx, fill, concentric }) {
 		ctx.beginPath();
 		ctx.moveTo(x + r3, y);
 		ctx.arc(x, y, r3, 0, 2 * Math.PI);
-		ctx.strokeStyle = fill || d.fill;
+		ctx.strokeStyle = '#fff';
 		ctx.lineWidth = 2;
 		ctx.stroke();
 	}

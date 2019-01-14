@@ -14,16 +14,17 @@ const $swing = $intro.selectAll('.carmen-swing');
 const $step = $intro.selectAll('.step');
 const $watch = $intro.selectAll('.intro__watch');
 
-const badgeData = [];
+let badgeData = [];
+let tweetData = [];
 let width = 0;
 let height = 0;
 let stepWidth = 0;
 let timeout = null;
-const tweetData = null;
 let currentStep = null;
 let exampleCounter = 0;
 let mobile = false;
-let active = false;
+let active = true;
+let disabled = false;
 
 function hideTitle() {
 	const titleWidth = $intro.select('.intro__hed').node().offsetWidth;
@@ -153,20 +154,23 @@ function runTitle() {
 
 function runExamples() {
 	hideTitle();
-	// triggerExample();
+	triggerExample();
 }
 
 function enterSection() {
-	Render.clear($.contextFg);
+	// Render.clear($.contextFg);
 	// revealDots();
-	// active = true;
+	if (!disabled) active = true;
 }
 
 function enter(step) {
 	if (timeout) clearTimeout(timeout);
 	currentStep = step;
-	if (currentStep === 'title') runTitle();
-	else if (currentStep === 'examples') runExamples();
+	if (currentStep === 'title') {
+		runTitle();
+		setTimeout(triggerExample, 1000);
+	} else if (currentStep === 'examples') hideTitle();
+	// runExamples();
 }
 
 function exit(step) {
@@ -209,10 +213,16 @@ function resize() {
 	enter(currentStep);
 }
 
-function init(data) {
-	// badgeData = data.badgeOnly.map(d => ({ ...d }))
-	// tweetData = data.curate;
-	// $.canvasEx.classed('is-hidden', false);
+function disable() {
+	active = false;
+	disabled = true;
+	clear();
 }
 
-export default { init, resize, enter, enterSection, exit, clear };
+function init(data) {
+	badgeData = data.badgeOnly.map(d => ({ ...d }));
+	tweetData = data.curate;
+	$.canvasEx.classed('is-hidden', false);
+}
+
+export default { init, resize, enter, enterSection, exit, clear, disable };

@@ -3,6 +3,7 @@ import Tweet from './tweet';
 import Render from './render';
 import Categories from './categories';
 import Colors from './colors';
+import Intro from './intro';
 
 const BADGE_R = 3;
 const DURATION = 1000;
@@ -44,6 +45,7 @@ const ease = d3.easeCubicOut;
 const voronoi = d3.voronoi();
 
 function handleVorEnter({ data }) {
+	Intro.disable();
 	const { x, y, index, category } = data;
 	const cd = categoryData[category];
 	cd.current += 1;

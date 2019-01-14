@@ -34,7 +34,7 @@ function create({
 		.domain([0, 1])
 		.range([1, 2, 3, 4, 5]);
 	$tweet
-		.append(`div.tweet__image-${  grabRandomImage(Math.random())}`)
+		.append(`div.tweet__image-${grabRandomImage(Math.random())}`)
 		.attr('title', 'Picture of Carmen Sandiego');
 
 	$tweet
