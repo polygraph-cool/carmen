@@ -65,7 +65,7 @@ function updateSection(index) {
 		$.canvasFg.classed('is-hidden', false);
 		$.vor.classed('is-hidden', false);
 		// $.overlay.classed('is-hidden', false);
-		// Curate.enterSection();
+		Curate.enterSection(true);
 		// Intro.enterSection();
 		break;
 	case 'globe':
@@ -76,9 +76,9 @@ function updateSection(index) {
 		break;
 	case 'curate':
 		$.canvasFg.classed('is-hidden', false);
-		$.chart.select('.chart__curate_purp').classed('is-hidden', false);
+		// $.chart.select('.chart__curate_purp').classed('is-hidden', false);
 		$.vor.classed('is-hidden', false);
-		// Curate.enterSection();
+		Curate.enterSection();
 		break;
 
 	case 'explore':
@@ -140,7 +140,7 @@ function setup(data) {
 			let index = +d3.select(el).attr('data-index');
 			index = Math.max(0, index - 1);
 			updateSection(index);
-			console.log({ el });
+			// console.log({ el });
 		},
 		offset: 0.2
 	});

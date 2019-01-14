@@ -3,7 +3,6 @@ import Tweet from './tweet';
 import Render from './render';
 import Categories from './categories';
 import Colors from './colors';
-import categories from './categories';
 
 const BADGE_R = 3;
 const DURATION = 1000;
@@ -15,9 +14,8 @@ const exampleTweet = {
 	time: '11/14/18 12:39 PM'
 };
 
-let sampleSize = 0;
 let simulation = null;
-let cat = 'edutainment';
+let currentCat = null;
 let active = false;
 const $curate = d3.select('#curate');
 const $nav = $curate.select('nav');
@@ -35,7 +33,7 @@ let height = 0;
 let centerX = 0;
 let centerY = 0;
 let radius = 0;
-let currentStep = null;
+const currentStep = null;
 const timer = null;
 let triggeredVor = false;
 let mobile = false;
@@ -47,7 +45,6 @@ const voronoi = d3.voronoi();
 
 function handleVorEnter({ data }) {
 	const { x, y, index, category } = data;
-
 	const cd = categoryData[category];
 	cd.current += 1;
 	if (cd.current >= cd.total) cd.current = 0;
@@ -75,11 +72,9 @@ function handleNavClick() {
 	$nav.selectAll('button').classed('is-active', false);
 	const $button = d3.select(this);
 	$button.classed('is-active', true);
-	cat = $button.at('data-id');
-
-	// console.log({ cat, tweetData });
-
-	runNav(cat);
+	currentCat = $button.at('data-id');
+	clear();
+	placeDots();
 }
 
 function createVor() {
@@ -94,7 +89,12 @@ function createVor() {
 		.selectAll('path')
 		.remove();
 
-	const polygons = voronoi.polygons(nodes);
+	const polyNodes = nodes.filter(d => {
+		if (currentCat) return currentCat === d.category;
+		return true;
+	});
+
+	const polygons = voronoi.polygons(polyNodes);
 
 	const vorPaths = d3
 		.select('.g-voronoi')
@@ -170,20 +170,20 @@ function placeDots() {
 	// $.chart.select(".chart__curate_purp").classed('is-hidden',false);
 
 	// hide hover text and buttons
-	$fade.classed('is-hidden', true);
+	// $fade.classed('is-hidden', true);
 	// disable mouse interaction while it sim is running
-	$.vor.selectAll('path').on('mouseenter', () => {});
+	// $.vor.selectAll('path').on('mouseenter', () => {});
 
 	// reset trigger for rendering voronoi
-	triggeredVor = false;
+	// triggeredVor = false;
 
 	Render.clear($.contextBg);
 	Render.clear($.contextFg);
 
-	nodes = badgeData;
-
 	nodes.forEach(d => {
-		d.fill = Colors[d.category];
+		if (!currentCat) d.fill = Colors[d.category];
+		else
+			d.fill = d.category === currentCat ? Colors[d.category] : 'rgba(0,0,0,0)';
 		d.stroke = null;
 		Render.dot({ d, ctx: $.contextFg });
 	});
@@ -191,38 +191,37 @@ function placeDots() {
 	createVor();
 }
 
-function enterSection() {
-	console.log('enterSection');
-	Render.clear($.contextFg);
-	active = true;
+function enterSection(reset) {
+	if (reset) currentCat = null;
+	placeDots();
 }
 
 function enter(step) {
 	Tweet.clear({ section: 'curate' });
-	currentStep = step;
+	// currentStep = step;
 
-	$.chartCurate.classed('is-hidden', true);
+	// $.chartCurate.classed('is-hidden', true);
 
-	$step
-		.filter(function(d, i) {
-			return d3.select(this).attr('data-step') == step;
-		})
-		.classed('is-visible', true);
+	// $step
+	// 	.filter(function(d, i) {
+	// 		return d3.select(this).attr('data-step') == step;
+	// 	})
+	// 	.classed('is-visible', true);
 
-	if (currentStep === 'intro') placeDots();
-	else if (currentStep === 'nav') {
-		runNav('edutainment');
-		$.chart.select('.chart__curate_purp').classed('is-hidden', true);
-		$nav.selectAll('button').classed('is-active', (d, i) => i === 0);
-	}
+	// if (currentStep === 'intro') placeDots();
+	// else if (currentStep === 'nav') {
+	// 	runNav('edutainment');
+	// 	$.chart.select('.chart__curate_purp').classed('is-hidden', true);
+	// 	$nav.selectAll('button').classed('is-active', (d, i) => i === 0);
+	// }
 }
 
 function exit(step) {
 	Tweet.clear({ section: 'curate' });
-	if (step == 'nav') {
-		placeDots();
-		currentStep = 'intro';
-	}
+	// if (step == 'nav') {
+	// 	placeDots();
+	// 	currentStep = 'intro';
+	// }
 	// currentStep = step === 'nav' ? 'intro' : 'nav';
 	// console.log(step,currentStep);
 }
@@ -233,17 +232,14 @@ function clear() {
 }
 
 function resize() {
-	sampleSize = 0.05;
 	width = $.chart.node().offsetWidth;
 	height = $.chart.node().offsetHeight;
 	mobile = width < BP;
 	centerX = width / 2;
 	centerY = mobile ? (height * 2) / 3 : height / 2;
 
-	const stepSize = $step.size();
 	const stepHeight = window.innerHeight;
-	$step.st('height', stepHeight); // .classed('is-visible', true);
-	// .st('height', (d, i) => stepHeight * (i === stepSize - 1 ? 2 : 1))
+	$step.st('height', stepHeight);
 
 	const { scale, offsetW, offsetH } = Render.getScale();
 
@@ -280,8 +276,9 @@ function init(data) {
 	badgeData = data.fullBadge.map(d => ({
 		...d
 	}));
+	nodes = badgeData;
 	// tweetData = data.curate;
-	categories.forEach(c => {
+	Categories.forEach(c => {
 		categoryData[c.cat] = {
 			tweets: data.curate.filter(d => d.category === c.cat),
 			current: 0,
