@@ -25,7 +25,9 @@ function create({
 
 	const { handle, text, time } = data;
 	// $tweet.append('p.tweet__name').text(name);
-	$tweet.append('p.tweet__handle').text(handle);
+	const top = $tweet.append('div.tweet__top')
+	top.append('p.tweet__handle').text(handle);
+	top.append('div.tweet__icon')
 	$tweet.append('p.tweet__text').text(text);
 	$tweet.append('p.tweet__time').text(time);
 
