@@ -186,9 +186,7 @@ function placeDots() {
 	nodes.forEach(d => {
 		if (!currentCat) d.fill = Colors[d.category];
 		else {
-			let rgbCol = d3.rgb(Colors[d.category])
-			rgbCol.opacity = 0.15
-			return d.fill = d.category === currentCat ? Colors[d.category] : rgbCol
+			return d.fill = d.category === currentCat ? Colors[d.category] : "#444444"
 		}//.opacity[0.9]//'rgba(0,0,0,0)';
 		d.stroke = null;
 		Render.dot({ d, ctx: $.contextFg });
