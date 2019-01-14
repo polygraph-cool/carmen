@@ -61,7 +61,7 @@ function handleVorEnter({ data }) {
 	Tweet.clear({ section: 'curate' });
 
 	Tweet.create({
-		data: cd.tweets[cd.current] || exampleTweet,
+		data: cd.tweets[cd.current],
 		x,
 		y,
 		offset: true,
