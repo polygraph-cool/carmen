@@ -73,6 +73,7 @@ function handleNavClick() {
 	const $button = d3.select(this);
 	$button.classed('is-active', true);
 	currentCat = $button.at('data-id');
+	currentCat = currentCat === 'all' ? null : currentCat;
 	clear();
 	placeDots();
 }

@@ -9,11 +9,13 @@
 		<div class='step__fade'>
 			<p class='step__prose'>{{{doc.curate.nav}}}</p>
 			<nav class='curate__nav' role='group'>
+					<div class='choice'><button class='cat-all is-active' data-id='{{all}}'>All Tweets</button></div>
 					{{#each doc.categories}}
 					{{#if curate}}
 					<div class='choice'><button class='cat-{{id}}' data-id='{{id}}'>{{label}}</button></div>
 					{{/if}}
 					{{/each}}
+					
 			</nav>
 			<p class='step__note'>{{{doc.curate.note}}}</p>
 		</div>
