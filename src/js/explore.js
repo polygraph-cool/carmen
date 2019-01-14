@@ -36,7 +36,7 @@ function removeTweets() {
 
 
 function loadMoreData() {
-	const NUM_FILES = 24;
+	const NUM_FILES = 25;
 	const INDEX = Math.ceil(Math.random() * NUM_FILES);
 
 	return new Promise((resolve, reject) => {
