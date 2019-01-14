@@ -67,6 +67,8 @@ function resize() {
 	$.chart
 		.st('background-image', 'url("assets/images/bg-dots.png")')
 		.st('background-size', `${bgSize}px ${bgSize}px`);
+
+	console.log("render resize")
 }
 
 function createConcentric({ ringNum, ctx }) {

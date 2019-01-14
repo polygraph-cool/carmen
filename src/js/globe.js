@@ -417,10 +417,12 @@ function resize() {
 			.context($.contextGlobe);
 
 		updateCanvasGlobe();
+
 	}
 }
 
 function setup(world) {
+
 	const widthCanvasDom = +$.canvasGlobe.style('width').replace('px', '');
 
 	const widthRetinaDom = +$.canvasGlobe.attr('width');

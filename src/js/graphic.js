@@ -27,6 +27,12 @@ function resize() {
 	Globe.resize();
 	Curate.resize();
 	Explore.resize();
+
+	const hidden = $.globeSec.classed('is-hidden')
+	console.log({hidden})
+	$.globeSec.classed('is-hidden', false)
+	const hidden2 = $.globeSec.classed('is-hidden')
+	console.log({hidden2})
 }
 
 function onIntroStepEnter(el) {
@@ -121,6 +127,7 @@ function onCurateStepExit(el) {
 
 function setup(data) {
 	// console.log({ data });
+	$.globeSec.classed('is-hidden', true)
 	// sections
 	Intro.init(data);
 	Curate.init(data);

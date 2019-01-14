@@ -187,6 +187,7 @@ function clear() {
 }
 
 function resize() {
+	console.log("intro resize")
 	width = $.chart.node().offsetWidth;
 	height = $.chart.node().offsetHeight;
 	stepWidth = $step.node().offsetWidth;
