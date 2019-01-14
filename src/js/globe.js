@@ -4,8 +4,7 @@ import Render from './render';
 import Tweet from './tweet';
 import Color from './colors';
 
-
-const firstStepCoords = [46.738586,24.7136];
+const firstStepCoords = [46.738586, 24.7136];
 
 const $section = d3.select('#globe');
 const $step = $section.selectAll('.step');
@@ -19,10 +18,10 @@ const PATH_COLOR = '#666';
 const LOFT = 1.8;
 const LINE_WIDTH = 1;
 
-let loftedness = 1.3;
+const loftedness = 1.3;
 
-let mobile = false
-let BP = 800
+let mobile = false;
+const BP = 800;
 
 let land = null;
 let swoosh = null;
@@ -66,14 +65,10 @@ function lineLength(points) {
 }
 
 function flyingArc(coords) {
-    var source = coords[0];
-    var target = coords[1];
-    var middle = locationAlongArc(source, target, 0.5);
-    return [
-        projection(source),
-        loftedProjection(middle),
-        projection(target)
-    ];
+	const source = coords[0];
+	const target = coords[1];
+	const middle = locationAlongArc(source, target, 0.5);
+	return [projection(source), loftedProjection(middle), projection(target)];
 }
 
 function updateCanvasGlobe() {
@@ -97,13 +92,13 @@ function updateCanvasGlobe() {
 }
 
 function addTweetBox(coord) {
-	console.log(active);
+	// console.log(active);
 	const p = projection(coord);
 
-	const x = p[0]*(1/adjustRetina) + stepWidth;
-	console.log({x})
+	const x = p[0] * (1 / adjustRetina) + stepWidth;
+	// console.log({x})
 
-	const y = p[1]*(1/adjustRetina) - 10;
+	const y = p[1] * (1 / adjustRetina) - 10;
 	if (current.step !== 'categories' && active) {
 		const data = {
 			text: current.tweet,
@@ -150,29 +145,27 @@ function addFinalMarker(coord) {
 	const y = p[1];
 
 	$.contextGlobe.beginPath();
-	$.contextGlobe.arc(x, y, 10*adjustRetina, 0, 2 * Math.PI);
+	$.contextGlobe.arc(x, y, 10 * adjustRetina, 0, 2 * Math.PI);
 	$.contextGlobe.strokeStyle = 'rgba(255,0,0,.5)';
 
 	$.contextGlobe.stroke();
 
 	$.contextGlobe.beginPath();
-	$.contextGlobe.arc(x, y, 20*adjustRetina, 0, 2 * Math.PI);
+	$.contextGlobe.arc(x, y, 20 * adjustRetina, 0, 2 * Math.PI);
 	$.contextGlobe.strokeStyle = 'rgba(255,0,0,.5)';
 	$.contextGlobe.stroke();
 }
 
 function updateTextLabels(textString, coord) {
+	const width = +$.canvasGlobe.style('width').replace('px', '');
 
-	var width = +$.canvasGlobe
-		.style("width").replace("px","");
-
-	var svgWidth = +$.svg.style("width").replace("px","");
+	const svgWidth = +$.svg.style('width').replace('px', '');
 
 	const p = projection(coord);
 
-	const x = p[0]*(1/adjustRetina) + (svgWidth-width);
+	const x = p[0] * (1 / adjustRetina) + (svgWidth - width);
 
-	const y = p[1]*(1/adjustRetina);
+	const y = p[1] * (1 / adjustRetina);
 
 	const offset = 40;
 
@@ -187,10 +180,9 @@ function updateTextLabels(textString, coord) {
 	}
 }
 
-function showStatic(globeCoordinates){
-
+function showStatic(globeCoordinates) {
 	textElement.text(current.country);
-	let focalPoint = null;
+	const focalPoint = null;
 
 	function focusGlobeOnPoint(point) {
 		const x = point[0];
@@ -210,31 +202,28 @@ function showStatic(globeCoordinates){
 		// Rotate globe to focus on the flying arc
 		focusGlobeOnPoint(globeCoordinates);
 		updateCanvasGlobe();
-		//updateMarkers([coordsStart, coordsEnd]);
+		// updateMarkers([coordsStart, coordsEnd]);
 		updateTextLabels(current.city, globeCoordinates);
 		addFinalMarker(globeCoordinates);
-		addTweetBox(globeCoordinates)
+		addTweetBox(globeCoordinates);
 		// $.contextGlobe.save();
 		// $.contextGlobe.translate(x, y);
 		// $.contextGlobe.rotate(r);
 		// $.contextGlobe.restore();
-	};
-	if(current.step != "categories"){
+	}
+	if (current.step != 'categories') {
 		draw(globeCoordinates);
 	}
-
 }
 
-function createImages(){
-}
+function createImages() {}
 
 function goTo(coordsStart, coordsEnd) {
 	let focalPoint = null;
 	let flyingArcLength = null;
 	textElement.text(current.country);
-	//&&
+	// &&
 	function focusGlobeOnPoint(point) {
-
 		const x = point[0];
 		const y = point[1];
 		const cx = x;
@@ -294,7 +283,6 @@ function goTo(coordsStart, coordsEnd) {
 		const r = 135 + heading * -(Math.PI / 180);
 		const gDistance = d3.geoDistance([x, y], [xF, yF]);
 
-
 		if (gDistance === 0) {
 			addFinalMarker(coordsEnd);
 		}
@@ -302,7 +290,13 @@ function goTo(coordsStart, coordsEnd) {
 		$.contextGlobe.translate(x, y);
 		$.contextGlobe.rotate(r);
 
-		$.contextGlobe.drawImage($planeEl, -(40*adjustRetina / 2), -(40*adjustRetina / 2), 40*adjustRetina, 40*adjustRetina);
+		$.contextGlobe.drawImage(
+			$planeEl,
+			-((40 * adjustRetina) / 2),
+			-((40 * adjustRetina) / 2),
+			40 * adjustRetina,
+			40 * adjustRetina
+		);
 		$.contextGlobe.restore();
 	};
 
@@ -326,27 +320,27 @@ function goTo(coordsStart, coordsEnd) {
 		const timer = d3.timer(tick);
 	};
 	shuffle();
-
 }
 
 function update() {
 	const newCoords = [+current.lon, +current.lat];
-	console.log(newCoords);
+	// console.log(newCoords);
 	Tweet.clear({ section: 'globe' });
 
 	if (current.step === 'categories') {
 		globeCoordinates = firstStepCoords;
-		console.log(globeCoordinates);
+		// console.log(globeCoordinates);
 	}
 	if (ready) {
-		if(current.step === 'categories'){
+		if (current.step === 'categories') {
 			updateCanvasGlobe();
-			textElement.text("")
-		}
-		else if(globeCoordinates[0] == newCoords[0] && globeCoordinates[1] == newCoords[1]){
+			textElement.text('');
+		} else if (
+			globeCoordinates[0] == newCoords[0] &&
+			globeCoordinates[1] == newCoords[1]
+		) {
 			showStatic(globeCoordinates);
-		}
-		else{
+		} else {
 			goTo(globeCoordinates, newCoords);
 		}
 	}
@@ -365,18 +359,17 @@ function step(index) {
 }
 
 function resize() {
-	const sectionWidth = $section.node().offsetWidth
+	const sectionWidth = $section.node().offsetWidth;
 	// check if mobile
 	mobile = sectionWidth < BP;
 	// resize stepper elements
 	const stepHeight = mobile ? window.innerHeight * 1.5 : window.innerHeight;
 	stepWidth = d3.select('.globe__steps').node().offsetWidth;
-	if(mobile){
-		$step.st('height', stepHeight)//.classed('is-visible', true);	
+	if (mobile) {
+		$step.st('height', stepHeight); // .classed('is-visible', true);
 	}
 
 	// console.log({mobile, width, BP})
-
 
 	// resize all the globe stuff
 	if (ready) {
@@ -385,8 +378,6 @@ function resize() {
 		const smaller = Math.min(width, height);
 		const radius = smaller / 2.5;
 		const scale = radius;
-
-
 
 		fauxPathElement = $.globe.append('path');
 
@@ -398,12 +389,12 @@ function resize() {
 			.precision(0.1)
 			.clipAngle(90);
 
-		loftedProjection = d3.geoOrthographic()
-    	.scale(((height - 10) / 2) * loftedness)
-    	.translate([width / 2, height / 2])
-    	.precision(0.1)
-			.clipAngle(90)
-			;
+		loftedProjection = d3
+			.geoOrthographic()
+			.scale(((height - 10) / 2) * loftedness)
+			.translate([width / 2, height / 2])
+			.precision(0.1)
+			.clipAngle(90);
 
 		const x = firstStepCoords[0];
 		const y = firstStepCoords[1];
@@ -430,38 +421,39 @@ function resize() {
 }
 
 function setup(world) {
+	const widthCanvasDom = +$.canvasGlobe.style('width').replace('px', '');
 
-	var widthCanvasDom = +$.canvasGlobe
-		.style("width").replace("px","");
+	const widthRetinaDom = +$.canvasGlobe.attr('width');
 
-	var widthRetinaDom = +$.canvasGlobe
-		.attr("width");
+	adjustRetina = widthRetinaDom / widthCanvasDom;
 
-	adjustRetina = (widthRetinaDom/widthCanvasDom);
-
-	console.log(adjustRetina);
+	// console.log(adjustRetina);
 
 	projection = d3.geoOrthographic();
 	path = d3.geoPath();
 	land = topojson.feature(world, world.objects.countries);
-	var stepsColors = d3.select(".globe__steps").selectAll(".step").each(function(d){
-		var stepName = d3.select(this).attr("data-step");
+	const stepsColors = d3
+		.select('.globe__steps')
+		.selectAll('.step')
+		.each(function(d) {
+			const stepName = d3.select(this).attr('data-step');
 
-		d3.select(this).select(".destination-wrapper")
-			.style("color",function(d){
-				return "white";
-				if(stepName == "pop-culture"){
-					return d3.color(Color[stepName]).brighter(2)
-				}
-				return d3.color(Color[stepName]);
-			})
+			d3.select(this)
+				.select('.destination-wrapper')
+				.style('color', (d) => {
+					return 'white';
+					if (stepName == 'pop-culture') {
+						return d3.color(Color[stepName]).brighter(2);
+					}
+					return d3.color(Color[stepName]);
+				});
 
-		d3.select(this).select(".destination-wrapper")
-			.select(".destination-plane")
-			.select("path")
-			.style("fill",Color[stepName])
-			;
-	})
+			d3.select(this)
+				.select('.destination-wrapper')
+				.select('.destination-plane')
+				.select('path')
+				.style('fill', Color[stepName]);
+		});
 }
 
 let active = false;
@@ -487,4 +479,4 @@ function init() {
 	});
 }
 
-export default { init, resize, step, enterSection, clear};
+export default { init, resize, step, enterSection, clear };

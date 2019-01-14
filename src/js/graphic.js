@@ -40,9 +40,6 @@ function onIntroStepExit(el) {
 }
 
 function updateSection(index) {
-
-	console.log("updating section");
-
 	const $section = $.section.filter((d, i) => i === index);
 	const id = $section.at('id');
 
@@ -56,17 +53,20 @@ function updateSection(index) {
 	$.overlay.classed('is-hidden', true);
 	$.chartCurate.classed('is-hidden', true);
 	$.chartTweets.classed('globe-tweets', false);
-	$.chart.select(".chart__curate_purp").classed('is-hidden',true);
-	Intro.clear();
+	$.chart.select('.chart__curate_purp').classed('is-hidden', true);
+	// Intro.clear();
 	Curate.clear();
 	Explore.clear();
 	Globe.clear();
+	$.vor.classed('is-hidden', true);
 	switch (id) {
 	case 'intro':
 		$.canvasBg.classed('is-hidden', false);
 		$.canvasFg.classed('is-hidden', false);
-		$.overlay.classed('is-hidden', false);
-		Intro.enterSection();
+		$.vor.classed('is-hidden', false);
+		// $.overlay.classed('is-hidden', false);
+		// Curate.enterSection();
+		// Intro.enterSection();
 		break;
 	case 'globe':
 		$.canvasGlobe.classed('is-hidden', false);
@@ -76,8 +76,9 @@ function updateSection(index) {
 		break;
 	case 'curate':
 		$.canvasFg.classed('is-hidden', false);
-		$.chart.select(".chart__curate_purp").classed('is-hidden',false);
-		Curate.enterSection();
+		$.chart.select('.chart__curate_purp').classed('is-hidden', false);
+		$.vor.classed('is-hidden', false);
+		// Curate.enterSection();
 		break;
 
 	case 'explore':
@@ -88,10 +89,10 @@ function updateSection(index) {
 		break;
 
 	case 'outro':
-	$.canvasEx.classed('is-hidden', false);
-	$.chart.classed('is-hidden', true);
-	$.exploreNav.classed('is-hidden', true);
-	break;
+		$.canvasEx.classed('is-hidden', false);
+		$.chart.classed('is-hidden', true);
+		$.exploreNav.classed('is-hidden', true);
+		break;
 
 	default:
 		break;
@@ -121,9 +122,9 @@ function onCurateStepExit(el) {
 function setup(data) {
 	// console.log({ data });
 	// sections
-	Intro.init(data);
-	Globe.init(data);
+	// Intro.init(data);
 	Curate.init(data);
+	Globe.init(data);
 	Explore.init(data);
 
 	resize();
@@ -139,7 +140,7 @@ function setup(data) {
 			let index = +d3.select(el).attr('data-index');
 			index = Math.max(0, index - 1);
 			updateSection(index);
-			console.log({el})
+			console.log({ el });
 		},
 		offset: 0.2
 	});
@@ -169,7 +170,7 @@ function setup(data) {
 }
 
 function assignCategoryRandom(counts) {
-	console.log(badgePos.length)
+	// console.log(badgePos.length);
 	const pool = [].concat(...counts.map((d, i) => d3.range(d).map(() => i)));
 	const shuffled = Shuffle(pool);
 	return badgePos.map((d, i) => ({
@@ -197,8 +198,6 @@ function assignCategoryLayer(counts) {
 	});
 }
 
-
-
 function prepareData() {
 	return new Promise(resolve => {
 		const sum = d3.sum(categories, d => d.count);
@@ -208,22 +207,20 @@ function prepareData() {
 			return Math.floor(percent * badgePos.length);
 		});
 
-		const culture = culturePos.map(d => {
-			return {
-				...d,
-				category: 'cultural-icon'
-			}
-		})
+		const culture = culturePos.map(d => ({
+			...d,
+			category: 'cultural-icon'
+		}));
 
 		loadData()
 			.then(results => {
 				const withCat = assignCategoryRandom(counts);
-				const fullBadge = withCat.concat(culture)
+				const fullBadge = withCat.concat(culture);
 				const curateData = results.curate;
 				const exploreData = results.explore;
 				const allData = {
 					badgeOnly: withCat,
-					fullBadge: fullBadge,
+					fullBadge,
 					curate: curateData,
 					explore: exploreData
 				};
@@ -249,7 +246,7 @@ function svgToJSON() {
 
 function init() {
 	prepareData().then(setup);
-	//svgToJSON();
+	// svgToJSON();
 }
 
 export default { init, resize };

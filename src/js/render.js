@@ -8,8 +8,8 @@ const DPR = window.devicePixelRatio ? Math.min(window.devicePixelRatio, 2) : 1;
 
 let width = 0;
 let height = 0;
-let mobile = false
-let BP = 800
+let mobile = false;
+const BP = 800;
 
 function getScale() {
 	const w = width / DPR;
@@ -51,8 +51,7 @@ function resize() {
 		.at({ width, height })
 		.st({ width: width / DPR, height: height / DPR });
 
-
-	const globeStepW = d3.select('.globe__steps').node().offsetWidth
+	const globeStepW = d3.select('.globe__steps').node().offsetWidth;
 	const globeW = mobile ? globeStepW * DPR : width - globeStepW * DPR;
 	$.canvasGlobe
 		.at({ width: globeW, height })
@@ -60,7 +59,8 @@ function resize() {
 
 	const bgSize = getScale().scale * 30;
 
-	$.chart.select(".chart__curate_purp")
+	$.chart
+		.select('.chart__curate_purp')
 		.st('background-image', 'url("assets/images/bg-dots-purp.png")')
 		.st('background-size', `${bgSize}px ${bgSize}px`);
 
@@ -87,9 +87,10 @@ function dot({ d, ctx, fill, concentric }) {
 	ctx.moveTo(x + r, y);
 	ctx.arc(x, y, r, 0, 2 * Math.PI);
 	// console.log({fill})
-	ctx.fillStyle = fill ? fill : d.fill; // || '#fff';
+	ctx.fillStyle = fill || d.fill;
 	ctx.fill();
 
+	// console.log(d.x);
 	if (concentric === true) {
 		// concentric 1
 		const r1 = d.r * 2 * DPR;

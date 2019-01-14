@@ -10,16 +10,16 @@ const BP = 800;
 const $intro = d3.select('#intro');
 const $introHed = $intro.select('.intro__hed');
 const $title = $intro.selectAll('.intro__hed-text, .intro__watch');
-const $swing = $intro.selectAll('.carmen-swing')
+const $swing = $intro.selectAll('.carmen-swing');
 const $step = $intro.selectAll('.step');
 const $watch = $intro.selectAll('.intro__watch');
 
-let badgeData = [];
+const badgeData = [];
 let width = 0;
 let height = 0;
 let stepWidth = 0;
 let timeout = null;
-let tweetData = null;
+const tweetData = null;
 let currentStep = null;
 let exampleCounter = 0;
 let mobile = false;
@@ -43,7 +43,7 @@ function hideTitle() {
 	$swing
 		.transition()
 		.duration(500)
-		.translate([-width, 0])
+		.translate([-width, 0]);
 }
 
 function showTitle() {
@@ -68,7 +68,7 @@ function showTitle() {
 	$swing
 		.transition()
 		.duration(500)
-		.translate([0, 0])
+		.translate([0, 0]);
 }
 
 function chooseTweet() {
@@ -99,7 +99,7 @@ function triggerExample() {
 
 		const delay = data.text.length * 50;
 
-		//d.fill = '#fff';
+		// d.fill = '#fff';
 
 		Tweet.clear({ section: 'intro' });
 		Render.clear($.contextEx);
@@ -146,20 +146,20 @@ function revealDots() {
 
 function runTitle() {
 	showTitle();
-	Render.clear($.contextEx);
-	Tweet.clear({ section: 'intro' });
-	revealDots();
+	// Render.clear($.contextEx);
+	// Tweet.clear({ section: 'intro' });
+	// revealDots();
 }
 
 function runExamples() {
 	hideTitle();
-	triggerExample();
+	// triggerExample();
 }
 
 function enterSection() {
 	Render.clear($.contextFg);
-	revealDots();
-	active = true;
+	// revealDots();
+	// active = true;
 }
 
 function enter(step) {
@@ -172,7 +172,7 @@ function enter(step) {
 function exit(step) {
 	if (timeout) clearTimeout(timeout);
 	currentStep = step === 'examples' ? 'title' : 'examples';
-	if (currentStep === 'title') runTitle()
+	if (currentStep === 'title') runTitle();
 }
 
 function clear() {
@@ -210,9 +210,9 @@ function resize() {
 }
 
 function init(data) {
-	badgeData = data.badgeOnly.map(d => ({ ...d }))
-	tweetData = data.curate;
-	$.canvasEx.classed('is-hidden', false);
+	// badgeData = data.badgeOnly.map(d => ({ ...d }))
+	// tweetData = data.curate;
+	// $.canvasEx.classed('is-hidden', false);
 }
 
 export default { init, resize, enter, enterSection, exit, clear };

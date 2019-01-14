@@ -3,16 +3,25 @@ import $ from './dom';
 const REM = 16;
 const PAD = REM * 4;
 
-const $step = d3.selectAll('.intro__steps')
-const $slide = d3.selectAll('.figure__dots')
+const $step = d3.selectAll('.intro__steps');
+const $slide = d3.selectAll('.figure__dots');
 
-function create({ data, x = 0, y = 0, fade, offset, pushLeft, section, category }) {
+function create({
+	data,
+	x = 0,
+	y = 0,
+	fade,
+	offset,
+	pushLeft,
+	section,
+	category
+}) {
 	const $tweet =
 		section === 'explore'
 			? $.exploreTweets.append('div.tweet')
 			: $.chartTweets.append('div.tweet');
 
-		console.log({category})
+	// console.log({category})
 
 	const { handle, text, time } = data;
 	// $tweet.append('p.tweet__name').text(name);
@@ -20,8 +29,13 @@ function create({ data, x = 0, y = 0, fade, offset, pushLeft, section, category 
 	$tweet.append('p.tweet__text').text(text);
 	$tweet.append('p.tweet__time').text(time);
 
-	var grabRandomImage = d3.scaleQuantize().domain([0,1]).range([1,2,3,4,5])
-	$tweet.append('div.tweet__image-'+grabRandomImage(Math.random())).attr("title","Picture of Carmen Sandiego");
+	const grabRandomImage = d3
+		.scaleQuantize()
+		.domain([0, 1])
+		.range([1, 2, 3, 4, 5]);
+	$tweet
+		.append(`div.tweet__image-${  grabRandomImage(Math.random())}`)
+		.attr('title', 'Picture of Carmen Sandiego');
 
 	$tweet
 		.st({ top: y, left: x })
@@ -35,29 +49,27 @@ function create({ data, x = 0, y = 0, fade, offset, pushLeft, section, category 
 	const h = +$tweet.node().offsetHeight / 2;
 	const chartW = $.chartTweets.node().offsetWidth;
 	const chartH = $.chartTweets.node().offsetHeight;
-	const yOffAm = -h * 1.35
-	const drawW = chartW - PAD
+	const yOffAm = -h * 1.35;
+	const drawW = chartW - PAD;
 	let marginLeft = 0;
 	let marginTop = offset ? yOffAm : 0;
-	let stepWidth = $step.node().offsetWidth
+	const stepWidth = $step.node().offsetWidth;
 
-	if (section == 'explore'){
-		let slideWidth = $slide.node().offsetWidth
-		if(x + w >= slideWidth) marginLeft = -((x + w) - slideWidth)
-		else if (x - w <= 0 ) marginLeft = (w - x)
-	}
-	else {
-		if (x + w >= drawW) marginLeft = -((x + w) - drawW)
-		else if (x + w >= drawW - stepWidth && pushLeft) marginLeft = -((x + w) - (drawW - stepWidth))
-		else if (x - w <= PAD) marginLeft = (w - x) + PAD
-	}
+	if (section == 'explore') {
+		const slideWidth = $slide.node().offsetWidth;
+		if (x + w >= slideWidth) marginLeft = -(x + w - slideWidth);
+		else if (x - w <= 0) marginLeft = w - x;
+	} else if (x + w >= drawW) marginLeft = -(x + w - drawW);
+	else if (x + w >= drawW - stepWidth && pushLeft)
+		marginLeft = -(x + w - (drawW - stepWidth));
+	else if (x - w <= PAD) marginLeft = w - x + PAD;
 
-	//if (x + fullW >= drawW || pushLeft) marginLeft = drawW - fullW//-(w * 2);
-	//if (x - w <= PAD) marginLeft = w;
+	// if (x + fullW >= drawW || pushLeft) marginLeft = drawW - fullW//-(w * 2);
+	// if (x - w <= PAD) marginLeft = w;
 
-	const boxTop = offset ? y + yOffAm : y
+	const boxTop = offset ? y + yOffAm : y;
 
-	if (boxTop <= h) marginTop = -(yOffAm)
+	if (boxTop <= h) marginTop = -yOffAm;
 
 	// if (y + (2 * h) >= chartH - PAD) marginTop += -h;
 	// if (y - (2 * h) <= PAD) marginTop = h;
