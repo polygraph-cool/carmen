@@ -19,6 +19,9 @@ figure#chart
 	width 100%
 	transition opacity 250ms ease-in-out
 
+	&.is-behind
+		pointer-events none
+
 	&.is-hidden
 		opacity 0
 		pointer-events none
@@ -64,6 +67,7 @@ figure#chart
 		+mq('bp-4')
 			left 20rem
 
+	
 	.chart__svg
 		position absolute
 		top 0px
@@ -148,3 +152,7 @@ figure#chart
 
 	.chart__curate_purp
 		z-index set-index(bottom)
+
+#chart.is-behind .chart__svg
+	pointer-events none
+	

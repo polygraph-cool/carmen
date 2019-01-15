@@ -1,12 +1,12 @@
 #globe
-	pointer-events none
+	// pointer-events none
 	display block
 	opacity 1
 	&.is-hidden
 		opacity 0
 	.globe__steps
 		position relative
-		pointer-events none
+		// pointer-events none
 		background none
 		max-width 31rem
 		margin-left auto
@@ -18,16 +18,18 @@
 			padding 1rem
 			background linear-gradient(to bottom, rgba(0,0,0,0) 0px, rgba(0,0,0,0) 150px, rgba(61,61,55,0.75) 400px, rgba(61,61,55,0.75) 95%, rgba(0,0,0,0) 100%)
 		.step
-			//display flex
-			//flex-direction column
-			//justify-content flex-end
-			//min-height 480px
-			//max-height 700px
-			opacity .4
-			transition opacity .5s
-			margin-bottom 90px
+			margin-bottom 2rem
+			height 3rem
+			overflow hidden
+			&.is-visible
+				height auto
+				.destination-wrapper
+					// border-color transparent
+					&:after
+						opacity 0
 			&:first-of-type
 				//justify-content center
+				height auto
 				margin-bottom 100px
 				+mq('bp-4')
 					//justify-content flex-end
@@ -41,7 +43,26 @@
 					background-color transparent
 
 			.destination-wrapper
+				position relative
 				display flex
+				border 1px solid currentColor
+				border-radius 10px
+				padding 0 1rem
+				align-items center
+				margin-bottom 1rem
+				cursor pointer
+				&:after
+					content 'explore'
+					text-transform uppercase
+					position absolute
+					right 1rem
+					top 50%
+					transform translateY(-50%)
+					display block
+					color $fg
+					opacity 0.5
+					font-weight 300
+					set-type-size(small)
 				svg
 					width 20px
 					margin-top -2px
@@ -51,6 +72,8 @@
 			.step__prose
 				set-type-size(root, true)
 				// font-size 15px
+				margin 0
+				margin-bottom 1rem
 				span
 					padding 0 0.25em
 				.edutainment
@@ -75,13 +98,14 @@
 			.step__label
 				margin 0px
 				font-size 48px
-				line-height 1
 
 			.step__destination
 				font-size 21px
 				margin 0px
 				text-transform uppercase
 				font-family 'Akhand Soft'
+				line-height 1
+				margin-top -3px
 			h3
 				font-family 'Akhand Soft'
 				text-transform uppercase

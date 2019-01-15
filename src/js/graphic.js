@@ -44,6 +44,7 @@ function updateSection(index) {
 	const id = $section.at('id');
 
 	// console.log('section', id);
+	$.chart.classed('is-behind', false);
 	$.chart.classed('is-hidden', false);
 	$.exploreNav.classed('is-hidden', true);
 	$.globe.classed('is-hidden', true);
@@ -73,6 +74,7 @@ function updateSection(index) {
 		$.canvasGlobe.classed('is-hidden', false);
 		$.globe.classed('is-hidden', false);
 		$.chartTweets.classed('globe-tweets', true);
+		$.chart.classed('is-behind', true);
 		Globe.enterSection();
 		break;
 	case 'curate':
@@ -149,12 +151,12 @@ function setup(data) {
 		offset: 0.9
 	});
 	// globe steps
-	EnterView({
-		selector: '#globe .step',
-		enter: onGlobeStepEnter,
-		exit: onGlobeStepExit,
-		offset: 0.67
-	});
+	// EnterView({
+	// 	selector: '#globe .step',
+	// 	enter: onGlobeStepEnter,
+	// 	exit: onGlobeStepExit,
+	// 	offset: 0.67
+	// });
 	EnterView({
 		selector: '#curate .step',
 		enter: onCurateStepEnter,

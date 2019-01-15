@@ -422,6 +422,20 @@ function resize() {
 	}
 }
 
+function handleStepClick() {
+	const $s = d3
+		.select(this)
+		.parent()
+		.parent();
+
+	const visible = $s.classed('is-visible');
+	$step.classed('is-visible', false);
+	if (!visible) {
+		$s.classed('is-visible', true);
+		step(+$s.at('data-index'));
+	}
+}
+
 function setup(world) {
 	const widthCanvasDom = +$.canvasGlobe.style('width').replace('px', '');
 
@@ -437,24 +451,29 @@ function setup(world) {
 	const stepsColors = d3
 		.select('.globe__steps')
 		.selectAll('.step')
-		.each(function(d) {
+		.each(function(d, i) {
 			const stepName = d3.select(this).attr('data-step');
-
+			const col =
+				stepName === 'pop-culture'
+					? d3.color(Color[stepName]).brighter(0.5)
+					: Color[stepName];
 			d3.select(this)
 				.select('.destination-wrapper')
-				.style('color', d => {
-					return 'white';
-					if (stepName == 'pop-culture') {
-						return d3.color(Color[stepName]).brighter(2);
-					}
-					return d3.color(Color[stepName]);
-				});
+				.style('color', col)
+				.on('click', handleStepClick);
+			// if (stepName == 'pop-culture') {
+			// 	return ;
+			// }
+			// 	 d3.color(Color[stepName])
+			// );
 
 			d3.select(this)
 				.select('.destination-wrapper')
 				.select('.destination-plane')
 				.select('path')
 				.style('fill', Color[stepName]);
+
+			if (i === 1) d3.select(this).classed('is-visible', true);
 		});
 }
 

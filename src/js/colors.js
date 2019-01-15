@@ -4,5 +4,5 @@ export default {
 	'role-model': '#01c43a',
 	fashion: '#e50914',
 	'cultural-icon': '#3d66f9',
-	'pop-culture': '#03d66f9'
+	'pop-culture': '#3d66f9'
 };
