@@ -189,6 +189,10 @@ function showStatic(globeCoordinates) {
 
 	console.log(current);
 
+	const test = $.globe.selectAll('text')
+
+	console.log({test})
+
 	textElement.text(current.country);
 	const focalPoint = null;
 
@@ -394,9 +398,10 @@ function resize() {
 		const radius = smaller / 2.5;
 		const scale = radius;
 
-		fauxPathElement = $.globe.append('path');
+		// fauxPathElement = $.globe.append('path');
+		//
+		// textElement = $.globe.append('text');
 
-		textElement = $.globe.append('text');
 
 		projection
 			.scale(scale)
@@ -493,6 +498,11 @@ function setup(world) {
 
 			if (i === 1) d3.select(this).classed('is-visible', true);
 		});
+
+
+		fauxPathElement = $.globe.append('path');
+
+		textElement = $.globe.append('text');
 }
 
 let active = false;
