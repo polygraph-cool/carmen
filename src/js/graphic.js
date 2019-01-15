@@ -103,7 +103,9 @@ function updateSection(index) {
 
 function onGlobeStepEnter(el) {
 	const index = +d3.select(el).at('data-index');
-	Globe.step(index);
+	if(index < 2){
+		Globe.step(index);
+	}
 }
 
 function onGlobeStepExit(el) {
@@ -151,12 +153,12 @@ function setup(data) {
 		offset: 0.9
 	});
 	// globe steps
-	// EnterView({
-	// 	selector: '#globe .step',
-	// 	enter: onGlobeStepEnter,
-	// 	exit: onGlobeStepExit,
-	// 	offset: 0.67
-	// });
+	EnterView({
+		selector: '#globe .step',
+		enter: onGlobeStepEnter,
+		// exit: onGlobeStepExit,
+		offset: 0.67
+	});
 	EnterView({
 		selector: '#curate .step',
 		enter: onCurateStepEnter,
