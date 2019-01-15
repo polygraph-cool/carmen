@@ -45,29 +45,37 @@ const ease = d3.easeCubicOut;
 const voronoi = d3.voronoi();
 
 function handleVorEnter({ data }) {
-	Intro.disable();
+	const pos = d3.mouse(this);
 	const { x, y, index, category } = data;
 	const cd = categoryData[category];
-	cd.current += 1;
-	if (cd.current >= cd.total) cd.current = 0;
 
-	Render.clear($.contextFg);
-	nodes.forEach(d => {
-		// d.stroke = '#fff';
-		// else d.stroke = '#000';
-		Render.dot({ d, ctx: $.contextFg, concentric: d.index === index });
-	});
+	const yD = Math.abs(y - pos[1]);
+	const xD = Math.abs(x - pos[0]);
+	const dist = Math.sqrt(yD * yD + xD * xD);
+	if (dist < 32) {
+		Intro.disable();
 
-	Tweet.clear({ section: 'curate' });
+		cd.current += 1;
+		if (cd.current >= cd.total) cd.current = 0;
 
-	Tweet.create({
-		data: cd.tweets[cd.current],
-		x,
-		y,
-		offset: true,
-		section: 'curate'
-		// category: filteredTweets[index].category
-	});
+		Render.clear($.contextFg);
+		nodes.forEach(d => {
+			// d.stroke = '#fff';
+			// else d.stroke = '#000';
+			Render.dot({ d, ctx: $.contextFg, concentric: d.index === index });
+		});
+
+		Tweet.clear({ section: 'curate' });
+
+		Tweet.create({
+			data: cd.tweets[cd.current],
+			x,
+			y,
+			offset: true,
+			section: 'curate'
+			// category: filteredTweets[index].category
+		});
+	}
 }
 
 function handleNavClick() {
@@ -186,8 +194,9 @@ function placeDots() {
 	nodes.forEach(d => {
 		if (!currentCat) d.fill = Colors[d.category];
 		else {
-			return d.fill = d.category === currentCat ? Colors[d.category] : "#444444"
-		}//.opacity[0.9]//'rgba(0,0,0,0)';
+			return (d.fill =
+				d.category === currentCat ? Colors[d.category] : '#444444');
+		} // .opacity[0.9]//'rgba(0,0,0,0)';
 		d.stroke = null;
 		Render.dot({ d, ctx: $.contextFg });
 	});
@@ -204,7 +213,7 @@ function enter(step) {
 	Tweet.clear({ section: 'curate' });
 	// currentStep = step;
 
-	//$.chartCurate.classed('is-hidden', true);
+	// $.chartCurate.classed('is-hidden', true);
 
 	// $step
 	// 	.filter(function(d, i) {
@@ -236,7 +245,6 @@ function clear() {
 }
 
 function resize() {
-
 	width = $.chart.node().offsetWidth;
 	height = $.chart.node().offsetHeight;
 	mobile = width < BP;
@@ -266,7 +274,7 @@ function resize() {
 	placeDots();
 
 	// unhide section after resize
-	$curate.classed('is-hidden', false)
+	$curate.classed('is-hidden', false);
 }
 
 function setupLabels() {
@@ -286,7 +294,7 @@ function init(data) {
 	}));
 	nodes = badgeData;
 	// hide section until after resize
-	$curate.classed('is-hidden', true)
+	$curate.classed('is-hidden', true);
 	// tweetData = data.curate;
 	Categories.forEach(c => {
 		categoryData[c.cat] = {
