@@ -177,30 +177,14 @@ function runSim() {
 }
 
 function placeDots() {
-	// TODO
-	// $.chart.select(".chart__curate_purp").classed('is-hidden',false);
-
-	// hide hover text and buttons
-	// $fade.classed('is-hidden', true);
-	// disable mouse interaction while it sim is running
-	// $.vor.selectAll('path').on('mouseenter', () => {});
-
-	// reset trigger for rendering voronoi
-	// triggeredVor = false;
-
-	Render.clear($.contextBg);
 	Render.clear($.contextFg);
 
 	nodes.forEach(d => {
 		if (!currentCat) d.fill = Colors[d.category];
-		else {
-			return (d.fill =
-				d.category === currentCat ? Colors[d.category] : '#444444');
-		} // .opacity[0.9]//'rgba(0,0,0,0)';
+		else d.fill = d.category === currentCat ? Colors[d.category] : '#444444';
 		d.stroke = null;
 		Render.dot({ d, ctx: $.contextFg });
 	});
-
 	createVor();
 }
 
