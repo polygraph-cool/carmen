@@ -6,6 +6,8 @@ import Color from './colors';
 
 const firstStepCoords = [46.738586, 24.7136];
 
+var changed = false;
+
 const $section = d3.select('#globe');
 const $step = $section.selectAll('.step');
 const $planeEl = d3.select('.airplane').node();
@@ -99,7 +101,8 @@ function addTweetBox(coord) {
 	// console.log({x})
 
 	const y = p[1] * (1 / adjustRetina) - 10;
-	if (current.step !== 'categories' && active) {
+	//if (current.step !== 'categories' && active) {
+	if (active) {
 		const data = {
 			text: current.tweet,
 			handle: current.user,
@@ -181,6 +184,11 @@ function updateTextLabels(textString, coord) {
 }
 
 function showStatic(globeCoordinates) {
+
+	console.log("here");
+
+	console.log(current);
+
 	textElement.text(current.country);
 	const focalPoint = null;
 
@@ -211,9 +219,9 @@ function showStatic(globeCoordinates) {
 		// $.contextGlobe.rotate(r);
 		// $.contextGlobe.restore();
 	}
-	if (current.step != 'categories') {
-		draw(globeCoordinates);
-	}
+	// if (current.step != 'categories') {
+	draw(globeCoordinates);
+	// }
 }
 
 function createImages() {}
@@ -323,6 +331,9 @@ function goTo(coordsStart, coordsEnd) {
 }
 
 function update() {
+
+	console.log("updating",current.step);
+
 	const newCoords = [+current.lon, +current.lat];
 	// console.log(newCoords);
 	Tweet.clear({ section: 'globe' });
@@ -335,6 +346,7 @@ function update() {
 		if (current.step === 'categories') {
 			updateCanvasGlobe();
 			textElement.text('');
+			showStatic(globeCoordinates);
 		} else if (
 			globeCoordinates[0] == newCoords[0] &&
 			globeCoordinates[1] == newCoords[1]
@@ -348,6 +360,9 @@ function update() {
 }
 
 function step(index) {
+
+	console.log("stepping");
+
 	const $s = $step.filter((d, i) => i === index);
 	['step', 'lat', 'lon', 'tweet', 'user', 'city', 'country'].forEach(d => {
 		current[d] = $s.at(`data-${d}`);
@@ -423,6 +438,9 @@ function resize() {
 }
 
 function handleStepClick() {
+
+	changed = true;
+
 	const $s = d3
 		.select(this)
 		.parent()
@@ -488,6 +506,10 @@ function clear() {
 function enterSection() {
 	Render.clear($.contextFg);
 	active = true;
+	console.log("here");
+	if(!changed){
+		step(0);
+	}
 }
 
 function init() {
