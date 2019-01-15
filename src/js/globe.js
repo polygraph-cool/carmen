@@ -4,7 +4,7 @@ import Render from './render';
 import Tweet from './tweet';
 import Color from './colors';
 
-const firstStepCoords = [46.738586, 24.7136];
+const firstStepCoords = [-74.0060, 40.7128];
 
 var changed = false;
 
@@ -231,6 +231,8 @@ function showStatic(globeCoordinates) {
 function createImages() {}
 
 function goTo(coordsStart, coordsEnd) {
+	changed = true;
+
 	let focalPoint = null;
 	let flyingArcLength = null;
 	textElement.text(current.country);
@@ -342,30 +344,39 @@ function update() {
 	// console.log(newCoords);
 	Tweet.clear({ section: 'globe' });
 
-	if (current.step === 'categories') {
+	console.log(changed);
+
+	if (current.step === 'categories' && !changed) {
 		globeCoordinates = firstStepCoords;
 		// console.log(globeCoordinates);
 	}
+
 	if (ready) {
-		if (current.step === 'categories') {
+		if (current.step == 'categories' && !changed) {
 			updateCanvasGlobe();
 			textElement.text('');
-			showStatic(globeCoordinates);
-		} else if (
+			// showStatic(globeCoordinates);
+		}
+		else if(current.step == 'categories' && changed){
+		}
+		else if (
 			globeCoordinates[0] == newCoords[0] &&
 			globeCoordinates[1] == newCoords[1]
 		) {
-			showStatic(globeCoordinates);
-		} else {
+			// showStatic(globeCoordinates);
+		}
+		else if(current.step != 'categories') {
 			goTo(globeCoordinates, newCoords);
+			globeCoordinates = newCoords;
 		}
 	}
-	globeCoordinates = newCoords;
 }
 
-function step(index) {
+function stepHandle(index) {
 
 	console.log("stepping");
+	console.log(index);
+
 
 	const $s = $step.filter((d, i) => i === index);
 	['step', 'lat', 'lon', 'tweet', 'user', 'city', 'country'].forEach(d => {
@@ -373,8 +384,24 @@ function step(index) {
 	});
 
 	$s.classed('is-visible', true);
-
 	update();
+}
+
+
+function step(index) {
+	if(!changed){
+		console.log("stepping");
+		console.log(index);
+
+		const $s = $step.filter((d, i) => i === index);
+		['step', 'lat', 'lon', 'tweet', 'user', 'city', 'country'].forEach(d => {
+			current[d] = $s.at(`data-${d}`);
+		});
+
+		$s.classed('is-visible', true);
+		update();
+	}
+
 }
 
 function resize() {
@@ -444,8 +471,6 @@ function resize() {
 
 function handleStepClick() {
 
-	changed = true;
-
 	const $s = d3
 		.select(this)
 		.parent()
@@ -455,7 +480,7 @@ function handleStepClick() {
 	$step.classed('is-visible', false);
 	if (!visible) {
 		$s.classed('is-visible', true);
-		step(+$s.at('data-index'));
+		stepHandle(+$s.at('data-index'));
 	}
 }
 
@@ -514,11 +539,10 @@ function clear() {
 }
 
 function enterSection() {
-	Render.clear($.contextFg);
-	active = true;
-	console.log("here");
 	if(!changed){
-		step(0);
+		Render.clear($.contextFg);
+		active = true;
+		console.log("here");
 	}
 }
 
