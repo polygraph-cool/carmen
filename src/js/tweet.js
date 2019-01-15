@@ -1,10 +1,14 @@
 import $ from './dom';
+import Colors from './colors';
 
 const REM = 16;
 const PAD = REM * 4;
 
 const $step = d3.selectAll('.intro__steps');
 const $slide = d3.selectAll('.figure__dots');
+
+const svgIcon =
+	'<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="#c9c9c9" stroke="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-twitter"><path d="M23 3a10.9 10.9 0 0 1-3.14 1.53 4.48 4.48 0 0 0-7.86 3v1A10.66 10.66 0 0 1 3 4s-4 9 5 13a11.64 11.64 0 0 1-7 2c9 5 20 0 20-11.5a4.5 4.5 0 0 0-.08-.83A7.72 7.72 0 0 0 23 3z"></path></svg>';
 
 function create({
 	data,
@@ -25,12 +29,15 @@ function create({
 
 	const { handle, text, time } = data;
 	// $tweet.append('p.tweet__name').text(name);
-	const top = $tweet.append('div.tweet__top')
+	const top = $tweet.append('div.tweet__top');
 	top.append('p.tweet__handle').text(handle);
-	top.append('div.tweet__icon')
+	const $icon = top.append('div.tweet__icon').html(svgIcon);
+	// const $line = $tweet.append('div.tweet__line');
 	$tweet.append('p.tweet__text').text(text);
 	$tweet.append('p.tweet__time').text(time);
 
+	if (category) $icon.select('svg').st('fill', Colors[category]);
+	else $icon.select('svg').st('fill', Colors.bg);
 	const grabRandomImage = d3
 		.scaleQuantize()
 		.domain([0, 1])

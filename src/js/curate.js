@@ -72,7 +72,8 @@ function handleVorEnter({ data }) {
 			x,
 			y,
 			offset: true,
-			section: 'curate'
+			section: 'curate',
+			category
 			// category: filteredTweets[index].category
 		});
 	}

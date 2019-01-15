@@ -1,4 +1,5 @@
 export default {
+	bg: '#22221f',
 	edutainment: '#56ebff',
 	travel: '#ffc500',
 	'role-model': '#01c43a',
