@@ -17,7 +17,8 @@ const globe = g.select('.g-globe');
 const nodes = g.select('.g-nodes');
 const vor = g.select('.g-voronoi');
 
-const globeSec = d3.select('#globe')
+const globeSec = d3.select('#globe');
+const exploreSec = d3.select('#explore');
 
 const chartTweets = chart.select('.chart__tweets');
 const exploreTweets = d3.select('.figure__tweets');
@@ -45,6 +46,7 @@ export default {
 	chartTweets,
 	exploreTweets,
 	exploreNav,
+	exploreSec,
 	header,
 	globeSec
 };

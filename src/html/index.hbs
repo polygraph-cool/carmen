@@ -27,12 +27,11 @@
 
 	<main id='content'>
 		<figure id='chart'>
-			<div class='chart__curate_purp'></div>
 			<canvas class='canvas__bg'></canvas>
 			<canvas class='canvas__fg'></canvas>
 			<canvas class='canvas__ex'></canvas>
-			<canvas class='canvas__globe'></canvas>
-			<div class='chart__curate'></div>
+			<canvas class='canvas__globe is-hidden'></canvas>
+			<div class='chart__curate is-hidden'></div>
 			<div class='chart__overlay'></div>
 			<svg class='chart__svg'>
 				<g>
@@ -50,10 +49,10 @@
 		<section data-index='1' id='globe' class='is-hidden'>
 			{{> story/globe }}
 		</section>
-		<section data-index='2' id='curate'>
+		<section data-index='2' id='curate' class='is-hidden'>
 			{{> story/curate }}
 		</section>
-		<section data-index='3' id='explore'>
+		<section data-index='3' id='explore' class='is-hidden'>
 			{{> story/explore }}
 		</section>
 		<section data-index='4' id='outro'>

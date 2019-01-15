@@ -27,12 +27,6 @@ function resize() {
 	Globe.resize();
 	Curate.resize();
 	Explore.resize();
-
-	const hidden = $.globeSec.classed('is-hidden')
-	console.log({hidden})
-	$.globeSec.classed('is-hidden', false)
-	const hidden2 = $.globeSec.classed('is-hidden')
-	console.log({hidden2})
 }
 
 function onIntroStepEnter(el) {
@@ -58,13 +52,14 @@ function updateSection(index) {
 	$.canvasGlobe.classed('is-hidden', true);
 	$.overlay.classed('is-hidden', true);
 	$.chartCurate.classed('is-hidden', true);
+	$.vor.classed('is-hidden', true);
 	$.chartTweets.classed('globe-tweets', false);
-	$.chart.select('.chart__curate_purp').classed('is-hidden', true);
+
 	Intro.clear();
 	Curate.clear();
 	Explore.clear();
 	Globe.clear();
-	$.vor.classed('is-hidden', true);
+
 	switch (id) {
 	case 'intro':
 		$.canvasBg.classed('is-hidden', false);
@@ -82,7 +77,6 @@ function updateSection(index) {
 		break;
 	case 'curate':
 		$.canvasFg.classed('is-hidden', false);
-		// $.chart.select('.chart__curate_purp').classed('is-hidden', false);
 		$.vor.classed('is-hidden', false);
 		Curate.enterSection();
 		break;
@@ -126,16 +120,12 @@ function onCurateStepExit(el) {
 }
 
 function setup(data) {
-	// console.log({ data });
-	$.globeSec.classed('is-hidden', true)
 	// sections
 	Intro.init(data);
 	Curate.init(data);
 	Globe.init(data);
 	Explore.init(data);
-
 	resize();
-
 	// section steps
 	EnterView({
 		selector: 'section',
@@ -151,7 +141,6 @@ function setup(data) {
 		},
 		offset: 0.2
 	});
-
 	// intro steps
 	EnterView({
 		selector: '#intro .step',
@@ -159,7 +148,6 @@ function setup(data) {
 		exit: onIntroStepExit,
 		offset: 0.9
 	});
-
 	// globe steps
 	EnterView({
 		selector: '#globe .step',
@@ -167,7 +155,6 @@ function setup(data) {
 		exit: onGlobeStepExit,
 		offset: 0.67
 	});
-
 	EnterView({
 		selector: '#curate .step',
 		enter: onCurateStepEnter,

@@ -418,11 +418,11 @@ function resize() {
 
 		updateCanvasGlobe();
 
+		$.globeSec.classed('is-hidden', false);
 	}
 }
 
 function setup(world) {
-
 	const widthCanvasDom = +$.canvasGlobe.style('width').replace('px', '');
 
 	const widthRetinaDom = +$.canvasGlobe.attr('width');
@@ -442,7 +442,7 @@ function setup(world) {
 
 			d3.select(this)
 				.select('.destination-wrapper')
-				.style('color', (d) => {
+				.style('color', d => {
 					return 'white';
 					if (stepName == 'pop-culture') {
 						return d3.color(Color[stepName]).brighter(2);
