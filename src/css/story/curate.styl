@@ -1,9 +1,8 @@
 #curate
 	pointer-events none
-	display block
-	opacity 1
+
 	&.is-hidden
-		opacity 0
+		display none
 
 	.curate__steps
 		padding 0 1rem
@@ -36,14 +35,17 @@
 			padding 0 0.25em
 			margin-left 0.25em
 	nav
-		position relative
+		position absolute
 		display flex
 		flex-direction row
 		flex-wrap wrap
 		justify-content space-around
 		z-index set-index(middle)
+		bottom 2rem
 		+mq('bp-4')
 			flex-direction column
+			position relative
+			bottom auto
 		.choice
 			margin-bottom 1rem
 			pointer-events none
@@ -92,10 +94,8 @@
 	height 100%
 	opacity 1
 	transition opacity 250ms
-	
 	&.is-hidden
 		opacity 0
-		
 	.curate__label
 		position absolute
 		p
