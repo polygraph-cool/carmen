@@ -15,9 +15,11 @@ const exampleTweet = {
 	time: '11/14/18 12:39 PM'
 };
 
+let lastIndex = -1;
 let simulation = null;
 let currentCat = null;
 let active = false;
+let filteredNodes = null;
 const $curate = d3.select('#curate');
 const $nav = $curate.select('nav');
 const $step = $curate.selectAll('.step');
@@ -67,7 +69,7 @@ function handleVorEnter({ data }) {
 
 		Tweet.clear({ section: 'curate' });
 
-		console.log(category);
+		// console.log(category);
 
 		Tweet.create({
 			data: cd.tweets[cd.current],
@@ -91,6 +93,75 @@ function handleNavClick() {
 	placeDots();
 }
 
+function handleMouseMove() {
+	const [x, y] = d3.mouse(this);
+
+	const f = filteredNodes.filter(d => {
+		const yD = Math.abs(d.y - y);
+		const xD = Math.abs(d.x - x);
+		d.dist = Math.sqrt(yD * yD + xD * xD);
+		return d.dist < 32;
+	});
+
+	f.sort((a, b) => d3.ascending(a.dist, b.dist));
+
+	if (f.length) {
+		const n = f[0];
+		if (n.index !== lastIndex) {
+			lastIndex = n.index;
+			Tweet.clear({ section: 'curate' });
+			Intro.disable();
+
+			const cd = categoryData[n.category];
+			cd.current += 1;
+			if (cd.current >= cd.total) cd.current = 0;
+
+			Render.clear($.contextFg);
+
+			const tempIndex = nodes.findIndex(d => d.index === n.index);
+			nodes.push(nodes.splice(tempIndex, 1)[0]);
+
+			nodes.forEach(d => {
+				// d.stroke = '#fff';
+				// else d.stroke = '#000';
+				Render.dot({ d, ctx: $.contextFg, concentric: d.index === n.index });
+			});
+
+			// console.log(category);
+
+			Tweet.create({
+				data: cd.tweets[cd.current],
+				x: n.x,
+				y: n.y,
+				offset: true,
+				section: 'curate',
+				category: n.category
+				// category: filteredTweets[index].category
+			});
+		}
+	}
+}
+
+function createInteraction() {
+	const x = 0;
+	const y = 0;
+
+	filteredNodes = nodes.filter(d => {
+		if (currentCat) return currentCat === d.category;
+		return true;
+	});
+
+	d3.select('.g-voronoi')
+		.select('rect')
+		.at({
+			width,
+			height,
+			x,
+			y
+		})
+		.on('mousemove', handleMouseMove);
+}
+
 function createVor() {
 	// VORONOI
 	voronoi
@@ -98,7 +169,6 @@ function createVor() {
 		.y(d => d.y)
 		.extent([[0, 0], [width, height]]);
 
-	const $vorPath = $.vor.selectAll('path');
 	d3.select('.g-voronoi')
 		.selectAll('path')
 		.remove();
@@ -107,28 +177,19 @@ function createVor() {
 		if (currentCat) return currentCat === d.category;
 		return true;
 	});
-
+	console.log(polyNodes);
 	const polygons = voronoi.polygons(polyNodes);
-
+	console.log(polygons);
 	const vorPaths = d3
 		.select('.g-voronoi')
 		.selectAll('path')
 		.data(polygons)
 		.enter()
 		.append('path');
-	// $vorPath = $vorPath
-	// 	.data(polygons)
-	// 	.enter()
-	// 	.append('path')
-	// 	.merge($vorPath);
 
 	vorPaths.at('d', d => (d ? `M${d.join('L')}Z` : null));
 
-	// $vorPath.at('d', d => (d ? `M${d.join('L')}Z` : null));
 	vorPaths.on('mouseenter', handleVorEnter);
-	// $vorPath.on('mouseenter', handleVorEnter);
-	// $vorPath.on('mouseout', handleVorE);
-	// else $vorPath.on('mouseenter', handleVorEnter);
 }
 
 function handleTick() {
@@ -188,7 +249,9 @@ function placeDots() {
 		d.stroke = null;
 		Render.dot({ d, ctx: $.contextFg });
 	});
-	createVor();
+
+	createInteraction();
+	// createVor();
 }
 
 function enterSection(reset) {

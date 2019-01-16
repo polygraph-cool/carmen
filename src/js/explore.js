@@ -78,7 +78,7 @@ function showTweet(forceMiddle) {
 	// don't let slide div expose background
 	if (dotPos < pageWidth / 2) posX = 0;
 	const dif = sectionWidth - pageWidth / 2;
-	console.log({ dotPos, pageWidth, sectionWidth, posX, dif });
+	// console.log({ dotPos, pageWidth, sectionWidth, posX, dif });
 	if (dotPos > dif) posX = -(sectionWidth - pageWidth);
 
 	$slide.st('left', posX);

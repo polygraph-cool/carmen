@@ -29,7 +29,7 @@ function create({
 
 
 
-	console.log({category})
+	// console.log({category})
 
 	const { handle, text, time } = data;
 	// $tweet.append('p.tweet__name').text(name);

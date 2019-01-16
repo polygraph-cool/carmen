@@ -97,7 +97,7 @@ function addTweetBox(coord) {
 	// console.log(active);
 	const p = projection(coord);
 
-	console.log("Adding tweet");
+	// console.log("Adding tweet");
 
 	const x = p[0] * (1 / adjustRetina) + stepWidth;
 	// console.log({x})
@@ -188,13 +188,13 @@ function updateTextLabels(textString, coord) {
 
 function showStatic(globeCoordinates) {
 
-	console.log("here");
+	// console.log("here");
 
-	console.log(current);
+	// console.log(current);
 
 	const test = $.globe.selectAll('text')
 
-	console.log({test})
+	// console.log({test})
 
 	textElement.text(current.country);
 	const focalPoint = null;
@@ -341,12 +341,12 @@ function goTo(coordsStart, coordsEnd) {
 
 function update() {
 
-	console.log("updating",current.step);
+	// console.log("updating",current.step);
 
 	const newCoords = [+current.lon, +current.lat];
 	// console.log(newCoords);
 
-	console.log(changed);
+	// console.log(changed);
 
 	if (current.step === 'categories' && !changed) {
 		globeCoordinates = firstStepCoords;
@@ -377,8 +377,8 @@ function update() {
 
 function stepHandle(index) {
 
-	console.log("stepping");
-	console.log(index);
+	// console.log("stepping");
+	// console.log(index);
 
 
 	const $s = $step.filter((d, i) => i === index);
@@ -393,8 +393,8 @@ function stepHandle(index) {
 
 function step(index) {
 	if(!changed){
-		console.log("stepping");
-		console.log(index);
+		// console.log("stepping");
+		// console.log(index);
 
 		const $s = $step.filter((d, i) => i === index);
 		['step', 'lat', 'lon', 'tweet', 'user', 'city', 'country'].forEach(d => {
@@ -546,7 +546,7 @@ function enterSection() {
 
 	if(!changed){
 		Render.clear($.contextFg);
-		console.log("here");
+		// console.log("here");
 	}
 	else{
 		addTweetBox(globeCoordinates);
