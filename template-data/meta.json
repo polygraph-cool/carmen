@@ -3,8 +3,8 @@
   "description": "The Carmen Effect",
   "url": "https://thecarmeneffect.com",
   "keywords": "Carmen, San Diego, social, Netflix, fashion, style, education, travel, cutlure",
-  "imgFacebook": "social/social-facebook.jpg",
-  "imgTwitter": "social/social-twitter.jpg",
+  "imgFacebook": "https://thecarmeneffect.com/assets/social/social-facebook.jpg",
+  "imgTwitter": "https://thecarmeneffect.com/assets/social/social-twitter.jpg",
   "author": {
     "name": "Netflix",
     "url": "https://twitter.com/netflix",
