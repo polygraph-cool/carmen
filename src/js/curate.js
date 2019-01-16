@@ -67,6 +67,8 @@ function handleVorEnter({ data }) {
 
 		Tweet.clear({ section: 'curate' });
 
+		console.log(category);
+
 		Tweet.create({
 			data: cd.tweets[cd.current],
 			x,

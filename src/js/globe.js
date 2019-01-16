@@ -97,6 +97,8 @@ function addTweetBox(coord) {
 	// console.log(active);
 	const p = projection(coord);
 
+	console.log("Adding tweet");
+
 	const x = p[0] * (1 / adjustRetina) + stepWidth;
 	// console.log({x})
 
@@ -106,7 +108,7 @@ function addTweetBox(coord) {
 		const data = {
 			text: current.tweet,
 			handle: current.user,
-			category: 'money',
+			category: current.step,
 			star_tweet: 'x'
 		};
 		Tweet.create({
@@ -115,7 +117,8 @@ function addTweetBox(coord) {
 			y,
 			fade: true,
 			offset: true,
-			section: 'globe'
+			section: 'globe',
+			category: current.step			
 		});
 	}
 }
@@ -342,7 +345,6 @@ function update() {
 
 	const newCoords = [+current.lon, +current.lat];
 	// console.log(newCoords);
-	Tweet.clear({ section: 'globe' });
 
 	console.log(changed);
 
@@ -366,6 +368,7 @@ function update() {
 			// showStatic(globeCoordinates);
 		}
 		else if(current.step != 'categories') {
+			Tweet.clear({ section: 'globe' });
 			goTo(globeCoordinates, newCoords);
 			globeCoordinates = newCoords;
 		}
@@ -539,10 +542,14 @@ function clear() {
 }
 
 function enterSection() {
+	active = true;
+
 	if(!changed){
 		Render.clear($.contextFg);
-		active = true;
 		console.log("here");
+	}
+	else{
+		addTweetBox(globeCoordinates);
 	}
 }
 
