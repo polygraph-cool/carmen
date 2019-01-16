@@ -20,12 +20,16 @@ function create({
 	section,
 	category
 }) {
+
+
 	const $tweet =
 		section === 'explore'
 			? $.exploreTweets.append('div.tweet')
 			: $.chartTweets.append('div.tweet');
 
-	// console.log({category})
+
+
+	console.log({category})
 
 	const { handle, text, time } = data;
 	// $tweet.append('p.tweet__name').text(name);
