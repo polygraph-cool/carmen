@@ -506,6 +506,7 @@ function handleStepClick() {
 	else if(!mobile){
 		console.log("scrollingintoview_2");
 		$s.node().scrollIntoView();
+		
 	}
 }
 
