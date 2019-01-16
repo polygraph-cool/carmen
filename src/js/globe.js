@@ -412,7 +412,7 @@ function resize() {
 	const sectionWidth = $section.node().offsetWidth;
 	Tweet.clear({ section: 'globe' });
 	if(textElement){
-		textElement.text("");	
+		textElement.text("");
 	}
 
 
@@ -499,9 +499,13 @@ function handleStepClick() {
 		stepHandle(+$s.at('data-index'));
 	}
 	if(mobile || !active){
+		console.log("scrollingintoview");
 		$s.node().scrollIntoView();
 		//$s.node().scrollTop += 40;
-
+	}
+	else if(!mobile){
+		console.log("scrollingintoview_2");
+		$s.node().scrollIntoView();
 	}
 }
 

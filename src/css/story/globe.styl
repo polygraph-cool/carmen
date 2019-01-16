@@ -3,9 +3,10 @@
 	#globe
 		.globe__steps
 			.step
-				&.is-visible
-					margin-bottom 75vh
-					padding-top 100px
+				&:not(:first-of-type)
+					&.is-visible
+						margin-bottom 75vh
+						padding-top 100px
 
 #globe
 	// pointer-events none
@@ -32,6 +33,7 @@
 			overflow hidden
 			&.is-visible
 				height auto
+				padding-top 150px
 				.destination-wrapper
 					// border-color transparent
 					&:after
