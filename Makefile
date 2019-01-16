@@ -3,6 +3,7 @@ PHONY: github aws-assets aws-htmljs aws-cache pudding
 github:
 	rm -rf docs
 	cp -r dist/ docs
+	echo "thecarmeneffect.com" > docs/CNAME
 	git add -A
 	git commit -m "update dev version"
 	git push
