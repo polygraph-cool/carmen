@@ -95,6 +95,8 @@ function updateCanvasGlobe() {
 
 function addTweetBox(coord) {
 	// console.log(active);
+	Tweet.clear({ section: 'globe' });
+
 	const p = projection(coord);
 
 	// console.log("Adding tweet");
@@ -118,7 +120,7 @@ function addTweetBox(coord) {
 			fade: true,
 			offset: true,
 			section: 'globe',
-			category: current.step			
+			category: current.step
 		});
 	}
 }
@@ -390,7 +392,6 @@ function stepHandle(index) {
 	update();
 }
 
-
 function step(index) {
 	if(!changed){
 		// console.log("stepping");
@@ -409,17 +410,28 @@ function step(index) {
 
 function resize() {
 	const sectionWidth = $section.node().offsetWidth;
+	Tweet.clear({ section: 'globe' });
+	if(textElement){
+		textElement.text("");	
+	}
+
+
 	// check if mobile
 	mobile = sectionWidth < BP;
 	// resize stepper elements
 	const stepHeight = mobile ? window.innerHeight * 1.5 : window.innerHeight;
 	stepWidth = d3.select('.globe__steps').node().offsetWidth;
 	if (mobile) {
-		$step.st('height', stepHeight); // .classed('is-visible', true);
+		console.log($step);
+		$step
+		.filter(function(d){
+			return d3.select(this).attr("data-step") == "categories";
+			return d//d.step == "categories"
+		})
+		.st('height', window.innerHeight*.75); // .classed('is-visible', true);
 	}
 
 	// console.log({mobile, width, BP})
-
 	// resize all the globe stuff
 	if (ready) {
 		height = $.canvasGlobe.node().offsetHeight * Render.getDPR();
@@ -431,7 +443,6 @@ function resize() {
 		// fauxPathElement = $.globe.append('path');
 		//
 		// textElement = $.globe.append('text');
-
 
 		projection
 			.scale(scale)
@@ -474,6 +485,8 @@ function resize() {
 
 function handleStepClick() {
 
+
+
 	const $s = d3
 		.select(this)
 		.parent()
@@ -484,6 +497,11 @@ function handleStepClick() {
 	if (!visible) {
 		$s.classed('is-visible', true);
 		stepHandle(+$s.at('data-index'));
+	}
+	if(mobile || !active){
+		$s.node().scrollIntoView();
+		//$s.node().scrollTop += 40;
+
 	}
 }
 
