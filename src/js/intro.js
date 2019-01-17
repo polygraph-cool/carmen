@@ -29,10 +29,17 @@ let disabled = false;
 function hideTitle() {
 	const titleWidth = $intro.select('.intro__hed').node().offsetWidth;
 	$introHed.classed('is-hidden', true);
+	
 	$title
 		.transition()
 		.duration(500)
 		.delay((d, i) => i * 50)
+		.translate([-titleWidth, 0]);
+
+	$intro.select('.intro__desktop')
+		.transition()
+		.duration(500)
+		.delay(200)
 		.translate([-titleWidth, 0]);
 
 	$intro
@@ -45,6 +52,8 @@ function hideTitle() {
 		.transition()
 		.duration(500)
 		.translate([-width, 0]);
+
+	
 }
 
 function showTitle() {
@@ -59,6 +68,13 @@ function showTitle() {
 		.transition()
 		.duration(500)
 		.delay((d, i) => i * 50)
+		.translate([0, 0]);
+
+
+	$intro.select('.intro__desktop')
+		.transition()
+		.duration(500)
+		.delay(200)
 		.translate([0, 0]);
 
 	$watch
