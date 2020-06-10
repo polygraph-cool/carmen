@@ -8,3 +8,4 @@ dist
 package-lock.json
 .Rproj.user
 analysis/large_files/
+analysis
